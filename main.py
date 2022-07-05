@@ -1,0 +1,60 @@
+# This is a sample Python script.
+
+# Press ⌃R to execute it or replace it with your code.
+# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+import dataclasses
+
+from openpyxl import load_workbook, Workbook
+from dataclasses import dataclass
+
+from openpyxl.cell import MergedCell
+
+from QuantityItemStandard import QuantityItemStandard
+
+
+def excel_normalize(name):
+    # Use a breakpoint in the code line below to debug your script.
+    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+    workbook = load_workbook(
+        '/Users/jjongz/Downloads/서울시 은평구 역촌동 77-9,47 근생주택 신축공사-전기(산출).xlsm',
+        data_only=True)
+    # names = workbook.get_sheet_names()
+    # print(names)
+    worksheet = workbook['목록별산출서']
+    items = []
+    for row in worksheet.iter_rows(min_col=4, max_col=13, min_row=6):
+        if row[4].value is None:
+            continue
+        if row[4].value == '명칭':
+            continue
+        item = QuantityItemStandard(
+            name=row[4].value,
+            standard=row[5].value,
+            unit=row[6].value,
+            formula=row[1].value,
+            unit_formula=row[7].value,
+            sum=row[9].value,
+        )
+        if item.formula is None:
+            item.formula = items[-1].formula
+        items.append(item)
+    print(items.__sizeof__())
+
+    # 저장할 엑셀
+    new_workbook = Workbook()
+    new_sheet = new_workbook.active
+    new_sheet.title = '전기(데이터변경X)'
+    head_title = ['층', '호', '실', '대공종', '중공종', '코드', '품명', '규격', '단위', '부위', '타입', '산식', '수량', 'Remark']
+    new_sheet.append(head_title)
+    for item in items:
+        new_sheet.append(item.to_excel())
+
+
+    new_workbook.save("/Users/jjongz/Downloads/test.xlsx")
+
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    excel_normalize('PyCharm')
+
+# See PyCharm help at https://www.jetbrains.com/help/pycharm/
