@@ -10,13 +10,14 @@ from dataclasses import dataclass
 from openpyxl.cell import MergedCell
 
 from QuantityItemStandard import QuantityItemStandard
+from QuantityItemStandard2 import QuantityItemStandard2
 
 
 def excel_normalize(name):
     # Use a breakpoint in the code line below to debug your script.
     print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
     workbook = load_workbook(
-        '/Users/jjongz/Downloads/서울시 은평구 역촌동 77-9,47 근생주택 신축공사-전기(산출).xlsm',
+        'C:\\서울시 은평구 역촌동 77-9,47 근생주택 신축공사-통신(산출).xlsm',
         data_only=True)
     # names = workbook.get_sheet_names()
     # print(names)
@@ -40,6 +41,23 @@ def excel_normalize(name):
         items.append(item)
     print(items.__sizeof__())
 
+    worksheet2 = workbook['산출집계']
+    items2 = []
+    for row in worksheet2.iter_rows(min_col=4, max_col=10, min_row=7):
+        if row[4].value is None:
+            continue
+        if row[6].value == '소 계':
+            continue
+        item2 = QuantityItemStandard2(
+            name=row[0].value,
+            standard=row[1].value,
+            unit=row[2].value,
+            sum=row[6].value,
+        )
+        items2.append(item2)
+    print(items2)
+
+
     # 저장할 엑셀
     new_workbook = Workbook()
     new_sheet = new_workbook.active
@@ -49,8 +67,13 @@ def excel_normalize(name):
     for item in items:
         new_sheet.append(item.to_excel())
 
+    sheet = new_workbook.create_sheet(title='집계표')
+    sheet.append(['중공종', '품명', '규격', '단위', '수량(할증전)'])
+    for item2 in items2:
+        sheet.append(item2.to_excel())
 
-    new_workbook.save("/Users/jjongz/Downloads/test.xlsx")
+
+    new_workbook.save("C:\\Users\\Box\\Desktop\\외부적산\\test.xlsx")
 
 
 # Press the green button in the gutter to run the script.
