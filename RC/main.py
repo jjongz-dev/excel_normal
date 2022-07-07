@@ -18,6 +18,7 @@ def excel_normalize(name):
     ho = ""
     part = ""
     for row in worksheet.iter_rows(min_col=0, max_col=6, min_row=4):
+        # 호
         if ( row[0].value is not None
                 and row[1].value is None
                 and row[2].value is None
@@ -28,16 +29,24 @@ def excel_normalize(name):
             ho = row[0].value.split('-')[-1].strip()
             continue
 
+        # 층, 부위
         if ( row[0].value is not None
             and row[1].value is not None):
             floor = row[0].value
             part = row[1].value
 
+        # 비고 제외
+        if( row[3].value == '[ 비 고 ]'):
+            continue
+
+        # 콘크리트 규격 정규화 15-15-8 > 15-15-08
         concs = row[3].value.split('-')
         newconc = row[3].value
         if( len(concs) == 3):
             slope = concs[-1].zfill(2)
             newconc = '-'.join([concs[0], concs[1], slope])
+
+
 
         item = ItemStandard(
             floor = floor,
