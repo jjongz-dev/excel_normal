@@ -32,7 +32,7 @@ def excel_normalize(name):
             if isinstance(cell, MergedCell):
                 if (row[0].value is None):
                     continue
-                category = ''.join(re.compile('[가-힣]').findall(row[0].value.split('::')[1]))
+                category = ''.join(re.compile('[A-Za-z가-힣]').findall(row[0].value.split('::')[1]))
                 break
         if row[4].value is None:
             continue
@@ -66,7 +66,7 @@ def excel_normalize(name):
             if isinstance(cell, MergedCell):
                 if (row[0].value is None):
                     continue
-                category = ''.join(re.compile('[가-힣]').findall(row[0].value.split('::')[1]))
+                category = ''.join(re.compile('[A-Za-z가-힣]').findall(row[0].value.split('::')[1]))
                 break
         if row[4].value is None:
             continue
@@ -171,7 +171,7 @@ def excel_normalize(name):
             if isinstance(cell, MergedCell):
                 if (row[0].value is None):
                     continue
-                category = ''.join(re.compile('[가-힣]').findall(row[0].value.split('::')[1]))
+                category = ''.join(re.compile('[A-Za-z가-힣]').findall(row[0].value.split('::')[1]))
                 break
         if row[4].value is None:
             continue
@@ -198,7 +198,7 @@ def excel_normalize(name):
             if isinstance(cell, MergedCell):
                 if (row[0].value is None):
                     continue
-                category = ''.join(re.compile('[가-힣]').findall(row[0].value.split('::')[1]))
+                category = ''.join(re.compile('[A-Za-z가-힣]').findall(row[0].value.split('::')[1]))
                 break
         if row[4].value is None:
             continue
@@ -220,7 +220,7 @@ def excel_normalize(name):
     for item2 in items2:
         sheet.append(item2.to_excel())
 
-    new_workbook.save("C:\\Users\\Box\\Desktop\\외부적산\\test.xlsx")
+    new_workbook.save("C:\\out_excel\\TEST.xlsx")
 
 
 # Press the green button in the gutter to run the script.
