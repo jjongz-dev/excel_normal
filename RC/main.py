@@ -57,7 +57,7 @@ def excel_normalize(name):
             formula = row[4].value,
             sum = row[5].value,
             )
-        print(item.to_excel())
+        # print(item.to_excel())
         items.append(item)
 
 
