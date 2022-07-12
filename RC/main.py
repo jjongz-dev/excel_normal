@@ -39,7 +39,7 @@ def excel_normalize(name):
         if( row[2].value == '[ 비 고 ]'):
             continue
 
-        # 콘크리트 규격 정규화 15-15-8 > 15-15-08
+        # 콘크리트 규격 정규화 25-18-8 > 25-18-08
         concs = row[3].value.split('-')
         newconc = row[3].value
         if( len(concs) == 3):
