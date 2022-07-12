@@ -4,7 +4,7 @@ from dataclasses import dataclass
 @dataclass()
 class ItemStandard:
     floor: str
-    ho: str
+    location: str
     name: str
     standard: str
     part: str

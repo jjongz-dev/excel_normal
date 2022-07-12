@@ -15,7 +15,7 @@ def excel_normalize(name):
     worksheet = excel['부재별산출서']
     items = []
     floor = ""
-    ho = ""
+    location = ""
     part = ""
     for row in worksheet.iter_rows(min_col=0, max_col=6, min_row=4):
         # 호
@@ -26,7 +26,7 @@ def excel_normalize(name):
                 and row[4].value is None
                 and row[5].value is None
         ):
-            ho = row[0].value.split('-')[-1].strip()
+            location = row[0].value.split('-')[-1].strip()
             continue
 
         # 층, 부위
@@ -36,7 +36,7 @@ def excel_normalize(name):
             part = row[1].value
 
         # 비고 제외
-        if( row[3].value == '[ 비 고 ]'):
+        if( row[2].value == '[ 비 고 ]'):
             continue
 
         # 콘크리트 규격 정규화 15-15-8 > 15-15-08
@@ -50,7 +50,7 @@ def excel_normalize(name):
 
         item = ItemStandard(
             floor = floor,
-            ho = ho,
+            location = location,
             name = row[2].value,
             standard= newconc,
             part = part,
