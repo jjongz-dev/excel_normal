@@ -63,8 +63,7 @@ def excel_normalize(name):
     for row in worksheet2.iter_rows(min_col=1, max_col=5, min_row=4):
         #중공종
         if (row[1].value is not None
-                and row[2].value is None
-                and row[3].value is None
+                and row[4].value is None
         ):
             constructionWork = row[1].value
             continue
