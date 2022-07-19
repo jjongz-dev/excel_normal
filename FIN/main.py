@@ -2,8 +2,9 @@
 
 from openpyxl import load_workbook, Workbook
 
-
 from FIN.ItemStandard import ItemStandard
+
+from FIN.ItemStandard2 import ItemStandard2
 
 
 def excel_normalize(name):
@@ -33,7 +34,7 @@ def excel_normalize(name):
         #         row[7].value,
         #         row[8].value,
         #         row[9].value,
-        #         ''.format(row[10].value),
+        #         row[10].value,
         #         row[11].value,]
         #     ),
         #     end=''
@@ -55,6 +56,45 @@ def excel_normalize(name):
         items.append(item)
 
 
+    worksheet2 = excel['동별집계표']
+    items2 = []
+    constructionWork = ""
+    # name = ""
+    for row in worksheet2.iter_rows(min_col=1, max_col=5, min_row=4):
+        #중공종
+        if (row[1].value is not None
+                and row[2].value is None
+                and row[3].value is None
+        ):
+            constructionWork = row[1].value
+            continue
+
+        #품명
+        # if (row[1].value is not None
+
+        #         and row[3].value is not None
+        # ):
+        #     name = row[1].value
+        #     continue
+
+
+        item2 = ItemStandard2(
+            constructionWork = constructionWork,
+            name = row[1].value,
+            standard = row[2].value,
+            unit = row[3].value,
+            sum = row[4].value,
+            )
+        items2.append(item2)
+        print(items2)
+
+
+
+
+
+
+
+
     # 저장할 엑셀
     new_workbook = Workbook()
     new_sheet = new_workbook.active
@@ -63,6 +103,11 @@ def excel_normalize(name):
     new_sheet.append(head_title)
     for item in items:
         new_sheet.append(item.to_excel())
+
+    sheet = new_workbook.create_sheet(title='집계표')
+    sheet.append(['중공종', '품명', '규격', '단위', '수량(할증전)'])
+    for item2 in items2:
+        sheet.append(item2.to_excel())
 
 
     new_workbook.save("C:\\Users\ckddn\Desktop\건축완성.xlsx")
