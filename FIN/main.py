@@ -62,19 +62,14 @@ def excel_normalize(name):
     # name = ""
     for row in worksheet2.iter_rows(min_col=1, max_col=5, min_row=4):
         #중공종
-        if (row[1].value is not None
-                and row[4].value is None
+        if (row[1].value.__contains__('내  역  삭  제')
         ):
-            constructionWork = row[1].value
             continue
 
-        #품명
-        # if (row[1].value is not None
-
-        #         and row[3].value is not None
-        # ):
-        #     name = row[1].value
-        #     continue
+        if (row[1].value is not None
+               and row[4].value is None
+        ):
+            constructionWork = row[1].value.replace(" ","")
 
 
         item2 = ItemStandard2(
@@ -85,12 +80,28 @@ def excel_normalize(name):
             sum = row[4].value,
             )
         items2.append(item2)
-        print(items2)
+        # print(items2)
+
+    for item in items:
+        #TYPE변경
+        type1 = item.type.split('-')
+        if (len(type1) == 2):
+            item.type = item.type.split('-')[0]
+
+        if (item.type == '토공'):
+            item.type = '외부'
+
+        if (item.type == '가설'):
+            item.type = '내부'
+
+        #품명변경
+        if (item.name.startswith("★")):
+            item.name = item.name.replace("★","")
 
 
 
 
-
+        print(item.name)
 
 
 
