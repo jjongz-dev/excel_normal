@@ -66,6 +66,7 @@ def excel_normalize(name):
         # print(item.to_excel())
         items.append(item)
 
+    # and item.floor in ['1cmd', '2cmd'] ★ contains 대량
 
     worksheet2 = excel['동별집계표']
     items2 = []
@@ -110,45 +111,106 @@ def excel_normalize(name):
 
         #창호
         if (item.type == '창호'):
-            item.part = item.floor;
-            item.floor = '';
+            item.part = item.floor
+            item.floor = ''
             item.roomname =''
 
         #외부 입면 호실정리      일단 하자
         if (item.type == '외부'
                 and item.floor.__contains__('정면')):
-            item.location = '정면';
-            item.roomname = '정면';
+            item.location = '정면'
+            item.roomname = '정면'
             item.floor = ''
 
         if (item.type == '외부'
             and item.floor.__contains__('배면')
 
         ):
-            item.location = '배면';
-            item.roomname = '배면';
+            item.location = '배면'
+            item.roomname = '배면'
             item.floor = ''
 
         if (item.type == '외부'
-            # and item.floor in ['1cmd', '2cmd']
             and item.floor.__contains__('좌측면')):
-            item.location = '좌측면';
-            item.roomname = '좌측면';
+            item.location = '좌측면'
+            item.roomname = '좌측면'
             item.floor = ''
 
         if (item.type == '외부'
             and item.floor.__contains__('우측면')):
             item.location = '우측면'
             item.roomname = '우측면'
-            item.floor = '';
+            item.floor = ''
 
         #토공사정리, 기초단열재
         if (item.floor == '토공사' or item.floor == '기초단열재'):
-            item.location = '기초하부';
+            item.location = '기초하부'
+            item.roomname = '기초하부'
+            item.floor = 'FT'
+
+        #기본 층정리
+        if (item.name in ['가설컨테이너반입', '가설컨테이너반출', '가설수도', '가설전기', '가설울타리설치', '가설울타리해체', '가설출입구설치', '가설출입구해체',
+                          '건축폐기물처리', '건축허가표지판', '경계측량및현황측량', '민원처리', '이동식가설화장실반입', '이동식가설화장실반출', '준공청소', '지내력시험', '규준틀설치'] ):
+            item.location = '공통가설'
+            item.roomname = '공통가설'
+            item.floor = '1F'
+
+        #조경공사
+        if item.floor.__contains__('조경'):
+            item.location = '조경'
+            item.roomname = '조경'
+            item.floor = '1F'
+
+        # 부대토목공사
+        if item.floor.__contains__('부대토목'):
+            item.location = '부대토목'
+            item.roomname = '부대토목'
+            item.floor = '1F'
+
+        # 정화조설치공사
+        if item.floor.__contains__('정화조'):
+            item.location = '정화조'
+            item.roomname = '정화조'
             item.floor = 'FT'
 
 
+        # 산식 층정리
+        # item.formula = item.formula.replace('옥탑','PH').replace('지상','').replace('지하','B').replace('층','F').replace('기초','FT')
+
+        if ((item.floor == '공통가설' or item.floor == '골조가설') and item.formula.__contains__('>') and item.formula.__contains__('<')):
+            str = item.formula.split('>')[0].split('<')[1]
+            str2 = str.split('F')[0] + 'F'
+            str3 = str.split('층')[0] + '층'
+            str4 = str.split('붕')[0] + '붕'
+            str5 = str.split('초')[0] + '초'
+            if (re.match('PH\\d{1,2}F', str) or re.match('B\\d{1,2}F', str) or re.match('\\d{1,2}F', str) or re.match('RF', str) or re.match('PHRF', str)):
+                item.location = item.floor
+                item.roomname = item.floor
+                item.floor = str2
+            if (re.match('지상\\d{1,2}층', str) or re.match('지하\\d{1,2}층', str) or re.match('옥탑\\d{1,2}층', str) or re.match('\\d{1}층', str)):
+                item.location = item.floor
+                item.roomname = item.floor
+                item.floor = str3
+            if (re.match('지붕', str) or re.match('옥탑지붕', str)):
+                item.location = item.floor
+                item.roomname = item.floor
+                item.floor = str4
+            if (re.match('기초', str)):
+                item.location = item.floor
+                item.roomname = item.floor
+                item.floor = str5
+
+
         # 층정리
+        if (item.type == '외부'
+                and (re.match('지상\\d{1,2}층 \\w+', item.floor)
+                    or re.match('지하\\d{1,2}층 \\w+', item.floor))):
+            split_floor = item.floor.split(' ')
+            item.floor = split_floor[0]
+            item.location = split_floor[1]
+            item.roomname = split_floor[1]
+
+
         if (re.match('\\d{1,2}[.] 옥탑\\d{1,2}층', item.floor)):
             item.floor = 'PH' + re.sub(r'[^0-9]', '', item.floor.split(' ')[1]) + 'F'
 
@@ -157,6 +219,26 @@ def excel_normalize(name):
 
         if (re.match('\\d{1,2}[.] 지하\\d{1,2}층', item.floor)):
             item.floor = 'B' + re.sub(r'[^0-9]', '', item.floor.split(' ')[1]) + 'F'
+
+        if (re.match('옥탑\\d{1,2}층', item.floor)):
+            item.floor = 'PH' + re.sub(r'[^0-9]', '', item.floor) + 'F'
+
+        if (re.match('지상\\d{1,2}층', item.floor)):
+            item.floor = re.sub(r'[^0-9]', '', item.floor) + 'F'
+
+        if (re.match('지하\\d{1,2}층', item.floor)):
+            item.floor = 'B' + re.sub(r'[^0-9]', '', item.floor) + 'F'
+
+        if (re.match('\\d{1,2}층', item.floor)):
+            item.floor = re.sub(r'[^0-9]', '', item.floor) + 'F'
+
+        if (item.floor.__contains__('지붕')):
+            item.floor = item.floor.replace('지붕', 'RF')
+
+        if (item.floor.__contains__('기초')):
+            item.floor = item.floor.replace('기초', 'FT')
+
+
 
 
 
@@ -186,14 +268,10 @@ def excel_normalize(name):
         #     item.location = '공통가설';
         #     item.floor = '1F'
 
-        # 민원처리
-        if (item.floor == '민원처리'):
-            item.location = '민원처리';
-            item.floor = '1F'
-
         # 철거
         if (item.floor == '철거'):
-            item.location = '철거';
+            item.location = '철거'
+            item.roomname = '철거'
             item.floor = '1F'
 
 
