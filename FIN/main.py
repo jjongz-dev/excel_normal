@@ -1,4 +1,4 @@
-
+import re
 
 from openpyxl import load_workbook, Workbook
 
@@ -122,12 +122,15 @@ def excel_normalize(name):
             item.floor = ''
 
         if (item.type == '외부'
-            and item.floor.__contains__('배면')):
+            and item.floor.__contains__('배면')
+
+        ):
             item.location = '배면';
             item.roomname = '배면';
             item.floor = ''
 
         if (item.type == '외부'
+            # and item.floor in ['1cmd', '2cmd']
             and item.floor.__contains__('좌측면')):
             item.location = '좌측면';
             item.roomname = '좌측면';
@@ -139,26 +142,49 @@ def excel_normalize(name):
             item.roomname = '우측면'
             item.floor = '';
 
-        #토공사정리
-        if (item.floor == '토공사'):
+        #토공사정리, 기초단열재
+        if (item.floor == '토공사' or item.floor == '기초단열재'):
             item.location = '기초하부';
             item.floor = 'FT'
 
+
+        # 층정리
+        if (re.match('\\d{1,2}[.] 옥탑\\d{1,2}층', item.floor)):
+            item.floor = 'PH' + re.sub(r'[^0-9]', '', item.floor.split(' ')[1]) + 'F'
+
+        if (re.match('\\d{1,2}[.] 지상\\d{1,2}층', item.floor)):
+            item.floor = re.sub(r'[^0-9]', '', item.floor.split(' ')[1]) + 'F'
+
+        if (re.match('\\d{1,2}[.] 지하\\d{1,2}층', item.floor)):
+            item.floor = 'B' + re.sub(r'[^0-9]', '', item.floor.split(' ')[1]) + 'F'
+
+
+
+        # if (bool(re.match('옥탑\\d{1,2}층', item.floor))):
+        #     item.floor = 'PH' + re.sub(r'[^0-9]', '', item.floor) + 'F'
+        #
+        # if (bool(re.match('지상\\d{1,2}층', item.floor))):
+        #     item.floor = re.sub(r'[^0-9]', '', item.floor) + 'F'
+        #
+        # if (bool(re.match('지하\\d{1,2}층', item.floor))):
+        #     item.floor = 'B' + re.sub(r'[^0-9]', '', item.floor) + 'F'
+
+
         #공통가설 정리 ★★★★★★★★★★★★★
-        aaa = item.formula.split('>')
-        if (item.floor == '공통가설'
-                and (len(aaa) == 2)):
-            item.floor = aaa[0].replace('<', '');
-            item.location = '공통가설'
-
-        if (item.floor == '공통가설'
-            and (len(aaa) == 3)):
-            item.floor = aaa[0].replace('<','');
-            item.location = '공통가설'
-
-        if (item.floor == '공통가설'):
-            item.location = '공통가설';
-            item.floor = '1F'
+        # aaa = item.formula.split('>')
+        # if (item.floor == '공통가설'
+        #     and (len(aaa) == 2)):
+        #     item.floor = aaa[0].replace('<', '');
+        #     item.location = '공통가설'
+        #
+        # if (item.floor == '공통가설'
+        #     and (len(aaa) == 3)):
+        #     item.floor = aaa[0].replace('<','');
+        #     item.location = '공통가설'
+        #
+        # if (item.floor == '공통가설'):
+        #     item.location = '공통가설';
+        #     item.floor = '1F'
 
         # 민원처리
         if (item.floor == '민원처리'):
@@ -172,22 +198,20 @@ def excel_normalize(name):
 
 
         #골조가설정리 ★★★★★★★★★★★★★
-        aaa = item.formula.split('>')
-        if (item.floor == '골조가설'
-                and (len(aaa) == 2)):
-            item.floor = aaa[0].replace('<', '');
-            item.location = '골조가설'
-
-        if (item.floor == '골조가설'
-            and (len(aaa) == 3)):
-            item.floor = aaa[0].replace('<','');
-            item.location = '골조가설'
-
-        if (item.floor == '골조가설'):
-            item.location = '골조가설';
-            item.floor = '1F'
-
-
+        # aaa = item.formula.split('>')
+        # if (item.floor == '골조가설'
+        #         and (len(aaa) == 2)):
+        #     item.floor = aaa[0].replace('<', '');
+        #     item.location = '골조가설'
+        #
+        # if (item.floor == '골조가설'
+        #     and (len(aaa) == 3)):
+        #     item.floor = aaa[0].replace('<','');
+        #     item.location = '골조가설'
+        #
+        # if (item.floor == '골조가설'):
+        #     item.location = '골조가설';
+        #     item.floor = '1F'
 
 
 
