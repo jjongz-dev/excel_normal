@@ -16,8 +16,15 @@ def excel_normalize(name):
     worksheet = excel['산출근거집계표']
     items = []
     for row in worksheet.iter_rows(min_col=1, max_col=13, min_row=5):
+        # #0값 삭제
+        # if ( row[9].value == '0'
+        #     and row[12].value == '0'):
+        #     continue
         # 산출식 없음 삭제
         if ( row[2].value == '합        계'):
+            continue
+        # 구조이기 삭제
+        if ( row[7].value == '구조이기'):
             continue
 
         # for cell in row:
@@ -43,13 +50,17 @@ def excel_normalize(name):
         #     print(cell.col_idx, cell.value)
         item = ItemStandard(
             floor = row[7].value,
+            location = '',
+            roomname=row[8].value,
+
+
+
             name = row[2].value,
             standard= row[3].value,
-            part = row[6].value,
+            unit=row[4].value,
+            part = '',
+            type=row[5].value,
             formula = row[9].value,
-            roomname = row[8].value,
-            type = row[5].value,
-            unit = row[4].value,
             sum=row[12].value,
             )
         # print(item.to_excel())
@@ -80,7 +91,6 @@ def excel_normalize(name):
             sum = row[4].value,
             )
         items2.append(item2)
-        # print(items2)
 
     for item in items:
         #TYPE변경
@@ -98,10 +108,87 @@ def excel_normalize(name):
         if (item.name.startswith("★")):
             item.name = item.name.replace("★","")
 
+        #창호
+        if (item.type == '창호'):
+            item.part = item.floor;
+            item.floor = '';
+            item.roomname =''
+
+        #외부 입면 호실정리      일단 하자
+        if (item.type == '외부'
+                and item.floor.__contains__('정면')):
+            item.location = '정면';
+            item.roomname = '정면';
+            item.floor = ''
+
+        if (item.type == '외부'
+            and item.floor.__contains__('배면')):
+            item.location = '배면';
+            item.roomname = '배면';
+            item.floor = ''
+
+        if (item.type == '외부'
+            and item.floor.__contains__('좌측면')):
+            item.location = '좌측면';
+            item.roomname = '좌측면';
+            item.floor = ''
+
+        if (item.type == '외부'
+            and item.floor.__contains__('우측면')):
+            item.location = '우측면'
+            item.roomname = '우측면'
+            item.floor = '';
+
+        #토공사정리
+        if (item.floor == '토공사'):
+            item.location = '기초하부';
+            item.floor = 'FT'
+
+        #공통가설 정리 ★★★★★★★★★★★★★
+        aaa = item.formula.split('>')
+        if (item.floor == '공통가설'
+                and (len(aaa) == 2)):
+            item.floor = aaa[0].replace('<', '');
+            item.location = '공통가설'
+
+        if (item.floor == '공통가설'
+            and (len(aaa) == 3)):
+            item.floor = aaa[0].replace('<','');
+            item.location = '공통가설'
+
+        if (item.floor == '공통가설'):
+            item.location = '공통가설';
+            item.floor = '1F'
+
+        # 민원처리
+        if (item.floor == '민원처리'):
+            item.location = '민원처리';
+            item.floor = '1F'
+
+        # 철거
+        if (item.floor == '철거'):
+            item.location = '철거';
+            item.floor = '1F'
+
+
+        #골조가설정리 ★★★★★★★★★★★★★
+        aaa = item.formula.split('>')
+        if (item.floor == '골조가설'
+                and (len(aaa) == 2)):
+            item.floor = aaa[0].replace('<', '');
+            item.location = '골조가설'
+
+        if (item.floor == '골조가설'
+            and (len(aaa) == 3)):
+            item.floor = aaa[0].replace('<','');
+            item.location = '골조가설'
+
+        if (item.floor == '골조가설'):
+            item.location = '골조가설';
+            item.floor = '1F'
 
 
 
-        print(item.name)
 
 
 
