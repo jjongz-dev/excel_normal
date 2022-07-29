@@ -28,7 +28,7 @@ def excel_normalize(name, column_dimensions=None):
             continue
 
         # 0값 삭제
-        if ( row[9].value == '0' or row[12].value == '0'):
+        if (row[12].value == '0' or row[12].value == 0 ):
             continue
 
 
@@ -255,7 +255,6 @@ def excel_normalize(name, column_dimensions=None):
 
         if (item.floor.__contains__('기초')):
             item.floor = item.floor.replace('기초', 'FT')
-
 
 
 
