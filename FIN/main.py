@@ -7,7 +7,7 @@ from FIN.ItemStandard import ItemStandard
 from FIN.ItemStandard2 import ItemStandard2
 
 
-def excel_normalize(name):
+def excel_normalize(name, column_dimensions=None):
     excel = load_workbook(
         'C:\\Users\ckddn\Desktop\건축.xlsx',
         data_only=True)
@@ -26,6 +26,11 @@ def excel_normalize(name):
         # 구조이기 삭제
         if ( row[7].value == '구조이기'):
             continue
+
+        # 0값 삭제
+        if ( row[9].value == '0' or row[12].value == '0'):
+            continue
+
 
         # for cell in row:
         #     print(cell.value, end=', ')
@@ -167,11 +172,24 @@ def excel_normalize(name):
             item.roomname = '부대토목'
             item.floor = '1F'
 
+        # 철거
+        if item.floor.__contains__('철거'):
+            item.location = '철거'
+            item.roomname = '철거'
+            item.floor = '1F'
+
+        # 기타공사
+        if item.floor.__contains__('기타공사'):
+            item.location = '기타공사'
+            item.roomname = '기타공사'
+            item.floor = '1F'
+
         # 정화조설치공사
         if item.floor.__contains__('정화조'):
             item.location = '정화조'
             item.roomname = '정화조'
             item.floor = 'FT'
+
 
 
         # 산식 층정리
@@ -242,56 +260,6 @@ def excel_normalize(name):
 
 
 
-        # if (bool(re.match('옥탑\\d{1,2}층', item.floor))):
-        #     item.floor = 'PH' + re.sub(r'[^0-9]', '', item.floor) + 'F'
-        #
-        # if (bool(re.match('지상\\d{1,2}층', item.floor))):
-        #     item.floor = re.sub(r'[^0-9]', '', item.floor) + 'F'
-        #
-        # if (bool(re.match('지하\\d{1,2}층', item.floor))):
-        #     item.floor = 'B' + re.sub(r'[^0-9]', '', item.floor) + 'F'
-
-
-        #공통가설 정리 ★★★★★★★★★★★★★
-        # aaa = item.formula.split('>')
-        # if (item.floor == '공통가설'
-        #     and (len(aaa) == 2)):
-        #     item.floor = aaa[0].replace('<', '');
-        #     item.location = '공통가설'
-        #
-        # if (item.floor == '공통가설'
-        #     and (len(aaa) == 3)):
-        #     item.floor = aaa[0].replace('<','');
-        #     item.location = '공통가설'
-        #
-        # if (item.floor == '공통가설'):
-        #     item.location = '공통가설';
-        #     item.floor = '1F'
-
-        # 철거
-        if (item.floor == '철거'):
-            item.location = '철거'
-            item.roomname = '철거'
-            item.floor = '1F'
-
-
-        #골조가설정리 ★★★★★★★★★★★★★
-        # aaa = item.formula.split('>')
-        # if (item.floor == '골조가설'
-        #         and (len(aaa) == 2)):
-        #     item.floor = aaa[0].replace('<', '');
-        #     item.location = '골조가설'
-        #
-        # if (item.floor == '골조가설'
-        #     and (len(aaa) == 3)):
-        #     item.floor = aaa[0].replace('<','');
-        #     item.location = '골조가설'
-        #
-        # if (item.floor == '골조가설'):
-        #     item.location = '골조가설';
-        #     item.floor = '1F'
-
-
 
 
     # 저장할 엑셀
@@ -300,11 +268,16 @@ def excel_normalize(name):
     new_sheet.title = '건축(데이터변경X)'
     head_title = ['층', '호', '실', '대공종', '중공종', '코드', '품명', '규격', '단위', '부위', '타입', '산식', '수량', 'Remark']
     new_sheet.append(head_title)
+    new_sheet.column_dimensions["G"].width = 30
+    new_sheet.column_dimensions["H"].width = 30
+    new_sheet.column_dimensions["L"].width = 30
     for item in items:
         new_sheet.append(item.to_excel())
 
     sheet = new_workbook.create_sheet(title='집계표')
     sheet.append(['중공종', '품명', '규격', '단위', '수량(할증전)'])
+    sheet.column_dimensions["B"].width = 30
+    sheet.column_dimensions["C"].width = 30
     for item2 in items2:
         sheet.append(item2.to_excel())
 
