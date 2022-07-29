@@ -66,6 +66,9 @@ def excel_normalize(name):
     new_sheet = new_workbook.active
     new_sheet.title = '구조(데이터변경X)'
     head_title = ['층', '호', '실', '대공종', '중공종', '코드', '품명', '규격', '단위', '부위', '타입', '산식', '수량', 'Remark']
+    new_sheet.column_dimensions["G"].width = 30
+    new_sheet.column_dimensions["H"].width = 30
+    new_sheet.column_dimensions["L"].width = 30
     new_sheet.append(head_title)
     for item in items:
         new_sheet.append(item.to_excel())
