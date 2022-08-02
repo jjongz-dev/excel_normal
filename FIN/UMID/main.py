@@ -39,7 +39,6 @@ def excel_normalize(name):
                 name=row[2].value,
                 standard=row[3].value,
                 unit="unit",
-                part=part,
                 type="type",
                 formula=row[5].value,
                 sum=row[6].value,
