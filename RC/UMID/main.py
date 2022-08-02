@@ -15,7 +15,6 @@ def excel_normalize(name):
     items = []
     for sheetname in excel.sheetnames:
         worksheet = excel[sheetname]
-
         location = ""
         part = ""
         for row in worksheet.iter_rows(min_col=0, max_col=8, min_row=4):
