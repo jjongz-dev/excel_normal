@@ -1,4 +1,4 @@
-
+import re
 
 from openpyxl import load_workbook, Workbook
 
@@ -44,6 +44,19 @@ def excel_normalize(name):
             # print(item.to_excel())
             items.append(item)
 
+    for item in items:
+        # 층정리
+        if (re.match('\\d{1,2}', item.floor)):
+            item.floor = re.sub(r'[^0-9]', '', item.floor).lstrip("0") + 'F'
+
+        if (re.match('B\\d{1,2}', item.floor)):
+            item.floor = 'B' + re.sub(r'[^0-9]', '', item.floor).lstrip("0") + 'F'
+
+        if (re.match('P\\d{1,2}', item.floor)):
+            item.floor = 'PH' + re.sub(r'[^0-9]', '', item.floor).lstrip("0") + 'F'
+
+        if (item.floor == 'FTPIT'):
+            item.floor = 'B2F'
 
     # 저장할 엑셀
     new_workbook = Workbook()

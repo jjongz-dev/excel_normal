@@ -10,8 +10,10 @@ def excel_normalize(name):
     excel = load_workbook(
         'C:\\Users\ckddn\Desktop\건축.xlsx',
         data_only=True)
-    # names = excel.get_sheet_names()
-    # print(names)
+
+    names = excel.get_sheet_names()
+    print(names)
+
     items = []
     for sheetname in excel.sheetnames:
         worksheet = excel[sheetname]
