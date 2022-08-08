@@ -2,8 +2,11 @@
 
 from openpyxl import load_workbook, Workbook
 
+from Civil.ItemStandard import ItemStandard
 
-from civil.itemStandard import ItemStandard
+from Civil.ParsingRule import Earthwork
+
+from Civil.ParsingRule import SGR
 
 
 def excel_normalize(name):
@@ -11,8 +14,9 @@ def excel_normalize(name):
         'C:\\Users\ckddn\Desktop\토목.xlsx',
         data_only=True)
 
-    worksheet = excel['토공집계표']
+
     items = []
+    worksheet = excel['토공집계표']
     name = ""
     for row in worksheet.iter_rows(min_col=0, max_col=31, min_row=8):
         # 단위없음 삭제
@@ -23,8 +27,6 @@ def excel_normalize(name):
         if (row[0].value is not None):
             name = row[0].value
 
-
-
         item = ItemStandard(
             name = name,
             standard = row[8].value,
@@ -34,8 +36,12 @@ def excel_normalize(name):
             )
         items.append(item)
 
-    worksheet2 = excel['가시설공 집계표']
-    for row in worksheet2.iter_rows(min_col=1, max_col=31, min_row=9):
+    for item in items:
+        Earthwork.launch(item)
+
+
+    worksheet = excel['가시설공 집계표']
+    for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=9):
         # 단위없음 삭제
         if (row[16].value is None):
             continue
@@ -43,7 +49,6 @@ def excel_normalize(name):
         # 품명
         if (row[1].value is not None):
             name = row[1].value
-
 
         item = ItemStandard(
             name = name,
@@ -54,8 +59,8 @@ def excel_normalize(name):
             )
         items.append(item)
 
-    worksheet3 = excel['C.I.P 집계표']
-    for row in worksheet3.iter_rows(min_col=1, max_col=31, min_row=9):
+    worksheet = excel['C.I.P 집계표']
+    for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=9):
         # 단위없음 삭제
         if (row[16].value is None):
             continue
@@ -63,7 +68,6 @@ def excel_normalize(name):
         # 품명
         if (row[1].value is not None):
             name = row[1].value
-
 
         item = ItemStandard(
             name = name,
@@ -74,8 +78,8 @@ def excel_normalize(name):
             )
         items.append(item)
 
-    worksheet4 = excel['STRUT공 집계표']
-    for row in worksheet4.iter_rows(min_col=1, max_col=31, min_row=9):
+    worksheet = excel['STRUT공 집계표']
+    for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=9):
         # 단위없음 삭제
         if (row[16].value is None):
             continue
@@ -83,7 +87,6 @@ def excel_normalize(name):
         # 품명
         if (row[1].value is not None):
             name = row[1].value
-
 
         item = ItemStandard(
             name = name,
@@ -94,7 +97,27 @@ def excel_normalize(name):
             )
         items.append(item)
 
+    worksheet = excel['S.G.R공 집계표']
+    for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=11):
+        # 단위없음 삭제
+        if (row[16].value is None):
+            continue
 
+        # 품명
+        if (row[1].value is not None):
+            name = row[1].value
+
+        item = ItemStandard(
+            name = name,
+            standard = row[9].value,
+            unit = row[16].value,
+            formula = row[20].value,
+            sum = row[20].value,
+            )
+        items.append(item)
+
+    for item in items:
+        SGR.launch(item)
 
 
     # 저장할 엑셀
