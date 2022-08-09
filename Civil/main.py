@@ -6,6 +6,12 @@ from Civil.ItemStandard import ItemStandard
 
 from Civil.ParsingRule import Earthwork
 
+from Civil.ParsingRule import SidePostPile
+
+from Civil.ParsingRule import CIP
+
+from Civil.ParsingRule import Strut
+
 from Civil.ParsingRule import SGR
 
 
@@ -24,8 +30,9 @@ def excel_normalize(name):
             continue
 
         # 품명
-        if (row[0].value is not None):
-            name = row[0].value
+        if (row[0].value is not None
+                and row[15].value is not None):
+            name = row[0].value.replace('\n','')
 
         item = ItemStandard(
             name = name,
@@ -47,8 +54,14 @@ def excel_normalize(name):
             continue
 
         # 품명
-        if (row[1].value is not None):
-            name = row[1].value
+        if (row[1].value is not None
+                and row[16].value is not None):
+            name = row[1].value.replace('\n','')
+
+        # 품명+비고 임시해결
+        if (name.startswith("H-PILE 연결") and row[25].value is not None):
+            name = "H-PILE 연결" + row[25].value
+
 
         item = ItemStandard(
             name = name,
@@ -58,6 +71,10 @@ def excel_normalize(name):
             sum = row[20].value,
             )
         items.append(item)
+
+    for item in items:
+        SidePostPile.launch(item)
+
 
     worksheet = excel['C.I.P 집계표']
     for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=9):
@@ -66,8 +83,13 @@ def excel_normalize(name):
             continue
 
         # 품명
-        if (row[1].value is not None):
-            name = row[1].value
+        if (row[1].value is not None
+                and row[16].value is not None):
+            name = row[1].value.replace('\n','')
+
+        # 품명+비고 임시해결
+        if (name.startswith("CON'C 타설") and row[25].value is not None):
+            name = "CON'C 타설" + row[25].value
 
         item = ItemStandard(
             name = name,
@@ -77,6 +99,10 @@ def excel_normalize(name):
             sum = row[20].value,
             )
         items.append(item)
+
+    for item in items:
+        CIP.launch(item)
+
 
     worksheet = excel['STRUT공 집계표']
     for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=9):
@@ -85,8 +111,9 @@ def excel_normalize(name):
             continue
 
         # 품명
-        if (row[1].value is not None):
-            name = row[1].value
+        if (row[1].value is not None
+                and row[16].value is not None):
+            name = row[1].value.replace('\n','')
 
         item = ItemStandard(
             name = name,
@@ -97,6 +124,10 @@ def excel_normalize(name):
             )
         items.append(item)
 
+    for item in items:
+        Strut.launch(item)
+
+
     worksheet = excel['S.G.R공 집계표']
     for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=11):
         # 단위없음 삭제
@@ -104,8 +135,9 @@ def excel_normalize(name):
             continue
 
         # 품명
-        if (row[1].value is not None):
-            name = row[1].value
+        if (row[1].value is not None
+                and row[16].value is not None):
+            name = row[1].value.replace('\n','')
 
         item = ItemStandard(
             name = name,
@@ -118,6 +150,8 @@ def excel_normalize(name):
 
     for item in items:
         SGR.launch(item)
+
+
 
 
     # 저장할 엑셀
