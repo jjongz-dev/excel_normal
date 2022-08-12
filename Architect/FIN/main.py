@@ -4,7 +4,7 @@ from Architect.FIN.ItemStandard import ItemStandard
 
 from Architect.FIN.ItemStandard2 import ItemStandard2
 
-from Architect.FIN.PasingRule import Floorlevel3, Deleteitem2, Basicchange1
+from Architect.FIN.PasingRule import Floorlevel, Deleteitem, Basicchange
 
 
 def excel_normalize(name, column_dimensions=None):
@@ -43,11 +43,11 @@ def excel_normalize(name, column_dimensions=None):
         items.append(item)
 
     for item in items:
-        Basicchange1.launch(item)
+        Basicchange.launch(item)
 
-        Deleteitem2.launch(item)
+        Deleteitem.launch(item)
 
-        Floorlevel3.launch(item, levels, floorsupportlevels)
+        Floorlevel.launch(item, levels, floorsupportlevels)
 
 
     for item in items:
