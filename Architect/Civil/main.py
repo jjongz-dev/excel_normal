@@ -2,17 +2,9 @@
 
 from openpyxl import load_workbook, Workbook
 
-from Civil.ItemStandard import ItemStandard
+from Architect.Civil.ItemStandard import ItemStandard
 
-from Civil.ParsingRule import Earthwork
-
-from Civil.ParsingRule import SidePostPile
-
-from Civil.ParsingRule import CIP
-
-from Civil.ParsingRule import Strut
-
-from Civil.ParsingRule import SGR
+from Architect.Civil.ParsingRule import Strut, SGR, CIP, Earthwork, SidePostPile
 
 
 def excel_normalize(name):

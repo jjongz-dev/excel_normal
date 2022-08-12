@@ -3,7 +3,7 @@
 from openpyxl import load_workbook, Workbook
 
 
-from RC.ItemStandard import ItemStandard
+from Architect.RC.ItemStandard import ItemStandard
 
 
 def excel_normalize(name):
