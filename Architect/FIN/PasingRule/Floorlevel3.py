@@ -1,4 +1,4 @@
-from Architect.FIN.ItemStandard import ItemStandard
+from FIN.ItemStandard import ItemStandard
 
 import re
 

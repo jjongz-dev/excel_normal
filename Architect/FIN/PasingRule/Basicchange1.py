@@ -1,4 +1,4 @@
-from Architect.FIN.ItemStandard import ItemStandard
+from FIN.ItemStandard import ItemStandard
 
 
 def launch(item: ItemStandard):
@@ -100,18 +100,6 @@ def launch(item: ItemStandard):
     if item.floor.__contains__('기타공사'):
         item.location = '기타공사'
         item.roomname = '기타공사'
-        item.floor = '1F'
-
-    # 포장공사
-    if item.floor.__contains__('포장공사'):
-        item.location = '포장공사'
-        item.roomname = '포장공사'
-        item.floor = '1F'
-
-    # 우오수공사
-    if item.floor.__contains__('우오수공사'):
-        item.location = '우오수공사'
-        item.roomname = '우오수공사'
         item.floor = '1F'
 
     # 정화조설치공사

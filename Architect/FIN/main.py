@@ -4,7 +4,7 @@ from Architect.FIN.ItemStandard import ItemStandard
 
 from Architect.FIN.ItemStandard2 import ItemStandard2
 
-from Architect.FIN.PasingRule import Floorlevel, Deleteitem, Basicchange
+from Architect.FIN.PasingRule import Floorlevel3, Deleteitem2, Basicchange1
 
 
 def excel_normalize(name, column_dimensions=None):
@@ -43,11 +43,11 @@ def excel_normalize(name, column_dimensions=None):
         items.append(item)
 
     for item in items:
-        Basicchange.launch(item)
+        Basicchange1.launch(item)
 
-        Deleteitem.launch(item)
+        Deleteitem2.launch(item)
 
-        Floorlevel.launch(item, levels, floorsupportlevels)
+        Floorlevel3.launch(item, levels, floorsupportlevels)
 
 
     for item in items:
@@ -109,4 +109,4 @@ def excel_normalize(name, column_dimensions=None):
 if __name__ == '__main__':
     excel_normalize('PyCharm')
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
