@@ -1,5 +1,6 @@
-from FIN.ItemStandard import ItemStandard
+from Architect.FIN.ItemStandard import ItemStandard
 
+import re
 
 def launch(item: ItemStandard):
     # TYPE변경
@@ -44,6 +45,7 @@ def launch(item: ItemStandard):
         item.roomname = '우측면'
         item.floor = ''
 
+
     if item.type == '외부' and item.floor.__contains__('남측'):
         item.location = '남측면'
         item.roomname = '남측면'
@@ -64,7 +66,7 @@ def launch(item: ItemStandard):
         item.roomname = '동측면'
         item.floor = ''
 
-    #토공사정리, 기초단열재
+    # 토공사정리, 기초단열재
     if item.floor == '토공사' or item.floor == '기초단열재':
         item.location = '기초하부'
         item.roomname = '기초하부'
