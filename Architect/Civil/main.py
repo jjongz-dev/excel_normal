@@ -6,142 +6,150 @@ from Architect.Civil.ItemStandard import ItemStandard
 
 from Architect.Civil.ParsingRule import Strut, SGR, CIP, Earthwork, SidePostPile
 
+from Architect.Civil.Utils.MergeCell import mergeCell
+
+
 
 def excel_normalize(name):
     excel = load_workbook(
         'C:\\Users\ckddn\Desktop\토목.xlsx',
         data_only=True)
 
-
+    print(excel.sheetnames)
     items = []
-    worksheet = excel['토공집계표']
     name = ""
-    for row in worksheet.iter_rows(min_col=0, max_col=31, min_row=8):
-        # 단위없음 삭제
-        if (row[15].value is None):
-            continue
+    if excel.sheetnames.__contains__('토공집계표'):
+        worksheet = excel['토공집계표']
+        for row in worksheet.iter_rows(min_col=0, max_col=31, min_row=8):
+            # 단위없음 삭제
+            if (row[15].value is None):
+                continue
 
-        # 품명
-        if (row[0].value is not None
-                and row[15].value is not None):
-            name = row[0].value.replace('\n','')
+            # 품명
+            if (row[0].value is not None
+                    and row[15].value is not None):
+                name = row[0].value.replace('\n','')
 
-        item = ItemStandard(
-            name = name,
-            standard = row[8].value,
-            unit = row[15].value,
-            formula = row[19].value,
-            sum = row[19].value,
-            )
-        items.append(item)
+            item = ItemStandard(
+                name = name,
+                standard = row[8].value,
+                unit = row[15].value,
+                formula = row[19].value,
+                sum = row[19].value,
+                )
+            items.append(item)
 
-    for item in items:
-        Earthwork.launch(item)
-
-
-    worksheet = excel['가시설공 집계표']
-    for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=9):
-        # 단위없음 삭제
-        if (row[16].value is None):
-            continue
-
-        # 품명
-        if (row[1].value is not None
-                and row[16].value is not None):
-            name = row[1].value.replace('\n','')
-
-        # 품명+비고 임시해결
-        if (name.startswith("H-PILE 연결") and row[25].value is not None):
-            name = "H-PILE 연결" + row[25].value
+        for item in items:
+            Earthwork.launch(item)
 
 
-        item = ItemStandard(
-            name = name,
-            standard = row[9].value,
-            unit = row[16].value,
-            formula = row[20].value,
-            sum = row[20].value,
-            )
-        items.append(item)
+    if excel.sheetnames.__contains__('가시설공 집계표'):
+        worksheet = excel['가시설공 집계표']
+        for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=9):
+            # 단위없음 삭제
+            if (row[16].value is None):
+                continue
 
-    for item in items:
-        SidePostPile.launch(item)
+            # 품명
+            if (row[1].value is not None
+                    and row[16].value is not None):
+                name = row[1].value.replace('\n','')
 
-
-    worksheet = excel['C.I.P 집계표']
-    for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=9):
-        # 단위없음 삭제
-        if (row[16].value is None):
-            continue
-
-        # 품명
-        if (row[1].value is not None
-                and row[16].value is not None):
-            name = row[1].value.replace('\n','')
-
-        # 품명+비고 임시해결
-        if (name.startswith("CON'C 타설") and row[25].value is not None):
-            name = "CON'C 타설" + row[25].value
-
-        item = ItemStandard(
-            name = name,
-            standard = row[9].value,
-            unit = row[16].value,
-            formula = row[20].value,
-            sum = row[20].value,
-            )
-        items.append(item)
-
-    for item in items:
-        CIP.launch(item)
+            # 품명+비고 임시해결
+            if (name.startswith("H-PILE 연결") and row[25].value is not None):
+                name = mergeCell(worksheet, row[1]) + row[25].value
 
 
-    worksheet = excel['STRUT공 집계표']
-    for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=9):
-        # 단위없음 삭제
-        if (row[16].value is None):
-            continue
+            item = ItemStandard(
+                name = name,
+                standard = row[9].value,
+                unit = row[16].value,
+                formula = row[20].value,
+                sum = row[20].value,
+                )
+            items.append(item)
 
-        # 품명
-        if (row[1].value is not None
-                and row[16].value is not None):
-            name = row[1].value.replace('\n','')
-
-        item = ItemStandard(
-            name = name,
-            standard = row[9].value,
-            unit = row[16].value,
-            formula = row[20].value,
-            sum = row[20].value,
-            )
-        items.append(item)
-
-    for item in items:
-        Strut.launch(item)
+        for item in items:
+            SidePostPile.launch(item)
 
 
-    worksheet = excel['S.G.R공 집계표']
-    for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=11):
-        # 단위없음 삭제
-        if (row[16].value is None):
-            continue
+    if excel.sheetnames.__contains__('C.I.P 집계표'):
+        worksheet = excel['C.I.P 집계표']
+        for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=9):
+            # 단위없음 삭제
+            if (row[16].value is None):
+                continue
 
-        # 품명
-        if (row[1].value is not None
-                and row[16].value is not None):
-            name = row[1].value.replace('\n','')
+            # 품명
+            if (row[1].value is not None
+                    and row[16].value is not None):
+                name = row[1].value.replace('\n','')
 
-        item = ItemStandard(
-            name = name,
-            standard = row[9].value,
-            unit = row[16].value,
-            formula = row[20].value,
-            sum = row[20].value,
-            )
-        items.append(item)
+            # 품명+비고 임시해결
+            if (name.startswith("CON'C 타설") and row[25].value is not None):
+                name = mergeCell(worksheet, row[1]) + row[25].value
 
-    for item in items:
-        SGR.launch(item)
+            item = ItemStandard(
+                name = name,
+                standard = row[9].value,
+                unit = row[16].value,
+                formula = row[20].value,
+                sum = row[20].value,
+                )
+            items.append(item)
+
+        for item in items:
+            CIP.launch(item)
+
+
+    if excel.sheetnames.__contains__('STRUT공 집계표'):
+        worksheet = excel['STRUT공 집계표']
+        for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=9):
+            # 단위없음 삭제
+            if (row[16].value is None):
+                continue
+
+            # 품명
+            if (row[1].value is not None
+                    and row[16].value is not None):
+                name = row[1].value.replace('\n','')
+
+            item = ItemStandard(
+                name = name,
+                standard = row[9].value,
+                unit = row[16].value,
+                formula = row[20].value,
+                sum = row[20].value,
+                )
+            items.append(item)
+
+        for item in items:
+            Strut.launch(item)
+
+
+    if excel.sheetnames.__contains__('S.G.R공 집계표'):
+        worksheet = excel['S.G.R공 집계표']
+        for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=11):
+            # 단위없음 삭제
+            if (row[16].value is None):
+                continue
+
+            # 품명
+            if (row[1].value is not None
+                    and row[16].value is not None):
+                name = row[1].value.replace('\n','')
+
+            item = ItemStandard(
+                name = name,
+                standard = row[9].value,
+                unit = row[16].value,
+                formula = row[20].value,
+                sum = row[20].value,
+                )
+            items.append(item)
+
+        for item in items:
+            SGR.launch(item)
 
 
 

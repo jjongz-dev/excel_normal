@@ -1,7 +1,7 @@
 import openpyxl
 
 
-def MergeCell(sheet, cell):
+def mergeCell(sheet, cell):
     idx = cell.coordinate
     for range_ in sheet.merged_cells.ranges:
         merged_cells = list(openpyxl.utils.rows_from_range(str(range_)))
