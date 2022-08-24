@@ -122,6 +122,7 @@ def excel_normalize(name, column_dimensions=None):
                         inroomname = temp_inroomname.split(':')[-1]
                     continue
 
+
                 # 0값 삭제
                 if row[6].value == '0' or  row[6].value == 0:
                     continue
