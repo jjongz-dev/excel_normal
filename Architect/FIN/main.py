@@ -12,75 +12,165 @@ def excel_normalize(name, column_dimensions=None):
         'C:\\Users\ckddn\Desktop\건축.xlsx',
         data_only=True)
 
-    worksheet = excel['산출근거집계표']
+
     items = []
     levels = []
     floorsupportlevels = []
-    for row in worksheet.iter_rows(min_col=1, max_col=13, min_row=5):
-        # 산출식 없음 삭제
-        if ( row[2].value == '합        계'):
-            continue
+    if excel.sheetnames.__contains__('산출근거집계표'):
+        worksheet = excel['산출근거집계표']
 
-        # 구조이기 삭제
-        if ( row[7].value == '구조이기'):
-            continue
+        for row in worksheet.iter_rows(min_col=1, max_col=13, min_row=5):
+            # 산출식 없음 삭제
+            if ( row[2].value == '합        계'):
+                continue
 
-        # 0값 삭제
-        if (row[12].value == '0' or row[12].value == 0 ):
-            continue
+            # 구조이기 삭제
+            if ( row[7].value == '구조이기'):
+                continue
 
-        item = ItemStandard(
-            floor = row[7].value,
-            location = '',
-            roomname=row[8].value,
-            name = row[2].value,
-            standard= row[3].value,
-            unit=row[4].value,
-            type=row[5].value,
-            formula = row[9].value,
-            sum=row[12].value,
-            )
-        items.append(item)
+            # 0값 삭제
+            if (row[12].value == '0' or row[12].value == 0 ):
+                continue
 
-    for item in items:
-        Basicchange.launch(item)
+            item = ItemStandard(
+                floor = row[7].value,
+                location = '',
+                roomname=row[8].value,
+                name = row[2].value,
+                standard= row[3].value,
+                unit=row[4].value,
+                type=row[5].value,
+                formula = row[9].value,
+                sum=row[12].value,
+                )
+            items.append(item)
 
-        Deleteitem.launch(item)
+        for item in items:
+            Basicchange.launch(item)
 
-        Floorlevel.launch(item, levels, floorsupportlevels)
+            Deleteitem.launch(item)
+
+            Floorlevel.launch(item, levels, floorsupportlevels)
+
+        for item in items:
+            if len(floorsupportlevels) > 1:
+                if max(levels) > max(floorsupportlevels):
+                    if item.formula.__contains__('RF') or item.formula.__contains__('지붕'):
+                        item.floor = str(max(levels)) + 'F'
+
+    else:
+        if excel.sheetnames.__contains__('가설산출서'):
+            worksheet = excel['가설산출서']
+            for row in worksheet.iter_rows(min_col=0, max_col=8, min_row=5):
+                # 품명없음 삭제
+                if row[2].value is None or row[2].value == "'" or row[7].value == '0' or row[7].value == 0:
+                    continue
+
+                item = ItemStandard(
+                    floor='1F',
+                    location='공통가설',
+                    roomname='공통가설',
+                    name=row[2].value,
+                    standard=row[3].value,
+                    unit=row[4].value,
+                    type='내부',
+                    formula=row[5].value,
+                    sum=row[6].value,
+                )
+                items.append(item)
+
+        if excel.sheetnames.__contains__('토공산출서'):
+            worksheet = excel['토공산출서']
+            for row in worksheet.iter_rows(min_col=0, max_col=9, min_row=5):
+                # 품명없음 삭제
+                if row[3].value is None or row[3].value == "'" or row[8].value == '0' or row[8].value == 0:
+                    continue
 
 
-    for item in items:
-        if len(floorsupportlevels) > 1:
-            if max(levels) > max(floorsupportlevels):
-                if item.formula.__contains__('RF') or item.formula.__contains__('지붕'):
-                    item.floor = str(max(levels)) + 'F'
+                item = ItemStandard(
+                    floor='FT',
+                    location='기초하부',
+                    roomname='기초하부',
+                    name=row[3].value,
+                    standard=row[4].value,
+                    unit=row[5].value,
+                    type='외부',
+                    formula=row[6].value,
+                    sum=row[7].value,
+                )
+                items.append(item)
+
+        inlevels = ""
+        inroomname = ""
+        if '내부산출서' in excel.sheetnames:
+        # if excel.sheetnames.__contains__('내부산출서'):
+            worksheet = excel['내부산출서']
+            for row in worksheet.iter_rows(min_col=0, max_col=7, min_row=3):
+                # 층정보가져오기
+                if (row[0].value is not None
+                        and row[1].value is None
+                        and row[2].value is None
+                        and row[3].value is None
+                        and row[4].value is None
+                        and row[5].value is None
+                ):
+                    temp_level = row[0].value.split(' ')[-2]
+                    if '층' in temp_level:
+                        inlevels = temp_level
+                    temp_inroomname = row[0].value.split('개소')[0]
+                    if '실명' in temp_inroomname:
+                        inroomname = temp_inroomname.split(':')[-1]
+                    continue
+
+                # 0값 삭제
+                if row[6].value == '0' or  row[6].value == 0:
+                    continue
+
+                if row[2].value == '품명':
+                    continue
+
+
+                item = ItemStandard(
+                    floor=inlevels,
+                    location='',
+                    roomname=inroomname,
+                    name=row[2].value,
+                    standard=row[3].value,
+                    unit=row[4].value,
+                    type='내부',
+                    formula=row[5].value,
+                    sum=row[6].value,
+                )
+                items.append(item)
 
 
 
-    worksheet2 = excel['동별집계표']
+
+
     items2 = []
-    constructionWork = ""
-    for row in worksheet2.iter_rows(min_col=1, max_col=5, min_row=4):
-        #중공종
-        if (row[1].value.__contains__('내  역  삭  제')
-        ):
-            continue
+    if excel.sheetnames.__contains__('동별집계표'):
+        worksheet2 = excel['동별집계표']
+        constructionWork = ""
+        for row in worksheet2.iter_rows(min_col=1, max_col=5, min_row=4):
+            #중공종
+            if (row[1].value.__contains__('내  역  삭  제')
+            ):
+                continue
 
-        if (row[1].value is not None
-               and row[4].value is None
-        ):
-            constructionWork = row[1].value.replace(" ","")
+            if (row[1].value is not None
+                   and row[4].value is None
+            ):
+                constructionWork = row[1].value.replace(" ","")
 
 
-        item2 = ItemStandard2(
-            constructionWork = constructionWork,
-            name = row[1].value,
-            standard = row[2].value,
-            unit = row[3].value,
-            sum = row[4].value,
-            )
-        items2.append(item2)
+            item2 = ItemStandard2(
+                constructionWork = constructionWork,
+                name = row[1].value,
+                standard = row[2].value,
+                unit = row[3].value,
+                sum = row[4].value,
+                )
+            items2.append(item2)
 
 
     # 저장할 엑셀
