@@ -14,9 +14,10 @@ def excel_normalize(name):
     # print(names)
     worksheet = excel['부재별산출서']
     items = []
-    floor = ""
     location = ""
+    floor = ""
     part = ""
+    crossname = ""
     for row in worksheet.iter_rows(min_col=0, max_col=6, min_row=4):
         # 호
         if ( row[0].value is not None
@@ -29,11 +30,16 @@ def excel_normalize(name):
             location = row[0].value.split('-')[-1].strip()
             continue
 
-        # 층, 부위
+        # 층, 부위, 이름
         if ( row[0].value is not None
             and row[1].value is not None):
             floor = row[0].value
             part = row[1].value
+
+        # 컷근이름 가져오기
+        if ( row[2].value is not None
+                and row[5].value is not None):
+            crossname = row[2].value.replace("'","")
 
         # 비고 제외
         if( row[2].value == '[ 비 고 ]'):
@@ -46,12 +52,13 @@ def excel_normalize(name):
             slope = concs[-1].zfill(2)
             newconc = '-'.join([concs[0], concs[1], slope])
 
+        print(crossname)
 
 
         item = ItemStandard(
             floor = floor,
             location = location,
-            name = row[2].value,
+            name = crossname,
             standard= newconc,
             part = part,
             formula = row[4].value,
@@ -59,6 +66,7 @@ def excel_normalize(name):
             )
         # print(item.to_excel())
         items.append(item)
+
 
 
     # 저장할 엑셀
