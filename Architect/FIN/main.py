@@ -59,33 +59,59 @@ def excel_normalize(name, column_dimensions=None):
                         item.floor = str(max(levels)) + 'F'
 
     else:
-        if excel.sheetnames.__contains__('가설산출서'):
+        if '가설산출서' in excel.sheetnames:
             worksheet = excel['가설산출서']
+            temproomname = ""
             for row in worksheet.iter_rows(min_col=0, max_col=8, min_row=5):
-                # 품명없음 삭제
-                if row[2].value is None or row[2].value == "'" or row[7].value == '0' or row[7].value == 0:
+                # 층정보가져오기
+                if (row[0].value is not None
+                        and row[1].value is None
+                        and row[2].value is None
+                        and row[3].value is None
+                        and row[4].value is None
+                        and row[5].value is None
+                        and row[6].value is None
+                        and row[7].value is None
+                ):
+                    temp_roomname = row[0].value.split('개소')[0]
+                    if '구분명' in temp_roomname:
+                        temproomname = temp_roomname.split(':')[-1]
                     continue
 
+                # 품명없음 삭제
+                if (row[7].value is None
+                        or row[7].value == "'"
+                        or row[7].value == '0'
+                        or row[7].value == 0
+                        or row[7].value == '물량'
+                ):
+                    continue
+
+                print(temproomname)
                 item = ItemStandard(
                     floor='1F',
-                    location='공통가설',
-                    roomname='공통가설',
+                    location=temproomname,
+                    roomname=temproomname,
                     name=row[2].value,
                     standard=row[3].value,
                     unit=row[4].value,
                     type='내부',
                     formula=row[5].value,
-                    sum=row[6].value,
+                    sum=row[7].value,
                 )
                 items.append(item)
 
-        if excel.sheetnames.__contains__('토공산출서'):
+        if '토공산출서' in excel.sheetnames:
             worksheet = excel['토공산출서']
             for row in worksheet.iter_rows(min_col=0, max_col=9, min_row=5):
                 # 품명없음 삭제
-                if row[3].value is None or row[3].value == "'" or row[8].value == '0' or row[8].value == 0:
+                if (row[8].value is None
+                        or row[8].value == "'"
+                        or row[8].value == '0'
+                        or row[8].value == 0
+                        or row[8].value == '물량'
+                ):
                     continue
-
 
                 item = ItemStandard(
                     floor='FT',
@@ -96,15 +122,14 @@ def excel_normalize(name, column_dimensions=None):
                     unit=row[5].value,
                     type='외부',
                     formula=row[6].value,
-                    sum=row[7].value,
+                    sum=row[8].value,
                 )
                 items.append(item)
 
-        inlevels = ""
-        inroomname = ""
         if '내부산출서' in excel.sheetnames:
-        # if excel.sheetnames.__contains__('내부산출서'):
             worksheet = excel['내부산출서']
+            inlevels = ""
+            inroomname = ""
             for row in worksheet.iter_rows(min_col=0, max_col=7, min_row=3):
                 # 층정보가져오기
                 if (row[0].value is not None
@@ -117,23 +142,23 @@ def excel_normalize(name, column_dimensions=None):
                     temp_level = row[0].value.split(' ')[-2]
                     if '층' in temp_level:
                         inlevels = temp_level
-                    temp_inroomname = row[0].value.split('개소')[0]
-                    if '실명' in temp_inroomname:
-                        inroomname = temp_inroomname.split(':')[-1]
+                    temp_roomname = row[0].value.split('개소')[0]
+                    if '실명' in temp_roomname:
+                        inroomname = temp_roomname.split(':')[-1]
                     continue
 
-
-                # 0값 삭제
-                if row[6].value == '0' or  row[6].value == 0:
+                # 품명없음 삭제
+                if (row[6].value is None
+                        or row[6].value == "'"
+                        or row[6].value == '0'
+                        or row[6].value == 0
+                        or row[6].value == '물량'
+                ):
                     continue
-
-                if row[2].value == '품명':
-                    continue
-
 
                 item = ItemStandard(
                     floor=inlevels,
-                    location='',
+                    location=inroomname,
                     roomname=inroomname,
                     name=row[2].value,
                     standard=row[3].value,
@@ -144,8 +169,162 @@ def excel_normalize(name, column_dimensions=None):
                 )
                 items.append(item)
 
+        if '외부산출서' in excel.sheetnames:
+            worksheet = excel['외부산출서']
+            exroomname = ""
+            for row in worksheet.iter_rows(min_col=0, max_col=9, min_row=3):
+                # 층정보가져오기
+                if (row[0].value is not None
+                        and row[1].value is None
+                        and row[2].value is None
+                        and row[3].value is None
+                        and row[4].value is None
+                        and row[5].value is None
+                        and row[6].value is None
+                        and row[7].value is None
+                ):
+                    temp_roomname = row[0].value.split('개소')[0]
+                    if '구분명' in temp_roomname:
+                        exroomname = temp_roomname.split(':')[-1]
+                    continue
+
+                # 품명없음 삭제
+                if (row[8].value is None
+                        or row[8].value == "'"
+                        or row[8].value == '0'
+                        or row[8].value == 0
+                        or row[8].value == '물량'
+                ):
+                    continue
+
+                item = ItemStandard(
+                    floor='',
+                    location=exroomname,
+                    roomname=exroomname,
+                    name=row[3].value,
+                    standard=row[4].value,
+                    unit=row[5].value,
+                    type='외부',
+                    formula=row[6].value,
+                    sum=row[8].value,
+                )
+                items.append(item)
+
+        if '조적산출서' in excel.sheetnames:
+            worksheet = excel['조적산출서']
+            bricklevels = ""
+            brickroomname = ""
+            for row in worksheet.iter_rows(min_col=0, max_col=6, min_row=3):
+                # 층정보가져오기
+                if (row[0].value is not None
+                        and row[1].value is None
+                        and row[2].value is None
+                        and row[3].value is None
+                        and row[4].value is None
+                        and row[5].value is None
+                ):
+                    temp_level = row[0].value.split(' ')[-2]
+                    if '층' in temp_level:
+                        bricklevels = temp_level
+                    temp_roomname = row[0].value.split('개소')[0]
+                    if '실명' in temp_roomname:
+                        brickroomname = temp_roomname.split(':')[-1]
+                    continue
+
+                # 품명없음 삭제
+                if (row[5].value is None
+                        or row[5].value == "'"
+                        or row[5].value == '0'
+                        or row[5].value == 0
+                        or row[5].value == '물량'
+                ):
+                    continue
+
+                item = ItemStandard(
+                    floor=bricklevels,
+                    location=brickroomname,
+                    roomname=brickroomname,
+                    name=row[1].value,
+                    standard=row[2].value,
+                    unit=row[3].value,
+                    type='내부',
+                    formula=row[4].value,
+                    sum=row[5].value,
+                )
+                items.append(item)
+
+        windows_dict = {}
+        if '동별창호리스트' in excel.sheetnames:
+            worksheet = excel['동별창호리스트']
+            for row in worksheet.iter_rows(min_col=0, max_col=11, min_row=5):
+                if row[0].value == '':
+                    break
+
+                if row[1].value is not None:
+                    wdname = row[1].value + '(' + row[9].value + ')'
+                    windows_dict[row[1].value] = row[10].value
+                    d1 = float_format(row[2])
+                    d2 = float_format(row[3])
+                    d3 = float_format(row[4])
+                    wdstandard = d1 + '*' + d2 + '=' + d3
+
+                item = ItemStandard(
+                    floor='',
+                    location='',
+                    roomname='',
+                    name=wdname,
+                    standard=wdstandard,
+                    unit='EA',
+                    type='창호',
+                    formula=row[10].value,
+                    sum=row[10].value,
+                )
+                items.append(item)
 
 
+        if '창호산출서' in excel.sheetnames:
+            worksheet = excel['창호산출서']
+            windows_name = ''
+            for row in worksheet.iter_rows(min_col=0, max_col=6, min_row=3):
+                # 비교정보 가져오기
+                if (row[0].value is not None
+                        and row[1].value is None
+                        and row[2].value is None
+                        and row[3].value is None
+                        and row[4].value is None
+                        and row[5].value is None
+                ):
+                    temp_wdnamecomepare = row[0].value.split('(')[0]
+                    if '창호' in temp_wdnamecomepare:
+                        windows_name = temp_wdnamecomepare.split(':')[-1].strip()
+                    continue
+
+                # 품명없음 삭제
+                if (row[5].value is None
+                        or row[5].value == "'"
+                        or row[5].value == '0'
+                        or row[5].value == 0
+                        or row[5].value == '물량'
+                ):
+                    continue
+
+                # print(f"keys : {windows_dict.keys()}")
+                # print(f"request key : {windows_name}")
+                item = ItemStandard(
+                    floor='',
+                    location='',
+                    roomname='',
+                    name=row[1].value,
+                    standard=row[2].value,
+                    unit=row[3].value,
+                    type='창호',
+                    formula=f"({row[4].value})*<수량>({windows_dict[windows_name]})",
+                    sum=float(row[5].value)*(float(windows_dict[windows_name])),
+                )
+                items.append(item)
+
+        # for key, value in windows_dict.items():
+        #     print(f"{key}:{value}")
 
 
     items2 = []
@@ -195,6 +374,11 @@ def excel_normalize(name, column_dimensions=None):
 
 
     new_workbook.save("C:\\Users\ckddn\Desktop\건축완성.xlsx")
+
+
+def float_format(column):
+    return str(f'{float(column.value):0.3f}')
+
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':

@@ -78,7 +78,7 @@ def launch(item: ItemStandard):
     # 띠장(WALE)연결
     if item.name in ['띠장(WALE) 연결']:
         item.name = '띠장(WALE)연결'
-        item.standard = ''
+        item.standard = item.standard.replace(' ','')
         item.unit = '개소'
 
     # 스티프너

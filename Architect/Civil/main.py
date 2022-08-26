@@ -18,7 +18,7 @@ def excel_normalize(name):
     print(excel.sheetnames)
     items = []
     name = ""
-    if excel.sheetnames.__contains__('토공집계표'):
+    if '토공집계표' in excel.sheetnames:
         worksheet = excel['토공집계표']
         for row in worksheet.iter_rows(min_col=0, max_col=31, min_row=8):
             # 단위없음 삭제
@@ -43,7 +43,7 @@ def excel_normalize(name):
             Earthwork.launch(item)
 
 
-    if excel.sheetnames.__contains__('가시설공 집계표'):
+    if '가시설공 집계표' in excel.sheetnames:
         worksheet = excel['가시설공 집계표']
         for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=9):
             # 단위없음 삭제
@@ -73,7 +73,7 @@ def excel_normalize(name):
             SidePostPile.launch(item)
 
 
-    if excel.sheetnames.__contains__('C.I.P 집계표'):
+    if 'C.I.P 집계표' in excel.sheetnames:
         worksheet = excel['C.I.P 집계표']
         for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=9):
             # 단위없음 삭제
@@ -102,7 +102,7 @@ def excel_normalize(name):
             CIP.launch(item)
 
 
-    if excel.sheetnames.__contains__('STRUT공 집계표'):
+    if 'STRUT공 집계표' in excel.sheetnames:
         worksheet = excel['STRUT공 집계표']
         for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=9):
             # 단위없음 삭제
@@ -127,7 +127,7 @@ def excel_normalize(name):
             Strut.launch(item)
 
 
-    if excel.sheetnames.__contains__('S.G.R공 집계표'):
+    if 'S.G.R공 집계표' in excel.sheetnames:
         worksheet = excel['S.G.R공 집계표']
         for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=11):
             # 단위없음 삭제
