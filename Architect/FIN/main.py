@@ -16,7 +16,7 @@ def excel_normalize(name, column_dimensions=None):
     items = []
     levels = []
     floorsupportlevels = []
-    if excel.sheetnames.__contains__('산출근거집계표'):
+    if '산출근거집계표' in excel.sheetnames:
         worksheet = excel['산출근거집계표']
 
         for row in worksheet.iter_rows(min_col=1, max_col=13, min_row=5):
@@ -87,7 +87,6 @@ def excel_normalize(name, column_dimensions=None):
                 ):
                     continue
 
-                print(temproomname)
                 item = ItemStandard(
                     floor='1F',
                     location=temproomname,
@@ -212,8 +211,6 @@ def excel_normalize(name, column_dimensions=None):
 
         if '조적산출서' in excel.sheetnames:
             worksheet = excel['조적산출서']
-            bricklevels = ""
-            brickroomname = ""
             for row in worksheet.iter_rows(min_col=0, max_col=6, min_row=3):
                 # 층정보가져오기
                 if (row[0].value is not None
@@ -261,19 +258,19 @@ def excel_normalize(name, column_dimensions=None):
                     break
 
                 if row[1].value is not None:
-                    wdname = row[1].value + '(' + row[9].value + ')'
+                    windows_name = row[1].value + '(' + row[9].value + ')'
                     windows_dict[row[1].value] = row[10].value
                     d1 = float_format(row[2])
                     d2 = float_format(row[3])
                     d3 = float_format(row[4])
-                    wdstandard = d1 + '*' + d2 + '=' + d3
+                    windows_standard = d1 + '*' + d2 + '=' + d3
 
                 item = ItemStandard(
                     floor='',
                     location='',
                     roomname='',
-                    name=wdname,
-                    standard=wdstandard,
+                    name=windows_name,
+                    standard=windows_standard,
                     unit='EA',
                     type='창호',
                     formula=row[10].value,
@@ -294,9 +291,9 @@ def excel_normalize(name, column_dimensions=None):
                         and row[4].value is None
                         and row[5].value is None
                 ):
-                    temp_wdnamecomepare = row[0].value.split('(')[0]
-                    if '창호' in temp_wdnamecomepare:
-                        windows_name = temp_wdnamecomepare.split(':')[-1].strip()
+                    temp_name = row[0].value.split('(')[0]
+                    if '창호' in temp_name:
+                        windows_name = temp_name.split(':')[-1].strip()
                     continue
 
                 # 품명없음 삭제
@@ -325,6 +322,27 @@ def excel_normalize(name, column_dimensions=None):
 
         # for key, value in windows_dict.items():
         #     print(f"{key}:{value}")
+
+
+    # 신규아이템 가설 추가
+    for numbering in range(3):
+        numbering = numbering + 1
+        temp_names = '가설신규아이템만#'
+        names = f"{temp_names}{str(numbering)}"
+
+        item = ItemStandard(
+            floor='1F',
+            location='가설',
+            roomname='가설',
+            name=names,
+            standard='',
+            unit='EA',
+            type='내부',
+            formula=float(1),
+            sum=float(1),
+        )
+        items.append(item)
+
 
 
     items2 = []

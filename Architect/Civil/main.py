@@ -151,7 +151,20 @@ def excel_normalize(name):
         for item in items:
             SGR.launch(item)
 
+    # 계측장비 추가
+    for numbering in range(5):
+        numbering = numbering + 1
+        temp_names = '계측장비#'
+        names = f"{temp_names}{str(numbering)}"
 
+        item = ItemStandard(
+            name=names,
+            standard='',
+            unit='EA',
+            formula=float(1),
+            sum=float(1),
+        )
+        items.append(item)
 
 
     # 저장할 엑셀
@@ -165,6 +178,8 @@ def excel_normalize(name):
     new_sheet.append(head_title)
     for item in items:
         new_sheet.append(item.to_excel())
+    # add_item = ['', '', '', '토목', '', '', '메롱', '', 'EA', '', '외부', 1, 1, '']
+    # new_sheet.append(add_item)
 
 
     new_workbook.save("C:\\Users\ckddn\Desktop\토목완성.xlsx")
