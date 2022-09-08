@@ -4,7 +4,7 @@ from openpyxl import load_workbook, Workbook
 
 from Architect.Civil.ItemStandard import ItemStandard
 
-from Architect.Civil.ParsingRule import Strut, SGR, CIP, Earthwork, SidePostPile
+from Architect.Civil.ParsingRule import Strut, SGR, CIP, Earthwork, SidePostPile, RoadDeckingPanel
 
 from Architect.Civil.Utils.MergeCell import mergeCell
 
@@ -28,10 +28,10 @@ def excel_normalize(name):
             # 품명
             if (row[0].value is not None
                     and row[15].value is not None):
-                name = row[0].value.replace('\n','')
+                temp_name = row[0].value.replace('\n','')
 
             item = ItemStandard(
-                name = name,
+                name=temp_name,
                 standard = row[8].value,
                 unit = row[15].value,
                 formula = row[19].value,
@@ -53,15 +53,15 @@ def excel_normalize(name):
             # 품명
             if (row[1].value is not None
                     and row[16].value is not None):
-                name = row[1].value.replace('\n','')
+                temp_name = row[1].value.replace('\n','')
 
             # 품명+비고 임시해결
-            if (name.startswith("H-PILE 연결") and row[25].value is not None):
-                name = mergeCell(worksheet, row[1]) + row[25].value
+            if (temp_name.startswith("H-PILE 연결") and row[25].value is not None):
+                temp_name = mergeCell(worksheet, row[1]) + row[25].value
 
 
             item = ItemStandard(
-                name = name,
+                name = temp_name,
                 standard = row[9].value,
                 unit = row[16].value,
                 formula = row[20].value,
@@ -83,14 +83,14 @@ def excel_normalize(name):
             # 품명
             if (row[1].value is not None
                     and row[16].value is not None):
-                name = row[1].value.replace('\n','')
+                temp_name = row[1].value.replace('\n','')
 
             # 품명+비고 임시해결
-            if (name.startswith("CON'C 타설") and row[25].value is not None):
-                name = mergeCell(worksheet, row[1]) + row[25].value
+            if (temp_name.startswith("CON'C") and row[25].value is not None):
+                temp_name = mergeCell(worksheet, row[1]) + row[25].value
 
             item = ItemStandard(
-                name = name,
+                name = temp_name,
                 standard = row[9].value,
                 unit = row[16].value,
                 formula = row[20].value,
@@ -98,9 +98,9 @@ def excel_normalize(name):
                 )
             items.append(item)
 
+
         for item in items:
             CIP.launch(item)
-
 
     if 'STRUT공 집계표' in excel.sheetnames:
         worksheet = excel['STRUT공 집계표']
@@ -112,10 +112,10 @@ def excel_normalize(name):
             # 품명
             if (row[1].value is not None
                     and row[16].value is not None):
-                name = row[1].value.replace('\n','')
+                temp_name = row[1].value.replace('\n','')
 
             item = ItemStandard(
-                name = name,
+                name = temp_name,
                 standard = row[9].value,
                 unit = row[16].value,
                 formula = row[20].value,
@@ -137,10 +137,10 @@ def excel_normalize(name):
             # 품명
             if (row[1].value is not None
                     and row[16].value is not None):
-                name = row[1].value.replace('\n','')
+                temp_name = row[1].value.replace('\n','')
 
             item = ItemStandard(
-                name = name,
+                name = temp_name,
                 standard = row[9].value,
                 unit = row[16].value,
                 formula = row[20].value,
@@ -150,6 +150,30 @@ def excel_normalize(name):
 
         for item in items:
             SGR.launch(item)
+
+    if '복공 집계표' in excel.sheetnames:
+        worksheet = excel['복공 집계표']
+        for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=11):
+            # 단위없음 삭제
+            if (row[16].value is None):
+                continue
+
+            # 품명
+            if (row[1].value is not None
+                    and row[16].value is not None):
+                temp_name = row[1].value.replace('\n','')
+
+            item = ItemStandard(
+                name = temp_name,
+                standard = row[9].value,
+                unit = row[16].value,
+                formula = row[20].value,
+                sum = row[20].value,
+                )
+            items.append(item)
+
+        for item in items:
+            RoadDeckingPanel.launch(item)
 
     # 계측장비 추가
     for numbering in range(5):
@@ -165,6 +189,7 @@ def excel_normalize(name):
             sum=float(1),
         )
         items.append(item)
+
 
 
     # 저장할 엑셀
