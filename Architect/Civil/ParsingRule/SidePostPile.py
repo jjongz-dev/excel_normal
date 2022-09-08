@@ -41,10 +41,21 @@ def launch(item: ItemStandard):
 
 
     # POST-PILE사장
+    try:
+        if item.name in ['POST PILE 절단 및 사장']:
+            item.name = 'POST-PILE절단'
+            item.unit = '개소'
+            if item.standard is not None and '(' in item.standard and ')' in item.standard:
+                item.standard = item.standard.split('(')[1].split(')')[0]
+    except Exception as e:
+        print('예외가 발생했습니다.', e)
+        print('POST-PILE사장 error!!!' + str(item))
+
     if item.name in ['POST PILE 절단 및 사장']:
         item.name = 'POST-PILE절단'
-        item.standard = item.standard.split('(')[1].split(')')[0]
         item.unit = '개소'
+        if item.standard is not None:
+            item.standard = item.standard.split('(')[1].split(')')[0]
 
     # SIDE-PILE연결
     if item.name in ['H-PILE 연결SIDE-PILE']:

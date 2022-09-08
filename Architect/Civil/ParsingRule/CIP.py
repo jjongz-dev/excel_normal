@@ -28,12 +28,12 @@ def launch(item: ItemStandard):
     # 레미콘
     if item.name in ["CON'C 타설C.I.P"]:
         item.name = '레미콘'
-        item.standard = '25-21-12,CIP용 ★강도체크'
+        item.standard = item.standard + ',CIP용 ★강도체크'
         item.unit = 'M3'
 
     if item.name in ["CON'C 타설CAP BEAM"]:
         item.name = '레미콘'
-        item.standard = '25-21-12,CAP BEAM용 ★강도체크'
+        item.standard = item.standard + ',CAP BEAM용 ★강도체크'
         item.unit = 'M3'
 
     # 거푸집

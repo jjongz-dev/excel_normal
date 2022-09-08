@@ -15,7 +15,7 @@ def excel_normalize(name):
         'C:\\Users\ckddn\Desktop\토목.xlsx',
         data_only=True)
 
-    print(excel.sheetnames)
+    # print(excel.sheetnames)
     items = []
     name = ""
     if '토공집계표' in excel.sheetnames:
