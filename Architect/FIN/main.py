@@ -52,6 +52,7 @@ def excel_normalize(name, column_dimensions=None):
 
             Floorlevel.launch(item, levels, floorsupportlevels)
 
+
         for item in items:
             if len(floorsupportlevels) > 1:
                 if max(levels) > max(floorsupportlevels):

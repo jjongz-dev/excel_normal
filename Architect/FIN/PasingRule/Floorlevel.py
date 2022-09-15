@@ -64,7 +64,7 @@ def launch(item: ItemStandard,levels,floorsupportlevels):
 
 
     # 최대 레벨값 뽑기
-    if item.name.__contains__('먹메김') and re.match('\\d{1,2}F', item.floor):
+    if (item.name.__contains__('먹메김') or item.name.__contains__('먹매김') ) and re.match('\\d{1,2}F', item.floor):
         ccc = int(item.floor.replace('F', ''))
         levels.append(ccc)
 
