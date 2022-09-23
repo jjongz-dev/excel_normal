@@ -1,25 +1,83 @@
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+from __future__ import print_function
 
-scope = ['https://drive.google.com/drive/my-drive']
+import os.path
+
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+
+# If modifying these scopes, delete the file token.json.
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
+
+# The ID and range of a sample spreadsheet.
+SAMPLE_SPREADSHEET_ID = '138QjV6skBObCz1TaWOwgtBLdIgYTnCK9nRZtNMcFCyU'
+SAMPLE_RANGE_NAME = '원주 뽑는정보!A1:S52'
 
 
-credentials = ServiceAccountCredentials.from_json_keyfile_name('C:\dev\My Project-sample.json', scope)
+def main():
+    """Shows basic usage of the Sheets API.
+    Prints values from a sample spreadsheet.
+    """
+    creds = None
+    # The file token.json stores the user's access and refresh tokens, and is
+    # created automatically when the authorization flow completes for the first
+    # time.
+    if os.path.exists('token.json'):
+        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+    # If there are no (valid) credentials available, let the user log in.
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                'c21166a86163.json', SCOPES)
+            creds = flow.run_local_server(port=0)
+        # Save the credentials for the next run
+        with open('token.json', 'w') as token:
+            token.write(creds.to_json())
 
-gc = gspread.authorize(credentials).open("Google Sheet Name")
+    try:
+        service = build('sheets', 'v4', credentials=creds)
 
-wks = gc.get_worksheet(0)
+        # Call the Sheets API
+        sheet = service.spreadsheets()
+        result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
+                                    range=SAMPLE_RANGE_NAME).execute()
+        values = result.get('values', [])
 
-gc.get_worksheet(-1)## integer position으로 접근
-gc.worksheet('Sheet Name) ## sheet name으로 접근
+        items = []
+        if not values:
+            print('No data found.')
+            return
 
-wks.update_acell('D1', 'It's Work!')
+        print('Name, Major:')
+        for row in values:
+            # Print columns A and E, which correspond to indices 0 and 4.
+            # print('%s, %s' % (row[0], row[4]))
 
-# Select a range
-cell_list = wks.range('A1:C7')
+            items.append(values)
 
-for cell in cell_list:
-    cell.value = 'test'
+        add_sheet_request = {
+            'requests': [
+                {
+                    'addSheet': {
+                        'properties': {
+                            'title': 'test',
+                            'tabColor':{'red':0.44}
+                        }
+                    }
+                }
+            ]
+        }
+        response = sheet.batchUpdate(body=add_sheet_request, spreadsheetId=SAMPLE_SPREADSHEET_ID).execute()
+        print(response)
+    except HttpError as err:
+        print(err)
 
-# Update in batch
-wks.update_cells(cell_list)
+    # print(items)
+
+
+if __name__ == '__main__':
+    main()
