@@ -1,3 +1,4 @@
+import os.path
 
 import gspread
 from google.oauth2.service_account import Credentials
@@ -12,9 +13,8 @@ scopes = [
     'https://www.googleapis.com/auth/drive',
     'https://spreadsheets.google.com/feeds'
 ]
-
 credentials = Credentials.from_service_account_file(
-    'c21166a86163.json',
+    'C:\\Users\\ckddn\\PycharmProjects\\c21166a86163.json',
     scopes=scopes
 )
 gc = gspread.authorize(credentials)

@@ -60,6 +60,7 @@ def excel_normalize(name, column_dimensions=None):
                         item.floor = str(max(levels)) + 'F'
 
     else:
+        print(excel.sheetnames)
         if '가설산출서' in excel.sheetnames:
             worksheet = excel['가설산출서']
             temproomname = ""
