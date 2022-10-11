@@ -60,7 +60,6 @@ def excel_normalize(name, column_dimensions=None):
                         item.floor = str(max(levels)) + 'F'
 
     else:
-        print(excel.sheetnames)
         if '가설산출서' in excel.sheetnames:
             worksheet = excel['가설산출서']
             temproomname = ""
@@ -77,7 +76,7 @@ def excel_normalize(name, column_dimensions=None):
                 ):
                     temp_roomname = row[0].value.split('개소')[0]
                     if '구분명' in temp_roomname:
-                        temproomname = temp_roomname.split(':')[-1]
+                        temproomname = temp_roomname.split(':')[-1].replace("[","").replace("]","").replace(" ","")
                     continue
 
                 # 품명없음 삭제
@@ -88,7 +87,7 @@ def excel_normalize(name, column_dimensions=None):
                         or row[7].value == '물량'
                 ):
                     continue
-
+                print(temproomname)
                 item = ItemStandard(
                     floor='1F',
                     location=temproomname,

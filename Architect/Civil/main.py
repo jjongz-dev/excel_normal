@@ -191,7 +191,6 @@ def excel_normalize(name):
         items.append(item)
 
 
-
     # 저장할 엑셀
     new_workbook = Workbook()
     new_sheet = new_workbook.active
