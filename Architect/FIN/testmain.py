@@ -10,6 +10,7 @@ def excel_normalize(name, column_dimensions=None):
         data_only=True)
 
     items = []
+    row_index_list = []
 
     start_titles = ['부위', '도형', '구분']
     title_row_index = ""
@@ -34,7 +35,6 @@ def excel_normalize(name, column_dimensions=None):
                     break
             row_index += 1
 
-        # 열의 타이틀을 가지고 그 열의 번호를 따서 row[]에 들어감
         for index, column in enumerate(worksheet[title_row_index]):
             match column.value:
                 case '부위':
@@ -115,8 +115,6 @@ def excel_normalize(name, column_dimensions=None):
                 case '물량':
                     quantity_index = index
 
-            print(figure_index)
-
         for row in worksheet.iter_rows(min_col=0, max_col=worksheet._current_row, min_row=(title_row_index+1)):
             if (row[figure_index].value is not None
                     and row[name_index].value is None
@@ -154,6 +152,120 @@ def excel_normalize(name, column_dimensions=None):
                 sum=row[quantity_index].value,
             )
             items.append(item)
+
+    if '내부산출서' in excel.sheetnames:
+        worksheet = excel['내부산출서']
+
+        row_index = 1
+        for row in worksheet.iter_rows():
+            for column_index, column in enumerate(row):
+                if column.value in start_titles:
+                    title_row_index = row_index
+                    title_column_index = column_index
+                    row_index_list.append(row_index)
+                    break
+            row_index += 1
+
+        for index, column in enumerate(worksheet[title_row_index]):
+            match column.value:
+                case '도형':
+                    figure_index = index
+                case '품명':
+                    name_index = index
+                case '규격':
+                    standard_index = index
+                case '단위':
+                    unit_index = index
+                case '산식':
+                    formular_index = index
+                case '물량':
+                    quantity_index = index
+
+        temp_levels = ""
+        temp_roomname = ""
+        for row in worksheet.iter_rows(min_col=0, max_col=worksheet._current_row, min_row=(row_index_list[0] - 1)):
+            if (row[figure_index].value is not None
+                    and row[name_index].value is None
+                    and row[standard_index].value is None
+                    and row[unit_index].value is None
+                    and row[formular_index].value is None
+                    and row[quantity_index].value is None
+            ):
+                try:
+                    temp_split_levels = row[figure_index].value.split(' ')[-2]
+                    if '층' in temp_split_levels:
+                        temp_levels = temp_split_levels
+
+                    temp_split_roomname = row[figure_index].value.split('개소')[0]
+                    if '실명' in temp_split_roomname:
+                        temp_roomname = temp_split_roomname.split(':')[-1].strip('[] ')
+                    continue
+                except Exception as e:
+                    print('예외가 발생했습니다.', e)
+                    print('내부산출서 : split오류' + str(item))
+
+            # 품명없음 삭제
+            if (row[quantity_index].value is None
+                    or row[quantity_index].value == "'"
+                    or row[quantity_index].value == '0'
+                    or row[quantity_index].value == 0
+                    or row[quantity_index].value == '물량'
+            ):
+                continue
+
+            item = ItemStandard(
+                floor=temp_levels,
+                location=temp_roomname,
+                roomname=temp_roomname,
+                name=row[name_index].value,
+                standard=row[standard_index].value,
+                unit=row[unit_index].value,
+                type='내부',
+                formula=row[formular_index].value,
+                sum=row[quantity_index].value,
+            )
+            items.append(item)
+
+    if '외부산출서' in excel.sheetnames:
+        worksheet = excel['외부산출서']
+
+        row_index = 1
+        for row in worksheet.iter_rows():
+            for column_index, column in enumerate(row):
+                if column.value in start_titles:
+                    title_row_index = row_index
+                    title_column_index = column_index
+                    row_index_list.append(row_index)
+                    break
+            row_index += 1
+
+        for index, column in enumerate(worksheet[title_row_index]):
+            match column.value:
+                case '도형':
+                    figure_index = index
+                case '품명':
+                    name_index = index
+                case '규격':
+                    standard_index = index
+                case '단위':
+                    unit_index = index
+                case '산식':
+                    formular_index = index
+                case '물량':
+                    quantity_index = index
+
+        for row in worksheet.iter_rows(min_col=0, max_col=worksheet._current_row, min_row=(row_index_list[0]+1)):
+            if (row[figure_index].value is not None
+                and row[name_index].value is None
+                and row[standard_index].value is None
+                and row[unit_index].value is None
+                and row[formular_index].value is None
+                and row[quantity_index].value is None
+            ):
+                try:
+
+
+
 
 
     for item in items:
