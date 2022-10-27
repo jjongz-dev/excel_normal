@@ -11,8 +11,8 @@ def excel_normalize(name):
         'C:\\Users\ckddn\Desktop\건축.xlsx',
         data_only=True)
 
-    names = excel.get_sheet_names()
-    print(names)
+    # names = excel.get_sheet_names()
+    # print(names)
 
     items = []
     for sheetname in excel.sheetnames:
@@ -59,7 +59,6 @@ def excel_normalize(name):
         # 비내력벽
         if (item.type == '비내력벽'):
             item.type = '내부'
-            item.floor = ''
             item.location = ''
             item.roomname = ''
 
@@ -77,7 +76,6 @@ def excel_normalize(name):
         # 창호
         if (item.type == '창호'):
             item.part = item.location.split(',')[0]
-            item.floor = ''
             item.location = ''
             item.roomname = ''
 
