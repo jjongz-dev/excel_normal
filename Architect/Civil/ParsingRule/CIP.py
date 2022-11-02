@@ -23,15 +23,19 @@ def launch(item: ItemStandard):
         item.standard = item.standard + ',SD400,지정장소도,CAP BEAM용'
 
     # 레미콘
-    # if item.name in ["CON'C 타설C.I.P"]:
-    #     item.name = '레미콘'
-    #     item.standard = item.standard + ',CIP용 ★강도체크'
-    #     item.unit = 'M3'
-    #
-    # if item.name in ["CON'C 타설CAP BEAM"]:
-    #     item.name = '레미콘'
-    #     item.standard = item.standard + ',CAP BEAM용 ★강도체크'
-    #     item.unit = 'M3'
+    if item.name in ["CON'C 타설C.I.P"]:
+        item.name = '레미콘'
+        if '240' in item.standard:
+            item.standard = '25-24-12,CIP용'
+        else:
+            item.standard = item.standard + ',CIP용 ★강도체크'
+
+    if item.name in ["CON'C 타설CAP BEAM"]:
+        item.name = '레미콘'
+        if '240' in item.standard:
+            item.standard = '25-24-12,CAP BEAM용'
+        else:
+            item.standard = item.standard + ',CAP BEAM용 ★강도체크'
 
     # 거푸집
     if item.name in ['거푸집 설치']:

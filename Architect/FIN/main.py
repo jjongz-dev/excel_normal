@@ -349,7 +349,7 @@ def excel_normalize(name, column_dimensions=None):
     items2 = []
     if excel.sheetnames.__contains__('동별집계표'):
         worksheet2 = excel['동별집계표']
-        constructionWork = ""
+        temp_constructionwork = ""
         for row in worksheet2.iter_rows(min_col=1, max_col=5, min_row=4):
             #중공종
             if (row[1].value.__contains__('내  역  삭  제')
@@ -359,11 +359,11 @@ def excel_normalize(name, column_dimensions=None):
             if (row[1].value is not None
                    and row[4].value is None
             ):
-                constructionWork = row[1].value.replace(" ","")
+                temp_constructionwork = row[1].value.replace(" ","")
 
 
             item2 = ItemStandard2(
-                constructionWork = constructionWork,
+                constructionWork = temp_constructionwork,
                 name = row[1].value,
                 standard = row[2].value,
                 unit = row[3].value,

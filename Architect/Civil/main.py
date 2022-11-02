@@ -17,7 +17,6 @@ def excel_normalize(name):
 
     # print(excel.sheetnames)
     items = []
-    name = ""
     if '토공집계표' in excel.sheetnames:
         worksheet = excel['토공집계표']
         for row in worksheet.iter_rows(min_col=0, max_col=31, min_row=8):

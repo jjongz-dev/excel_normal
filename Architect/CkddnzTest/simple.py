@@ -1,30 +1,25 @@
 
+# Q1
+국어 = 80
+영어 = 75
+수학 = 55
 
-languages = ['python', 'perl', 'c', 'java']
+print((국어 + 영어 + 수학)/3)
 
-for lang in languages:
-    if lang in ['python', 'perl']:
-        print("%6s need interpreter" % lang)
-    elif lang in ['c', 'java']:
-        print("%6s need compiler" % lang)
-    else:
-        print("shouild not reach here")
+# Q2
 
 
 
-windows_dict = {}
-windows_dict['aaa'] = [1,2,3,4,5]
-windows_dict['bbb'] = [6,7,8,9,10]
-windows_dict['name'] = 'pey'
-windows_dict['3'] = [1,2,3]
-del windows_dict['name']
+# Q3
+pin = "881120-1068234"
+yyyymmdd = pin[:6]
+num = pin[7:]
+print(yyyymmdd)
+print(num)
 
-dictt = {"김연아":"피겨스케이팅", "류현진":"야구", "박지성":"축구", "귀도":"파이썬"}
+# Q4
+print(pin[7])
 
-
-dictt['김연아']
-
-
-
-
-print(dictt['김연아'])
+# Q5
+a= "a:b:c:d"
+b = a.replace(":","#")

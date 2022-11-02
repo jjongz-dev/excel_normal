@@ -52,7 +52,6 @@ def excel_normalize(name):
             slope = concs[-1].zfill(2)
             newconc = '-'.join([concs[0], concs[1], slope])
 
-        print(crossname)
 
 
         item = ItemStandard(
