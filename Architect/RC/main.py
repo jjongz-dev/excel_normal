@@ -39,7 +39,9 @@ def excel_normalize(name):
         # 컷근이름 가져오기
         if ( row[2].value is not None
                 and row[5].value is not None):
-            crossname = row[2].value.replace("'","")
+            temp_crossname = row[2].value.replace("'","")
+            if len(temp_crossname) > 2:
+                crossname = temp_crossname
 
         # 비고 제외
         if( row[2].value == '[ 비 고 ]'):
