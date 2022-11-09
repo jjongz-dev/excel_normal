@@ -125,6 +125,26 @@ def excel_normalize(name):
         for item in items:
             Strut.launch(item)
 
+    if 'RAKER공 집계표' in excel.sheetnames:
+        worksheet = excel['RAKER공 집계표']
+        for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=11):
+            # 단위없음 삭제
+            if (row[16].value is None):
+                continue
+
+            # 품명
+            if (row[1].value is not None
+                    and row[16].value is not None):
+                temp_name = row[1].value.replace('\n','')
+
+            item = ItemStandard(
+                name = temp_name,
+                standard = row[9].value,
+                unit = row[16].value,
+                formula = row[20].value,
+                sum = row[20].value,
+                )
+            items.append(item)
 
     if 'S.G.R공 집계표' in excel.sheetnames:
         worksheet = excel['S.G.R공 집계표']
@@ -174,8 +194,9 @@ def excel_normalize(name):
         for item in items:
             RoadDeckingPanel.launch(item)
 
+
     # 계측장비 추가
-    for numbering in range(5):
+    for numbering in range(6):
         numbering = numbering + 1
         temp_names = '계측장비#'
         names = f"{temp_names}{str(numbering)}"
