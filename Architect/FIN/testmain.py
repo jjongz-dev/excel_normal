@@ -345,31 +345,47 @@ def excel_normalize(name, column_dimensions=None):
                 for floor_name in floor_list:
                     floor_count = row[title_list.index(floor_name)].value
                     if floor_count is not None and int(floor_count) > 0:
-                        windows_dict[window_name].append((floor_name, floor_count))
+                        if 'B' in floor_name:
+                            final_floor_name = f'{floor_name}F'
+                        elif 'F' in floor_name:
+                            floor_name1 = floor_name.replace('F','')
+                            final_floor_name = f'{floor_name1}F'
+                        elif floor_name == 'P1':
+                            final_floor_name = 'RF'
+                        elif floor_name == 'P1':
+                            final_floor_name = 'PHRF'
+                        windows_dict[window_name].append((final_floor_name, floor_count))
 
             if row[0].value == '' or len(row[0].value) > 2:
                 break
 
             if row[name_index].value is not None:
-                windows_name = f"{row[name_index].value}({row[note_index].value})"
+                # windows_name = f"{row[name_index].value}({row[note_index].value})"
                 # windows_dict[row[name_index].value] = row[quantity_index].value
                 windows_standard1 = f'{(row[width_index].value):0.3f}'
                 windows_standard2 = f'{(row[height_index].value):0.3f}'
                 windows_standard3 = f'{(row[area_index].value):0.3f}'
                 windows_standard = f"{windows_standard1}*{windows_standard2}={windows_standard3}"
+                if row[note_index].value is not None and len(row[note_index].value) > 2:
+                    windows_name = f"{row[name_index].value}({row[note_index].value})"
+                else:
+                    windows_name = f"{row[name_index].value}"
 
-            item = ItemStandard(
-                floor='',
-                location='',
-                roomname='',
-                name='',
-                standard=windows_standard,
-                unit='EA',
-                type='창호',
-                formula='',
-                sum='',
-            )
-            items.append(item)
+            for floor in windows_dict[window_name]:
+                window_name_with_floor = '_'.join([window_name, floor[0]])
+                item = ItemStandard(
+                    floor=floor[0],
+                    location=window_name,
+                    roomname=window_name,
+                    name=windows_name.replace(window_name, window_name_with_floor),
+                    standard=windows_standard,
+                    unit='EA',
+                    type='창호',
+                    formula=floor[1],
+                    sum=floor[1],
+                )
+                items.append(item)
+
 
     # windows
     if '창호산출서' in excel.sheetnames:
@@ -429,8 +445,8 @@ def excel_normalize(name, column_dimensions=None):
                 window_name_with_floor = '_'.join([window_name, floor[0]])
                 item = ItemStandard(
                     floor=floor[0],
-                    location=window_name_with_floor,
-                    roomname=window_name_with_floor,
+                    location=window_name,
+                    roomname=window_name,
                     name=row[name_index].value.replace(window_name, window_name_with_floor),
                     standard=row[standard_index].value,
                     unit=row[unit_index].value,
