@@ -340,12 +340,12 @@ def excel_normalize(name, column_dimensions=None):
                 floor_list.append(title)
 
         for row in worksheet.iter_rows(min_col=0, max_col=worksheet._current_row,min_row=dong_windowslist_row_index+1):
-            temp_name = row[title_list.index('창호명')].value
-            if temp_name is not None:
+            window_name = row[title_list.index('창호명')].value
+            if window_name is not None:
                 for floor_name in floor_list:
                     floor_count = row[title_list.index(floor_name)].value
                     if floor_count is not None and int(floor_count) > 0:
-                        windows_dict[temp_name].append((floor_name, floor_count))
+                        windows_dict[window_name].append((floor_name, floor_count))
 
             if row[0].value == '' or len(row[0].value) > 2:
                 break
@@ -410,7 +410,7 @@ def excel_normalize(name, column_dimensions=None):
                 try:
                     temp_window_name = row[part_index].value.split('(')[0]
                     if '창호' in temp_window_name:
-                        temp_name = temp_window_name.split(':')[-1].strip(' ')
+                        window_name = temp_window_name.split(':')[-1].strip(' ')
                         continue
                 except Exception as e:
                     print('예외가 발생했습니다', e)
@@ -425,13 +425,13 @@ def excel_normalize(name, column_dimensions=None):
             ):
                 continue
 
-            for floor in windows_dict[temp_name]:
-                window_name_with_floor = '_'.join([temp_name, floor[0]])
+            for floor in windows_dict[window_name]:
+                window_name_with_floor = '_'.join([window_name, floor[0]])
                 item = ItemStandard(
                     floor=floor[0],
                     location=window_name_with_floor,
                     roomname=window_name_with_floor,
-                    name=row[name_index].value.replace(temp_name, window_name_with_floor),
+                    name=row[name_index].value.replace(window_name, window_name_with_floor),
                     standard=row[standard_index].value,
                     unit=row[unit_index].value,
                     type='창호',
