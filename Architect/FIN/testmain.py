@@ -6,6 +6,8 @@ from Architect.FIN.ItemStandard import ItemStandard
 
 from Architect.FIN.ItemStandard2 import ItemStandard2
 
+from Architect.FIN.PasingRule import earthwork, internal_construction, delete_duplicate
+
 import re
 
 
@@ -17,77 +19,87 @@ def excel_normalize(name, column_dimensions=None):
     items = []
     earthwork_row_index_list = []
     internal_row_index_list = []
-    external_row_index_list = []
-    windowslist_row_index_list = []
     windows_dict = defaultdict(list)
 
     start_titles = ['부위', '도형', '구분']
 
     # temporary_constrution
-    # if '가설산출서' in excel.sheetnames:
-    #     worksheet = excel['가설산출서']
-    #
-    #     row_index = 1
-    #     for row in worksheet.iter_rows():
-    #         for column_index, column in enumerate(row):
-    #             if column.value in start_titles:
-    #                 title_row_index = row_index
-    #                 break
-    #         row_index += 1
-    #
-    #     for index, column in enumerate(worksheet[title_row_index]):
-    #         match column.value:
-    #             case '부위':
-    #                 part_index = index
-    #             case '품명':
-    #                 name_index = index
-    #             case '규격':
-    #                 standard_index = index
-    #             case '단위':
-    #                 unit_index = index
-    #             case '산식':
-    #                 formular_index = index
-    #             case '물량':
-    #                 quantity_index = index
-    #
-    #     for row in worksheet.iter_rows(min_col=0, max_col=worksheet._current_row, min_row=(title_row_index+1)):
-    #         if (row[part_index].value is not None
-    #                 and row[name_index].value is None
-    #                 and row[standard_index].value is None
-    #                 and row[unit_index].value is None
-    #                 and row[formular_index].value is None
-    #                 and row[quantity_index].value is None
-    #         ):
-    #             try:
-    #                 if '개소' in row[part_index].value:
-    #                     temp_split_roomname = row[part_index].value.split('개소')[0]
-    #                     if '구분명' in temp_split_roomname:
-    #                         temp_roomname = temp_split_roomname.split(':')[-1].strip(' ')
-    #                     continue
-    #             except Exception as e:
-    #                 print('예외가 발생했습니다.', e)
-    #                 print('가설산출서 : split오류' + str(item))
-    #
-    #         # 품명없음 삭제
-    #         if (row[quantity_index].value is None
-    #                 or row[quantity_index].value == "'"
-    #                 or row[quantity_index].value == '0'
-    #                 or row[quantity_index].value == 0
-    #         ):
-    #             continue
-    #
-    #         item = ItemStandard(
-    #             floor='1F',
-    #             location=temp_roomname,
-    #             roomname=temp_roomname,
-    #             name=row[name_index].value,
-    #             standard=row[standard_index].value,
-    #             unit=row[unit_index].value,
-    #             type='외부',
-    #             formula=row[formular_index].value,
-    #             sum=row[quantity_index].value,
-    #         )
-    #         items.append(item)
+    if '가설산출서' in excel.sheetnames:
+        worksheet = excel['가설산출서']
+
+        row_index = 1
+        for row in worksheet.iter_rows():
+            for column_index, column in enumerate(row):
+                if column.value in start_titles:
+                    title_row_index = row_index
+                    break
+            row_index += 1
+
+        for index, column in enumerate(worksheet[title_row_index]):
+            match column.value:
+                case '부위':
+                    part_index = index
+                case '품명':
+                    name_index = index
+                case '규격':
+                    standard_index = index
+                case '단위':
+                    unit_index = index
+                case '산식':
+                    formular_index = index
+                case '물량':
+                    quantity_index = index
+                case '층범위':
+                    rangefloor_index = index
+
+        for row in worksheet.iter_rows(min_col=0, max_col=worksheet._current_row, min_row=(title_row_index+1)):
+            if (row[part_index].value is not None
+                    and row[name_index].value is None
+                    and row[standard_index].value is None
+                    and row[unit_index].value is None
+                    and row[formular_index].value is None
+                    and row[quantity_index].value is None
+            ):
+                try:
+                    if '개소' in row[part_index].value:
+                        temp_split_roomname = row[part_index].value.split('개소')[0]
+                        if '구분명' in temp_split_roomname:
+                            temp_roomname = temp_split_roomname.split(':')[-1].strip(' ')
+                        continue
+                except Exception as e:
+                    print('예외가 발생했습니다.', e)
+                    print('가설산출서 : split오류' + str(item))
+
+            # 품명없음 삭제
+            if (row[quantity_index].value is None
+                    or row[quantity_index].value == "'"
+                    or row[quantity_index].value == '0'
+                    or row[quantity_index].value == 0
+            ):
+                continue
+
+            if row[rangefloor_index].value is not None:
+                temp_rangefloor = row[rangefloor_index].value
+                if 'FT' in temp_rangefloor:
+                    temp_rangefloor = 'FT'
+                elif 'P1' in temp_rangefloor:
+                    temp_rangefloor = 'RF'
+                else:
+                    if re.match('\\d{1,2}', temp_rangefloor):
+                        temp_rangefloor = temp_rangefloor + 'F'
+
+            item = ItemStandard(
+                floor=temp_rangefloor,
+                location=temp_roomname,
+                roomname=temp_roomname,
+                name=row[name_index].value,
+                standard=row[standard_index].value,
+                unit=row[unit_index].value,
+                type='외부',
+                formula=row[formular_index].value,
+                sum=row[quantity_index].value,
+            )
+            items.append(item)
 
     # earthwork
     if '토공산출서' in excel.sheetnames:
@@ -155,6 +167,9 @@ def excel_normalize(name, column_dimensions=None):
                 sum=row[quantity_index].value,
             )
             items.append(item)
+
+        for item in items:
+            earthwork.launch(item)
 
     # internal_construction
     if '내부산출서' in excel.sheetnames:
@@ -228,6 +243,9 @@ def excel_normalize(name, column_dimensions=None):
             )
             items.append(item)
 
+        for item in items:
+            internal_construction.launch(item)
+
     # external_construction
     if '외부산출서' in excel.sheetnames:
         worksheet = excel['외부산출서']
@@ -236,11 +254,11 @@ def excel_normalize(name, column_dimensions=None):
         for row in worksheet.iter_rows():
             for column_index, column in enumerate(row):
                 if column.value in start_titles:
-                    external_row_index_list.append(row_index)
+                    external_row_index = row_index
                     break
             row_index += 1
 
-        for index, column in enumerate(worksheet[external_row_index_list[0]]):
+        for index, column in enumerate(worksheet[external_row_index]):
             match column.value:
                 case '도형':
                     figure_index = index
@@ -254,9 +272,10 @@ def excel_normalize(name, column_dimensions=None):
                     formular_index = index
                 case '물량':
                     quantity_index = index
+                case '층범위':
+                    rangefloor_index = index
 
-        for row in worksheet.iter_rows(min_col=0, max_col=worksheet._current_row,
-                                       min_row=(external_row_index_list[0] + 1)):
+        for row in worksheet.iter_rows(min_col=0, max_col=worksheet._current_row, min_row=external_row_index+1):
             if (row[figure_index].value is not None
                     and row[name_index].value is None
                     and row[standard_index].value is None
@@ -268,13 +287,11 @@ def excel_normalize(name, column_dimensions=None):
                     temp_split_roomname = row[figure_index].value.split('개소')[0]
                     if '구분명' in temp_split_roomname:
                         temp_split2_roomname = temp_split_roomname.split(':')[-1].strip('[] ')
-                        if '층' in temp_split2_roomname:
-                            temp_roomname = temp_split2_roomname.split('층')[-1].strip(' ')
-                            temp_levels = temp_split2_roomname.split('층')[0].strip(' ') + '층'
-                        elif 'F' in temp_split2_roomname:
-                            temp_roomname = temp_split2_roomname.split('F')[-1].strip(' ')
-                            temp_levels = temp_split2_roomname.split('F')[0].strip(' ') + 'F'
-
+                        if '도' in temp_split2_roomname:
+                            temp_roomname = temp_split2_roomname
+                        elif '_' in temp_split2_roomname:
+                            temp_roomname = temp_split2_roomname.split('_')[-1]
+                            temp_levels = temp_split2_roomname.split('_')[0]
                         continue
                 except Exception as e:
                     print('예외가 발생했습니다', e)
@@ -288,6 +305,14 @@ def excel_normalize(name, column_dimensions=None):
                     or row[quantity_index].value == '물량'
             ):
                 continue
+
+            if row[rangefloor_index].value is not None:
+                temp_rangefloor = row[rangefloor_index].value
+                if 'P1' in temp_rangefloor:
+                    temp_levels = 'RF'
+                else:
+                    if re.match('\\d{1,2}', temp_rangefloor):
+                        temp_levels = temp_rangefloor + 'F'
 
             item = ItemStandard(
                 floor=temp_levels,
@@ -333,17 +358,21 @@ def excel_normalize(name, column_dimensions=None):
         for cell_obj in list(worksheet.rows)[dong_windowslist_row_index-1]:
             if cell_obj.value is not None:
                 title_list.append(cell_obj.value)
+                # print(title_list)
 
         floor_list = []
         for title in title_list:
             if re.match('[BFP]\\d{1,2}', title):
                 floor_list.append(title)
+                # print(floor_list)
 
-        for row in worksheet.iter_rows(min_col=0, max_col=worksheet._current_row,min_row=dong_windowslist_row_index+1):
+        for row in worksheet.iter_rows(min_col=0, max_col=worksheet._current_row, min_row=dong_windowslist_row_index+1):
             window_name = row[title_list.index('창호명')].value
+            # print(window_name)
             if window_name is not None:
                 for floor_name in floor_list:
                     floor_count = row[title_list.index(floor_name)].value
+                    # print(floor_count)
                     if floor_count is not None and int(floor_count) > 0:
                         if 'B' in floor_name:
                             final_floor_name = f'{floor_name}F'
@@ -352,11 +381,11 @@ def excel_normalize(name, column_dimensions=None):
                             final_floor_name = f'{floor_name1}F'
                         elif floor_name == 'P1':
                             final_floor_name = 'RF'
-                        elif floor_name == 'P1':
+                        elif floor_name == 'P2':
                             final_floor_name = 'PHRF'
                         windows_dict[window_name].append((final_floor_name, floor_count))
 
-            if row[0].value == '' or len(row[0].value) > 2:
+            if row[0].value == '' or len(row[0].value) < 2:
                 break
 
             if row[name_index].value is not None:
@@ -372,12 +401,11 @@ def excel_normalize(name, column_dimensions=None):
                     windows_name = f"{row[name_index].value}"
 
             for floor in windows_dict[window_name]:
-                window_name_with_floor = '_'.join([window_name, floor[0]])
                 item = ItemStandard(
                     floor=floor[0],
                     location=window_name,
                     roomname=window_name,
-                    name=windows_name.replace(window_name, window_name_with_floor),
+                    name=window_name,
                     standard=windows_standard,
                     unit='EA',
                     type='창호',
@@ -385,7 +413,6 @@ def excel_normalize(name, column_dimensions=None):
                     sum=floor[1],
                 )
                 items.append(item)
-
 
     # windows
     if '창호산출서' in excel.sheetnames:
@@ -395,11 +422,11 @@ def excel_normalize(name, column_dimensions=None):
         for row in worksheet.iter_rows():
             for column_index, column in enumerate(row):
                 if column.value in start_titles:
-                    windowslist_row_index_list.append(row_index)
+                    windowslist_row_index = row_index
                     break
             row_index += 1
 
-        for index, column in enumerate(worksheet[windowslist_row_index_list[0]]):
+        for index, column in enumerate(worksheet[windowslist_row_index]):
             match column.value:
                 case '부위':
                     part_index = index
@@ -414,8 +441,7 @@ def excel_normalize(name, column_dimensions=None):
                 case '물량':
                     quantity_index = index
 
-        for row in worksheet.iter_rows(min_col=0, max_col=worksheet._current_row,
-                                       min_row=(windowslist_row_index_list[0] + 1)):
+        for row in worksheet.iter_rows(min_col=0, max_col=worksheet._current_row, min_row=windowslist_row_index+1):
             if (row[part_index].value is not None
                     and row[name_index].value is None
                     and row[standard_index].value is None
@@ -441,6 +467,10 @@ def excel_normalize(name, column_dimensions=None):
             ):
                 continue
 
+            if row[name_index] is not None:
+                if window_name in row[name_index].value:
+                    continue
+
             for floor in windows_dict[window_name]:
                 window_name_with_floor = '_'.join([window_name, floor[0]])
                 item = ItemStandard(
@@ -455,6 +485,12 @@ def excel_normalize(name, column_dimensions=None):
                     sum=float(row[quantity_index].value) * (float(floor[1])),
                 )
                 items.append(item)
+
+
+
+
+    for item in items:
+        delete_duplicate.launch(item)
 
     items2 = []
     if excel.sheetnames.__contains__('동별집계표'):

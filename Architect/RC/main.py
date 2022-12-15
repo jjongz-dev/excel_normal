@@ -33,8 +33,11 @@ def excel_normalize(name):
         # 층, 부위, 이름
         if ( row[0].value is not None
             and row[1].value is not None):
-            floor = row[0].value
             part = row[1].value
+            if row[0].value == 'FT':
+                floor = row[0].value
+            else :
+                floor = row[0].value + 'F'
 
         # 컷근이름 가져오기
         if ( row[2].value is not None
