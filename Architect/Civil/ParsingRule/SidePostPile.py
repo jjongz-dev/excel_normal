@@ -5,12 +5,13 @@ def launch(item: ItemStandard):
     # SIDE-PILE천공
     if 'SIDE-PILE 천공' in item.name:
         temp_standard = item.name.split('(')[1].split(')')[0]
-        item.name = 'SIDE-PILE천공' + '(' + item.standard.replace(" ", "") + ')'
-        item.standard = temp_standard
+        item.name = 'SIDE-PILE천공'
+        item.standard = temp_standard + ',' + item.standard.replace(" ", "")
 
     # SIDE-PILE박기
     if item.name in ['SIDE-PILE 박기']:
         item.name = 'SIDE-PILE박기'
+        item.unit = '개소'
         if item.standard is not None and '(' in item.standard and ')' in item.standard:
             item.standard = item.standard.split('(')[1].split(')')[0]
 
@@ -23,22 +24,26 @@ def launch(item: ItemStandard):
     # POST-PILE천공
     if 'POST PILE 천공' in item.name:
         temp_standard = item.name.split('(')[1].split(')')[0]
-        item.name = 'POST-PILE천공' + '(' + item.standard.replace(" ", "") + ')'
-        item.standard = temp_standard
+        item.name = 'POST-PILE천공'
+        item.standard = temp_standard + ',' + item.standard.replace(" ", "")
 
     # POST-PILE박기
     if item.name in ['POST PILE 박기']:
         item.name = 'POST-PILE박기'
+        item.unit = '개소'
         if item.standard is not None and '(' in item.standard and ')' in item.standard:
             item.standard = item.standard.split('(')[1].split(')')[0]
 
     # POST-PILE인발
     if item.name in ['POST PILE 인발']:
         item.name = 'POST-PILE인발'
+        item.unit = 'M'
+        item.formula = '★산출서 확인 후 값 변경'
+        item.sum = '★산출서 확인 후 값 변경'
         if item.standard is not None and '(' in item.standard and ')' in item.standard:
-            item.standard = item.standard.split('(')[1].split(')')[0] + '★인발길이확인 후 개소 -> M'
+            item.standard = item.standard.split('(')[1].split(')')[0]
 
-    # POST-PILE사장
+    # POST-PILE절단
     try:
         if item.name in ['POST PILE 절단 및 사장']:
             item.name = 'POST-PILE절단'
@@ -71,7 +76,7 @@ def launch(item: ItemStandard):
     # 브라켓
     if item.name in ['BRACKET 설치'] and item.standard in ['STRUT 구간']:
         item.name = 'BRACKET설치(SIDE-PILE+WALE)'
-        item.standard = item.standard + '★규격 확인'
+        item.standard = ''
 
     if item.name in ['BRACKET 설치'] and item.standard in ['POST PILE 구간']:
         item.name = 'PIECE BRACKET설치(STRUT+POST-PILE)'

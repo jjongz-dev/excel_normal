@@ -4,7 +4,24 @@ from Architect.Civil.ItemStandard import ItemStandard
 def launch(item: ItemStandard):
     # 버팀보(MAIN STRUT) 연결 and 버팀보(CORNER STRUT) 연결
     if item.name in ['STRUT 설치 및 철거(H-300×300×10×15)']:
-        item.name = item.name + '★STRUT공 확인 STRUT -> MAIN and CORNER, 본 -> M'
+        temp_standard = item.name.split('(')[1].split(')')[0]
+        if item.standard == '3M이하':
+            item.name = '버팀보(MAIN STRUT) 설치 및 해체'
+            item.standard = temp_standard
+            item.unit = 'M'
+            item.formula = '★산출서 확인 후 값 변경'
+            item.sum = '★산출서 확인 후 값 변경'
+        elif item.standard == '3 ~ 5M':
+            item.name = '버팀보(CORNER STRUT) 설치 및 해체'
+            item.standard = temp_standard
+            item.unit = 'M'
+            item.formula = '★산출서 확인 후 값 변경'
+            item.sum = '★산출서 확인 후 값 변경'
+        else:
+            item.name = item.name + '★삭제'
+            item.formula = '0'
+            item.sum = '0'
+
 
     # JACK 설치 및 해체
     if item.name in ['스크류잭 설치 및 철거'] or item.name in ['선행하중잭 설치 및 철거'] :
@@ -28,7 +45,10 @@ def launch(item: ItemStandard):
 
 
     # H-PILE 연결
-    if item.name in ['H-PILE 연결']:
-        item.name = 'STRUT/' + item.name
-        item.standard = item.standard + '★코너oR매인 확인'
-        item.unit = '개소'
+    if item.name in ['H-PILE 연결STRUT 구간']:
+        item.name = '버팀보(MAIN STRUT) 연결'
+        item.standard = item.standard.strip('() ')
+
+    if item.name in ['H-PILE 연결H-BEAM 구간']:
+        item.name = '버팀보(CORNER STRUT) 연결'
+        item.standard = item.standard.strip('() ')

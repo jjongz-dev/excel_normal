@@ -11,7 +11,7 @@ def launch(item: ItemStandard):
     # 주입량(S.G.R)
     if item.name in ['주입량']:
         item.name = '주입량(S.G.R)'
-        item.standard = '자재포함'
+        item.standard = ''
         item.unit = 'M3'
 
     # 기계기구 설치 및 해체(S.G.R)
@@ -26,6 +26,5 @@ def launch(item: ItemStandard):
 
     # 시멘트 삭제 (주입량(S.G.R)부자재)
     if item.name in ['시멘트량']:
-        item.name = 'SGR' + item.name + '★삭제아이템'
-        item.formula = '0'
-        item.sum = '0'
+        item.name = '시멘트'
+        item.standard = '40KG/포,S.G.R용'

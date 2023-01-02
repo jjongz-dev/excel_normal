@@ -287,11 +287,6 @@ def excel_normalize(name, column_dimensions=None):
                     temp_split_roomname = row[figure_index].value.split('개소')[0]
                     if '구분명' in temp_split_roomname:
                         temp_split2_roomname = temp_split_roomname.split(':')[-1].strip('[] ')
-                        if '도' in temp_split2_roomname:
-                            temp_roomname = temp_split2_roomname
-                        elif '_' in temp_split2_roomname:
-                            temp_roomname = temp_split2_roomname.split('_')[-1]
-                            temp_levels = temp_split2_roomname.split('_')[0]
                         continue
                 except Exception as e:
                     print('예외가 발생했습니다', e)
@@ -322,6 +317,77 @@ def excel_normalize(name, column_dimensions=None):
                 standard=row[standard_index].value,
                 unit=row[unit_index].value,
                 type='외부',
+                formula=row[formular_index].value,
+                sum=row[quantity_index].value,
+            )
+            items.append(item)
+
+    # external_construction
+    if '철골산출서' in excel.sheetnames:
+        worksheet = excel['철골산출서']
+
+        row_index = 1
+        for row in worksheet.iter_rows():
+            for column_index, column in enumerate(row):
+                if column.value in start_titles:
+                    external_row_index = row_index
+                    break
+            row_index += 1
+
+        for index, column in enumerate(worksheet[external_row_index]):
+            match column.value:
+                case '부위':
+                    figure_index = index
+                case '품명':
+                    name_index = index
+                case '규격':
+                    standard_index = index
+                case '단위':
+                    unit_index = index
+                case '산식':
+                    formular_index = index
+                case '물량':
+                    quantity_index = index
+                case '층범위':
+                    rangefloor_index = index
+
+        for row in worksheet.iter_rows(min_col=0, max_col=worksheet._current_row, min_row=external_row_index+1):
+            if (row[figure_index].value is not None
+                    and row[name_index].value is None
+                    and row[standard_index].value is None
+                    and row[unit_index].value is None
+                    and row[formular_index].value is None
+                    and row[quantity_index].value is None
+            ):
+                try:
+                    temp_split_roomname = row[figure_index].value.split('개소')[0]
+                    if '구분명' in temp_split_roomname:
+                        temp_split2_roomname = temp_split_roomname.split(':')[-1].strip('[] ')
+                        continue
+                except Exception as e:
+                    print('예외가 발생했습니다', e)
+                    print('외부산출서 : split오류' + str(item))
+
+            # 품명없음 삭제
+            if (row[quantity_index].value is None
+                    or row[quantity_index].value == "'"
+                    or row[quantity_index].value == '0'
+                    or row[quantity_index].value == 0
+                    or row[quantity_index].value == '물량'
+            ):
+                continue
+
+            if row[rangefloor_index].value is not None:
+                temp_rangefloor = row[rangefloor_index].value
+
+            item = ItemStandard(
+                floor=temp_rangefloor,
+                location=temp_split2_roomname,
+                roomname=temp_split2_roomname,
+                name=row[name_index].value,
+                standard=row[standard_index].value,
+                unit=row[unit_index].value,
+                type='내부',
                 formula=row[formular_index].value,
                 sum=row[quantity_index].value,
             )

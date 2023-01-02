@@ -88,6 +88,9 @@ def excel_normalize(name):
             if (temp_name.startswith("CON'C") and row[25].value is not None):
                 temp_name = mergeCell(worksheet, row[1]) + row[25].value
 
+            if row[9].value == '풍화암':
+                continue
+
             item = ItemStandard(
                 name = temp_name,
                 standard = row[9].value,
@@ -112,6 +115,10 @@ def excel_normalize(name):
             if (row[1].value is not None
                     and row[16].value is not None):
                 temp_name = row[1].value.replace('\n','')
+
+            # 품명+비고 임시해결
+            if (temp_name.startswith("H-PILE 연결") and row[25].value is not None):
+                temp_name = mergeCell(worksheet, row[1]) + row[25].value
 
             item = ItemStandard(
                 name = temp_name,

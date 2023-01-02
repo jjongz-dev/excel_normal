@@ -71,14 +71,12 @@ def excel_normalize(name, column_dimensions=None):
                         print(floor_part_name)
                     continue
 
-
-
-            # concrete
-            if row[concrete_standard_index].value is not None and row[concrete_formular_index].value is not None and row[concrete_quantity_index].value is not None:
+            # CONC
+            if row[concrete_standard_index].value is not None and 'Kg' in row[concrete_standard_index].value and row[concrete_formular_index].value is not None:
 
                 if row[floor_part_index].value is not None:
-                    next_row = worksheet[index+min_row+1]
-                    prev_row = worksheet[index+min_row-1]
+                    next_row = worksheet[index + min_row + 1]
+                    prev_row = worksheet[index + min_row - 1]
                     if next_row[floor_part_index].value is not None:
                         floor = next_row[floor_part_index].value
                         part = row[floor_part_index].value
@@ -86,30 +84,54 @@ def excel_normalize(name, column_dimensions=None):
                         floor = row[floor_part_index].value
                         part = prev_row[floor_part_index].value
 
+                formular = row[concrete_formular_index].value
+                quantity = row[concrete_quantity_index].value
+
+                if row[concrete_quantity_index].value is None:
+                    next_row = worksheet[index + min_row + 1]
+                    formular += str(next_row[concrete_formular_index].value)
+                    if next_row[concrete_quantity_index].value is None:
+                        next_next_row = worksheet[index + min_row + 2]
+                        formular += str(next_next_row[concrete_formular_index].value)
+                        quantity = next_next_row[concrete_quantity_index].value
+                    else:
+                        quantity = next_row[concrete_quantity_index].value
+
                 item = ItemStandard(
                     floor=floor,
                     location=location,
                     name='콘크리트',
                     standard=row[concrete_standard_index].value,
                     part=part,
-                    formula=row[concrete_formular_index].value,
-                    sum=row[concrete_quantity_index].value,
+                    formula=formular,
+                    sum=quantity,
                 )
                 items.append(item)
 
-                # 거푸집
-                if row[formwork_standard_index].value is not None and row[formwork_formular_index].value is not None and row[formwork_quantity_index] is not None:
+            # 거푸집
+            if row[formwork_standard_index].value is not None and row[formwork_formular_index].value is not None:
+                formular = row[formwork_formular_index].value
+                quantity = row[formwork_quantity_index].value
+                if row[formwork_quantity_index].value is None:
+                    next_row = worksheet[index + min_row + 1]
+                    formular += str(next_row[formwork_formular_index].value)
+                    if next_row[formwork_quantity_index].value is None:
+                        next_next_row = worksheet[index + min_row + 2]
+                        formular += str(next_next_row[formwork_formular_index].value)
+                        quantity = next_next_row[formwork_quantity_index].value
+                    else:
+                        quantity = next_row[formwork_quantity_index].value
 
-                    item = ItemStandard(
-                        floor=floor,
-                        location=location,
-                        name='거푸집',
-                        standard=row[formwork_standard_index].value,
-                        part=part,
-                        formula=row[rebar_formular_index].value,
-                        sum=row[formwork_quantity_index].value,
-                    )
-                    items.append(item)
+                item = ItemStandard(
+                    floor=floor,
+                    location=location,
+                    name='거푸집',
+                    standard=row[formwork_standard_index].value,
+                    part=part,
+                    formula=formular,
+                    sum=quantity,
+                )
+                items.append(item)
 
             # 철근
             if row[rebar_standard_index].value is not None and 'HD' in row[rebar_standard_index].value and row[rebar_formular_index].value is not None:
