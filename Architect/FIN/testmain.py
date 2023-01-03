@@ -286,8 +286,13 @@ def excel_normalize(name, column_dimensions=None):
                 try:
                     temp_split_roomname = row[figure_index].value.split('개소')[0]
                     if '구분명' in temp_split_roomname:
-                        temp_split2_roomname = temp_split_roomname.split(':')[-1].strip('[] ')
-                        continue
+                        temp_roomname = temp_split_roomname.split(':')[-1].strip('[] ')
+                        if '_' in temp_roomname:
+                            levels = temp_roomname.split('_')[0]
+                            roomname = temp_roomname.split('_')[-1]
+                        else:
+                            roomname = temp_roomname
+                            continue
                 except Exception as e:
                     print('예외가 발생했습니다', e)
                     print('외부산출서 : split오류' + str(item))
@@ -304,15 +309,15 @@ def excel_normalize(name, column_dimensions=None):
             if row[rangefloor_index].value is not None:
                 temp_rangefloor = row[rangefloor_index].value
                 if 'P1' in temp_rangefloor:
-                    temp_levels = 'RF'
+                    levels = 'RF'
                 else:
                     if re.match('\\d{1,2}', temp_rangefloor):
-                        temp_levels = temp_rangefloor + 'F'
+                        levels = temp_rangefloor + 'F'
 
             item = ItemStandard(
-                floor=temp_levels,
-                location=temp_roomname,
-                roomname=temp_roomname,
+                floor=levels,
+                location=roomname,
+                roomname=roomname,
                 name=row[name_index].value,
                 standard=row[standard_index].value,
                 unit=row[unit_index].value,

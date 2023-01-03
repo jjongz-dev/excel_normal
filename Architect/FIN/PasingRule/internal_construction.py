@@ -9,3 +9,9 @@ def launch(item: ItemStandard):
         if re.match('\\d', temp_roomname):
             item.location = temp_roomname + '호'
             item.roomname = item.roomname.split('호')[-1]
+        elif re.match('B\\d', temp_roomname):
+            item.location = temp_roomname + '호'
+            item.roomname = item.roomname.split('호')[-1]
+        elif re.match('R\\d', temp_roomname):
+            item.location = temp_roomname + '호'
+            item.roomname = item.roomname.split('호')[-1]
