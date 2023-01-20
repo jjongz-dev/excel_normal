@@ -4,7 +4,7 @@ from openpyxl import load_workbook, Workbook
 
 from Architect.Civil.ItemStandard import ItemStandard
 
-from Architect.Civil.ParsingRule import Strut, SGR, CIP, Earthwork, SidePostPile, RoadDeckingPanel
+from Architect.Civil.ParsingRule import Strut, SGR, CIP, Earthwork, SidePostPile, RoadDeckingPanel, LW
 
 from Architect.Civil.Utils.MergeCell import mergeCell
 
@@ -163,19 +163,43 @@ def excel_normalize(name):
             # 품명
             if (row[1].value is not None
                     and row[16].value is not None):
-                temp_name = row[1].value.replace('\n','')
+                temp_name = row[1].value.replace('\n', '')
 
             item = ItemStandard(
-                name = temp_name,
-                standard = row[9].value,
-                unit = row[16].value,
-                formula = row[20].value,
-                sum = row[20].value,
-                )
+                name=temp_name,
+                standard=row[9].value,
+                unit=row[16].value,
+                formula=row[20].value,
+                sum=row[20].value,
+            )
             items.append(item)
 
         for item in items:
             SGR.launch(item)
+
+    if 'LW공 집계표' in excel.sheetnames:
+        worksheet = excel['LW공 집계표']
+        for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=11):
+            # 단위없음 삭제
+            if (row[16].value is None):
+                continue
+
+            # 품명
+            if (row[1].value is not None
+                    and row[16].value is not None):
+                temp_name = row[1].value.replace('\n', '')
+
+            item = ItemStandard(
+                name=temp_name,
+                standard=row[9].value,
+                unit=row[16].value,
+                formula=row[20].value,
+                sum=row[20].value,
+            )
+            items.append(item)
+
+        for item in items:
+            LW.launch(item)
 
     if '복공 집계표' in excel.sheetnames:
         worksheet = excel['복공 집계표']
