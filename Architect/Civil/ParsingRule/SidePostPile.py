@@ -37,9 +37,7 @@ def launch(item: ItemStandard):
     # POST-PILE인발
     if item.name in ['POST PILE 인발']:
         item.name = 'POST-PILE인발'
-        item.unit = 'M'
-        item.formula = '★산출서 확인 후 값 변경'
-        item.sum = '★산출서 확인 후 값 변경'
+        item.unit = '개소'
         if item.standard is not None and '(' in item.standard and ')' in item.standard:
             item.standard = item.standard.split('(')[1].split(')')[0]
 
