@@ -2,7 +2,7 @@ from openpyxl import load_workbook, Workbook
 from Architect.RC.ItemStandard import ItemStandard
 from datetime import datetime
 
-fileNameDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M%S')
+fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M%S')
 
 
 # 이곳에 현장 폴더명만 변경하면 완료 #######
@@ -11,7 +11,7 @@ siteTicketNo = '23-0046'
 
 
 openFilePath = '/Users/blue/hb/quantity/'+siteTicketNo+'/구조.xlsx'
-saveFilePath = '/Users/blue/hb/quantity/'+siteTicketNo+'/구조완성-' + fileNameDate + '.xlsx'
+saveFilePath = '/Users/blue/hb/quantity/'+siteTicketNo+'/구조완성-' + fileCreateDate + '.xlsx'
 
 def excel_normalize(name):
     excel = load_workbook(openFilePath, data_only=True)
