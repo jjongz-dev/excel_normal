@@ -12,11 +12,12 @@ siteTicketNo = '23-0046'
 openFilePath = '/Users/blue/hb/quantity/'+siteTicketNo+'/구조.xlsx'
 saveFilePath = '/Users/blue/hb/quantity/'+siteTicketNo+'/구조완성-' + fileCreateDate + '.xlsx'
 
+#openFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\구조.xlsx'
+#saveFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\구조완성-' + fileCreateDate + '.xlsx'
+
 #openFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\구조.xlsx'
 #saveFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\구조완성-' + fileCreateDate + '.xlsx'
 
-#openFilePath = 'C:\\Users\song\Desktop\quantity\\'+siteTicketNo+'/구조.xlsx'
-#saveFilePath = 'C:\\Users\song\Desktop\quantity\\'+siteTicketNo+'/구조완성-' + fileCreateDate + '.xlsx'
 
 
 def excel_normalize(name):
