@@ -15,8 +15,8 @@ saveFilePath = '/Users/blue/hb/quantity/'+siteTicketNo+'/구조완성-' + fileCr
 #openFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\구조.xlsx'
 #saveFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\구조완성-' + fileCreateDate + '.xlsx'
 
-#openFilePath = 'C:\\Users\song\Desktop\quantity\\'+siteTicketNo+'/건축.xlsx'
-#saveFilePath = 'C:\\Users\song\Desktop\quantity\\'+siteTicketNo+'/건축완성-' + fileCreateDate + '.xlsx'
+#openFilePath = 'C:\\Users\song\Desktop\quantity\\'+siteTicketNo+'/구조.xlsx'
+#saveFilePath = 'C:\\Users\song\Desktop\quantity\\'+siteTicketNo+'/구조완성-' + fileCreateDate + '.xlsx'
 
 
 def excel_normalize(name):
