@@ -4,16 +4,22 @@ from Architect.Civil.ParsingRule import Strut, SGR, CIP, Earthwork, SidePostPile
 from Architect.Civil.Utils.MergeCell import mergeCell
 from datetime import datetime
 
-fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M%S')
+
+fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
 
 
 # 이곳에 현장 폴더명만 변경하면 완료 #######
 siteTicketNo = '23-0046'
 ##################################
 
-
 openFilePath = '/Users/blue/hb/quantity/'+siteTicketNo+'/토목.xlsx'
 saveFilePath = '/Users/blue/hb/quantity/'+siteTicketNo+'/토목완성-' + fileCreateDate + '.xlsx'
+
+#openFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\토목.xlsx'
+#saveFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\토목완성-' + fileCreateDate + '.xlsx'
+
+#openFilePath = 'C:\\Users\song\Desktop\quantity\\'+siteTicketNo+'/건축.xlsx'
+#saveFilePath = 'C:\\Users\song\Desktop\quantity\\'+siteTicketNo+'/건축완성-' + fileCreateDate + '.xlsx'
 
 
 def excel_normalize(name):

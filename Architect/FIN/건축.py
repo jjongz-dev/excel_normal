@@ -5,11 +5,11 @@ from Architect.FIN.ItemStandard import ItemStandard
 from Architect.FIN.ItemStandard2 import ItemStandard2
 from Architect.FIN.PasingRule import earthwork, internal_construction, delete_duplicate
 from datetime import datetime
-
 import re
 
 
-fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M%S')
+fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
+
 
 # 이곳에 현장 폴더명만 변경하면 완료 #######
 siteTicketNo = '23-0046'
