@@ -26,8 +26,9 @@ def excel_normalize(name):
     # names = excel.get_sheet_names()
     # print(names)
 
-    #sheet_names = ['부재별산출서']
-    sheet_names = ['부재별산출서', '아파트옹벽 Unit별산출서']
+
+    #sheet_names = ['부재별산출서', '아파트옹벽 Unit별산출서']
+    sheet_names = ['부재별산출서']
     items = []
     for sheet in sheet_names:
         worksheet = excel[sheet]
