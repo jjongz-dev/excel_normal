@@ -12,7 +12,7 @@ fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
 
 
 # 이곳에 현장 폴더명만 변경하면 완료 #######
-siteTicketNo = '23-0046'
+siteTicketNo = '22-0068'
 ##################################
 
 openFilePath = '/Users/blue/hb/quantity/'+siteTicketNo+'/건축.xlsx'
@@ -183,80 +183,84 @@ def excel_normalize(name, column_dimensions=None):
         for item in items:
             earthwork.launch(item)
 
-    # internal_construction
-    if '내부산출서' in excel.sheetnames:
-        worksheet = excel['내부산출서']
+    # 시트 추가가 필요한경우 오른쪽과 같이 추가 :   ,'시트명'
+    # 추가해놓은 시트가 없는경우 자동으로 다음시트로 넘어감.
+    sheet_names = ['내부산출서','내부산출서-1','내부산출서-2']
+    for sheet in sheet_names:
+        # internal_construction
+        if sheet in excel.sheetnames:
+            worksheet = excel[sheet]
+            row_index = 1
+            for row in worksheet.iter_rows():
+                for column_index, column in enumerate(row):
+                    if column.value in start_titles:
+                        internal_row_index_list.append(row_index)
+                        break
+                row_index += 1
 
-        row_index = 1
-        for row in worksheet.iter_rows():
-            for column_index, column in enumerate(row):
-                if column.value in start_titles:
-                    internal_row_index_list.append(row_index)
-                    break
-            row_index += 1
+            for index, column in enumerate(worksheet[internal_row_index_list[0]]):
+                match column.value:
+                    case '도형':
+                        figure_index = index
+                    case '품명':
+                        name_index = index
+                    case '규격':
+                        standard_index = index
+                    case '단위':
+                        unit_index = index
+                    case '산식':
+                        formular_index = index
+                    case '물량':
+                        quantity_index = index
 
-        for index, column in enumerate(worksheet[internal_row_index_list[0]]):
-            match column.value:
-                case '도형':
-                    figure_index = index
-                case '품명':
-                    name_index = index
-                case '규격':
-                    standard_index = index
-                case '단위':
-                    unit_index = index
-                case '산식':
-                    formular_index = index
-                case '물량':
-                    quantity_index = index
+            temp_levels = ""
+            temp_roomname = ""
+            for row in worksheet.iter_rows(min_col=0, max_col=worksheet._current_row,
+                                           min_row=(internal_row_index_list[0] - 1)):
+                if (row[figure_index].value is not None
+                        and row[name_index].value is None
+                        and row[standard_index].value is None
+                        and row[unit_index].value is None
+                        and row[formular_index].value is None
+                        and row[quantity_index].value is None
+                ):
+                    try:
+                        temp_split_levels = row[figure_index].value.split(' ')[-2]
+                        if '층' in temp_split_levels:
+                            temp_levels = temp_split_levels
+                        temp_split_roomname = row[figure_index].value.split('개소')[0]
+                        if '실명' in temp_split_roomname:
+                            temp_roomname = temp_split_roomname.split(':')[-1].strip('[] ')
+                        continue
+                    except Exception as e:
+                        print('예외가 발생했습니다.', e)
+                        print('내부산출서 : split오류' + str(item))
 
-        temp_levels = ""
-        temp_roomname = ""
-        for row in worksheet.iter_rows(min_col=0, max_col=worksheet._current_row,
-                                       min_row=(internal_row_index_list[0] - 1)):
-            if (row[figure_index].value is not None
-                    and row[name_index].value is None
-                    and row[standard_index].value is None
-                    and row[unit_index].value is None
-                    and row[formular_index].value is None
-                    and row[quantity_index].value is None
-            ):
-                try:
-                    temp_split_levels = row[figure_index].value.split(' ')[-2]
-                    if '층' in temp_split_levels:
-                        temp_levels = temp_split_levels
-                    temp_split_roomname = row[figure_index].value.split('개소')[0]
-                    if '실명' in temp_split_roomname:
-                        temp_roomname = temp_split_roomname.split(':')[-1].strip('[] ')
+                # 품명없음 삭제
+                if (row[quantity_index].value is None
+                        or row[quantity_index].value == "'"
+                        or row[quantity_index].value == '0'
+                        or row[quantity_index].value == 0
+                        or row[quantity_index].value == '물량'
+                ):
                     continue
-                except Exception as e:
-                    print('예외가 발생했습니다.', e)
-                    print('내부산출서 : split오류' + str(item))
 
-            # 품명없음 삭제
-            if (row[quantity_index].value is None
-                    or row[quantity_index].value == "'"
-                    or row[quantity_index].value == '0'
-                    or row[quantity_index].value == 0
-                    or row[quantity_index].value == '물량'
-            ):
-                continue
+                item = ItemStandard(
+                    floor=temp_levels,
+                    location=temp_roomname,
+                    roomname=temp_roomname,
+                    name=row[name_index].value,
+                    standard=row[standard_index].value,
+                    unit=row[unit_index].value,
+                    type='내부',
+                    formula=row[formular_index].value,
+                    sum=row[quantity_index].value,
+                )
+                items.append(item)
 
-            item = ItemStandard(
-                floor=temp_levels,
-                location=temp_roomname,
-                roomname=temp_roomname,
-                name=row[name_index].value,
-                standard=row[standard_index].value,
-                unit=row[unit_index].value,
-                type='내부',
-                formula=row[formular_index].value,
-                sum=row[quantity_index].value,
-            )
-            items.append(item)
+            for item in items:
+                internal_construction.launch(item)
 
-        for item in items:
-            internal_construction.launch(item)
 
     # external_construction
     if '외부산출서' in excel.sheetnames:
