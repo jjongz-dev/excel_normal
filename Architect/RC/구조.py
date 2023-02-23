@@ -26,7 +26,8 @@ def excel_normalize(name):
     # names = excel.get_sheet_names()
     # print(names)
 
-
+    # 시트 추가가 필요한경우 오른쪽과 같이 추가 :   ,'시트명'
+    # 추가해놓은 시트가 없는경우 자동으로 다음시트로 넘어감.
     sheet_names = ['부재별산출서', '아파트옹벽 Unit별산출서']
     items = []
 
