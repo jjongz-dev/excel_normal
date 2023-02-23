@@ -27,69 +27,69 @@ def excel_normalize(name):
     # print(names)
 
 
-    #sheet_names = ['부재별산출서', '아파트옹벽 Unit별산출서']
-    sheet_names = ['부재별산출서']
+    sheet_names = ['부재별산출서', '아파트옹벽 Unit별산출서']
     items = []
+
     for sheet in sheet_names:
-        worksheet = excel[sheet]
-        items = []
-        location = ""
-        floor = ""
-        part = ""
-        crossname = ""
-        for row in worksheet.iter_rows(min_col=0, max_col=6, min_row=4):
-            # 호
-            if ( row[0].value is not None
-                    and row[1].value is None
-                    and row[2].value is None
-                    and row[3].value is None
-                    and row[4].value is None
-                    and row[5].value is None
-            ):
-                location = row[0].value.split('-')[-1].strip()
-                continue
+        if sheet in excel.sheetnames:
+            worksheet = excel[sheet]
+            location = ""
+            floor = ""
+            part = ""
+            crossname = ""
+            for row in worksheet.iter_rows(min_col=0, max_col=6, min_row=4):
+                # 호
+                if ( row[0].value is not None
+                        and row[1].value is None
+                        and row[2].value is None
+                        and row[3].value is None
+                        and row[4].value is None
+                        and row[5].value is None
+                ):
+                    location = row[0].value.split('-')[-1].strip()
+                    continue
 
-            # 층, 부위, 이름
-            if ( row[0].value is not None
-                and row[1].value is not None):
-                part = row[1].value
-                if row[0].value == 'FT':
-                    floor = row[0].value
-                else :
-                    floor = row[0].value + 'F'
+                # 층, 부위, 이름
+                if ( row[0].value is not None
+                    and row[1].value is not None):
+                    part = row[1].value
+                    if row[0].value == 'FT':
+                        floor = row[0].value
+                    else :
+                        floor = row[0].value + 'F'
 
-            # 컷근이름 가져오기
-            if ( row[2].value is not None
-                    and row[5].value is not None):
-                temp_crossname = row[2].value.replace("'","")
-                if len(temp_crossname) >= 2:
-                    crossname = temp_crossname
-
-
-            # 비고 제외
-            if( row[2].value == '[ 비 고 ]'):
-                continue
-
-            # 콘크리트 규격 정규화 25-18-8 > 25-18-08
-            concs = row[3].value.split('-')
-            newconc = row[3].value
-            if( len(concs) == 3):
-                slope = concs[-1].zfill(2)
-                newconc = '-'.join([concs[0], concs[1], slope])
+                # 컷근이름 가져오기
+                if ( row[2].value is not None
+                        and row[5].value is not None):
+                    temp_crossname = row[2].value.replace("'","")
+                    if len(temp_crossname) >= 2:
+                        crossname = temp_crossname
 
 
+                # 비고 제외
+                if( row[2].value == '[ 비 고 ]'):
+                    continue
 
-            item = ItemStandard(
-                floor = floor,
-                location = location,
-                name = crossname,
-                standard= newconc,
-                part = part,
-                formula = row[4].value,
-                sum = row[5].value,
-                )
-            # print(item.to_excel())
-            items.append(item)
+                # 콘크리트 규격 정규화 25-18-8 > 25-18-08
+                concs = row[3].value.split('-')
+                newconc = row[3].value
+                if( len(concs) == 3):
+                    slope = concs[-1].zfill(2)
+                    newconc = '-'.join([concs[0], concs[1], slope])
+
+
+
+                item = ItemStandard(
+                    floor = floor,
+                    location = location,
+                    name = crossname,
+                    standard= newconc,
+                    part = part,
+                    formula = row[4].value,
+                    sum = row[5].value,
+                    )
+                # print(item.to_excel())
+                items.append(item)
 
 
 
