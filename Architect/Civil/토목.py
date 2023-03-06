@@ -9,7 +9,7 @@ fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
 
 
 # 이곳에 현장 폴더명만 변경하면 완료 #######
-siteTicketNo = '23-0046'
+siteTicketNo = '22-0068'
 ##################################
 
 openFilePath = '/Users/blue/hb/quantity/'+siteTicketNo+'/토목.xlsx'
