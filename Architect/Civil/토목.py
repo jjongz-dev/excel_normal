@@ -31,7 +31,7 @@ def excel_normalize(name):
         worksheet = excel['토공집계표']
         for row in worksheet.iter_rows(min_col=0, max_col=31, min_row=8):
             # 단위없음 삭제
-            if (row[15].value is None):
+            if (row[15].value is None or row[19].value ==0):
                 continue
 
             # 품명
@@ -56,7 +56,8 @@ def excel_normalize(name):
         worksheet = excel['가시설공 집계표']
         for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=9):
             # 단위없음 삭제
-            if (row[16].value is None):
+
+            if (row[16].value is None or row[20].value ==0):
                 continue
 
             # 품명
@@ -86,7 +87,7 @@ def excel_normalize(name):
         worksheet = excel['C.I.P 집계표']
         for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=9):
             # 단위없음 삭제
-            if (row[16].value is None):
+            if (row[16].value is None or row[20].value ==0):
                 continue
 
             # 품명
@@ -118,7 +119,7 @@ def excel_normalize(name):
         worksheet = excel['STRUT공 집계표']
         for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=9):
             # 단위없음 삭제
-            if (row[16].value is None):
+            if (row[16].value is None  or row[20].value ==0):
                 continue
 
             # 품명
@@ -167,7 +168,7 @@ def excel_normalize(name):
         worksheet = excel['S.G.R공 집계표']
         for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=11):
             # 단위없음 삭제
-            if (row[16].value is None):
+            if (row[16].value is None or row[20].value ==0):
                 continue
 
             # 품명
@@ -191,7 +192,7 @@ def excel_normalize(name):
         worksheet = excel['LW공 집계표']
         for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=11):
             # 단위없음 삭제
-            if (row[16].value is None):
+            if (row[16].value is None or row[20].value ==0):
                 continue
 
             # 품명
@@ -215,7 +216,7 @@ def excel_normalize(name):
         worksheet = excel['복공 집계표']
         for row in worksheet.iter_rows(min_col=1, max_col=31, min_row=11):
             # 단위없음 삭제
-            if (row[16].value is None):
+            if (row[16].value is None or row[20].value ==0):
                 continue
 
             # 품명
