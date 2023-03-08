@@ -11,8 +11,7 @@ items = []
 def excel_normalize(name, column_dimensions=None):
     print(name)
     excel = load_workbook(
-        desktop_location + '\\2.영등포동2가 다세대주택 및 오피스텔 신축공사(산출서)-11.15.xlsx',
-        # desktop_location + '\\건축.xlsx',
+        desktop_location + '\\구조.xlsx',
         read_only=True,
         data_only=True)
 
@@ -35,7 +34,7 @@ def excel_normalize(name, column_dimensions=None):
     # 각종 변수들 초기화
     floor = location = room_name = part = ''
     type = '구조'
-    sheet_name = '본관동-물량산출서(골조)'
+    sheet_name = '본관동-물량산출서(옹벽)'
     if sheet_name in excel.sheetnames:
         worksheet = excel[sheet_name]
 
@@ -50,11 +49,11 @@ def excel_normalize(name, column_dimensions=None):
                 continue
             if row[0].value in ['계', '[비  고]']:
                 continue
-            if row[17].value in ['D', 'H D/s', 'SHD/s', 'UHD', 'SSH']:
+            if row[17].value in ['D', 'H D' , 'H D/s', 'SHD/s', 'UHD', 'SSH']:
                 continue
 
 
-            print(index)
+            # print(index)
 
             if (row[floor_part_index].value is not None
                     and (row[concrete_formular_index].value is None or row[concrete_formular_index].value == '')
@@ -73,16 +72,17 @@ def excel_normalize(name, column_dimensions=None):
 
             # CONC
             if row[concrete_standard_index].value is not None and 'Kg' in row[concrete_standard_index].value and row[concrete_formular_index].value is not None:
-
                 if row[floor_part_index].value is not None:
                     next_row = worksheet[index + min_row + 1]
                     prev_row = worksheet[index + min_row - 1]
                     if next_row[floor_part_index].value is not None:
                         floor = next_row[floor_part_index].value
                         part = row[floor_part_index].value
+                        print(index, floor, part)
                     if prev_row[floor_part_index].value is not None:
                         floor = row[floor_part_index].value
                         part = prev_row[floor_part_index].value
+                        print(index, floor, part)
 
                 formular = row[concrete_formular_index].value
                 quantity = row[concrete_quantity_index].value
@@ -133,6 +133,7 @@ def excel_normalize(name, column_dimensions=None):
                 )
                 items.append(item)
 
+            print(f"맨앞={row[floor_part_index].value}", f"규격={row[rebar_standard_index].value}", f"산식={row[rebar_formular_index].value}")
             # 철근
             if row[rebar_standard_index].value is not None and 'HD' in row[rebar_standard_index].value and row[rebar_formular_index].value is not None:
                 formular = row[rebar_formular_index].value

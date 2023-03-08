@@ -7,21 +7,30 @@ from Architect.FIN.ItemStandard import ItemStandard
 
 import re
 
-floor_regex = r"([PH]*[\d~]*[bB]*\d+F)_(.*)"
-window_regex = r"([A-Z_0-9]+)+\s/\s(\d+)\*(\d+).*\(면적:(\d+.\d+)\)"
+
+# B1F_기계실, FSD_02    [문]   0.95*2.1       (  1EA)
+# floor_regex = r"([PH]*[\d~]*[bB]*\d+F)_(.*)"
+# B301 근린생활시설
+# 101 근린생활시설
+
+floor_regex = r"([A-Z]*[0-9]+)\s+(.*)"
+# ASD_01 / 2000*2140 방화유리자동문포함(면적:4.28)
+# window_regex = r"([A-Z_0-9]+)+\s/\s(\d+)\*(\d+).*\(면적:(\d+.\d+)\)"
+# SD3       [문]   0.6*1.8        (  1EA)
+window_regex = r"([A-Z]+\d+[A-Z]*)\s*\[[가-힣]\]\s*(\d+[.\d+]*)\*(\d+.\d+)\s*\(\s*([0-9])+.*"
+# \s(\d+.\d+)*(\d+.\d+)\s\((\s\d+EA)\)
 
 desktop_location = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
 
 def excel_normalize(name, column_dimensions=None):
     print(desktop_location)
     excel = load_workbook(
-        desktop_location + '\\2.영등포동2가 다세대주택 및 오피스텔 신축공사(산출서)-11.15.xlsx',
-        # desktop_location + '\\건축.xlsx',
+        # desktop_location + '\\2.영등포동2가 다세대주택 및 오피스텔 신축공사(산출서)-11.15.xlsx',
+        desktop_location + '\\건축.xlsx',
         read_only=True,
         data_only=True)
 
     items = []
-
     # index init
     position_index = 0
     name_index = 1
@@ -34,7 +43,7 @@ def excel_normalize(name, column_dimensions=None):
 
     # 각종 변수들 초기화
     floor = location = room_name = type = ''
-    sheet_name = '1. 본관동-물량산출서'
+    sheet_name = '1. 본동-물량산출서'
 
     if sheet_name in excel.sheetnames:
         worksheet = excel[sheet_name]
@@ -53,17 +62,19 @@ def excel_normalize(name, column_dimensions=None):
 
                 # ASD_01 / 2000*2140 방화유리자동문포함(면적:4.28)
                 if is_window(row[position_index].value):
-                    name, width, height, area = window_name_stand(row[position_index].value)
+                    # name, width, height, area = window_name_stand(row[position_index].value)
+                    name, width, height, count = window_name_stand(row[position_index].value)
                     item = ItemStandard(
                         floor=floor,
                         location=location,
                         roomname=room_name,
                         name=name,
-                        standard=f'{format(int(width) / 1000.0, ".3f")}*{format(int(height) / 1000.0, ".3f")}={format(float(area), ".3f")}',
+                        # standard=f'{format(int(width) / 1000.0, ".3f")}*{format(int(height) / 1000.0, ".3f")}={format(float(area), ".3f")}',
+                        standard=f'{format(float(width), ".3f")}*{format(float(height), ".3f")}={format(float(width)*float(height), ".3f")}',
                         unit="EA",
                         type=type,
-                        formula=1,
-                        sum=1,
+                        formula=count,
+                        sum=count,
                     )
                     items.append(item)
                     continue
@@ -77,7 +88,12 @@ def excel_normalize(name, column_dimensions=None):
                 # B1F_기계실, FSD_02    [문]   0.95*2.1       (  1EA)
                 if is_floor(row[position_index].value):
                     try:
-                        floor, location = floor_name(row[position_index].value)
+                        split = row[position_index].value.split(' ')
+                        if len(split) == 2:
+                            floor = split[0]
+                            location = split[1]
+                        else:
+                            location = split[0]
                         room_name = location
                     except:
                         print(f'{floor=}, {location=}')
@@ -138,7 +154,8 @@ def excel_normalize(name, column_dimensions=None):
     try:
         for item in items:
             new_sheet.append(item.to_excel())
-    except:
+    except Exception as err:
+        print(err)
         print(item)
 
     # 저장할 파일이 열려 있을 경우 창을 닫고 다시 저장!!
@@ -162,11 +179,25 @@ def floor_name(text: str):
 
 
 def is_floor(text: str) -> bool:
-    match = re.match(floor_regex, text)
-    if match is None:
+    stripText = text.strip()
+    if stripText == "":
         return False
+
+    split = text.split(' ')
+    # print(len(split))
+    # print(text)
+    if len(split) == 2 or len(split) == 1:
+        return True
     else:
-        return match.lastindex == 2
+        return False
+
+
+# def is_floor(text: str) -> bool:
+    # match = re.match(floor_regex, text)
+    # if match is None:
+    #     return False
+    # else:
+    #     return match.lastindex == 2
 
 
 def window_name_stand(text: str):
