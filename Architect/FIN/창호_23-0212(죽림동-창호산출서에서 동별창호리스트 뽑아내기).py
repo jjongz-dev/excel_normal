@@ -1,38 +1,32 @@
 from openpyxl import load_workbook, Workbook
 
-from Architect.FIN.ItemStandard import ItemStandard
+from Architect.FIN.WindowList import WindowList
 
-from Architect.FIN.ItemStandard2 import ItemStandard2
 
-from Architect.FIN.PasingRule import Floorlevel, Deleteitem, Basicchange
 
 from datetime import datetime
 
 fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
 
-
-
 # 이곳에 현장 폴더명만 변경하면 완료 #######
 siteTicketNo = '23-0212_ko'
 ##################################
 
-openFilePath = '/Users/blue/hb/quantity/'+siteTicketNo+'/창호.xlsx'
-saveFilePath = '/Users/blue/hb/quantity/'+siteTicketNo+'/창호완성 -' + fileCreateDate + '.xlsx'
-
-#openFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\창호.xlsx'
-#saveFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\창호완성-' + fileCreateDate + '.xlsx'
-
-#openFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\창호.xlsx'
-#saveFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\창호완성-' + fileCreateDate + '.xlsx'
+openFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/창호.xlsx'
+saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/창호완성 -' + fileCreateDate + '.xlsx'
 
 
+# openFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\창호.xlsx'
+# saveFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\창호완성-' + fileCreateDate + '.xlsx'
+
+# openFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\창호.xlsx'
+# saveFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\창호완성-' + fileCreateDate + '.xlsx'
 
 
 def excel_normalize(name, column_dimensions=None):
-
     excel = load_workbook(openFilePath)
 
-    items = []
+    창호목록 = []
 
     if '창호산출서' in excel.sheetnames:
         worksheet = excel['창호산출서']
@@ -54,36 +48,60 @@ def excel_normalize(name, column_dimensions=None):
                     and 물량 is None
             ):
                 if '건축공사' in 부위:
-
                     창호명 = 부위.split('(')[0]
                     창호명 = 창호명.split(':')[-1].strip()
 
                     사이즈 = 부위.split('Size:')[1].split('공제면적')[0]
 
                     # 사이즈>>    7 * 4 = 28
-                    가로 = f'{float(사이즈.split("*")[0]):0.3f}'
 
-                    #가로 = f'{float(가로):0.3f}'
+                    가로 = f"{float(사이즈.split('*')[0]):0.3f}"
+                    세로 = f"{float(사이즈.split('*')[1].split('=')[0]):0.3f}"
+                    면적 = f"{float(사이즈.split('*')[1].split('=')[-1]):0.3f}"
 
-                    세로 = 사이즈.split('*')[1].split('=')[0]
+#                    print(창호명, '/', 사이즈, '/', 가로, 세로, 면적)
 
-                    면적 = 사이즈.split('*')[1].split('=')[-1]
+                    창호 = WindowList(
+                        구분='본동',
+                        창호명=창호명,
+                        가로=가로,
+                        세로=세로,
+                        면적=면적,
+                        공제면적=면적,
+                        BASE길이='',
+                        면적공식='',
+                        도어윈도우='',
+                        비고='',
+                        합계=면적
+                    )
 
-                    print(창호명,'/', 사이즈, '/', 가로, 세로, 면적)
+                    창호목록.append(창호)
 
 
 
+    # 저장할 엑셀
+    new_workbook = Workbook()
+    new_sheet = new_workbook.active
+    new_sheet.title = '동별창호목록'
+    head_title = ['구분', '창호명', '가로', '세로', '면적', '공제면적', 'BASE길이', '면적공식', '도어윈도우', '비고', '합계']
+    new_sheet.append(head_title)
+    new_sheet.column_dimensions["A"].width = 15
+    new_sheet.column_dimensions["B"].width = 15
+    new_sheet.column_dimensions["C"].width = 15
+    new_sheet.column_dimensions["D"].width = 15
+    new_sheet.column_dimensions["E"].width = 15
+    new_sheet.column_dimensions["F"].width = 15
+    new_sheet.column_dimensions["G"].width = 15
+    new_sheet.column_dimensions["H"].width = 15
+    new_sheet.column_dimensions["I"].width = 15
+    new_sheet.column_dimensions["J"].width = 15
+    new_sheet.column_dimensions["K"].width = 15
+
+    for 창호 in 창호목록:
+        new_sheet.append(창호.to_excel())
+        new_workbook.save(saveFilePath)
 
 
 
-
-
-
-
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     excel_normalize('PyCharm')
-
-
