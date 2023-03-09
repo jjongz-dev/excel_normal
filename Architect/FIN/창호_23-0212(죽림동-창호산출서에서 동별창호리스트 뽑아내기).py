@@ -47,19 +47,15 @@ def excel_normalize(name, column_dimensions=None):
                     and 산식 is None
                     and 물량 is None
             ):
-                if '건축공사' in 부위:
+                if '창호명' in 부위:
                     창호명 = 부위.split('(')[0]
                     창호명 = 창호명.split(':')[-1].strip()
-
                     사이즈 = 부위.split('Size:')[1].split('공제면적')[0]
-
                     # 사이즈>>    7 * 4 = 28
-
                     가로 = f"{float(사이즈.split('*')[0]):0.3f}"
                     세로 = f"{float(사이즈.split('*')[1].split('=')[0]):0.3f}"
                     면적 = f"{float(사이즈.split('*')[1].split('=')[-1]):0.3f}"
-
-#                    print(창호명, '/', 사이즈, '/', 가로, 세로, 면적)
+                    #print(창호명, '/', 사이즈, '/', 가로, 세로, 면적)
 
                     창호 = WindowList(
                         구분='본동',
@@ -76,8 +72,6 @@ def excel_normalize(name, column_dimensions=None):
                     )
 
                     창호목록.append(창호)
-
-
 
     # 저장할 엑셀
     new_workbook = Workbook()
@@ -100,8 +94,6 @@ def excel_normalize(name, column_dimensions=None):
     for 창호 in 창호목록:
         new_sheet.append(창호.to_excel())
         new_workbook.save(saveFilePath)
-
-
 
 if __name__ == '__main__':
     excel_normalize('PyCharm')
