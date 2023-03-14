@@ -13,7 +13,7 @@ siteTicketNo = '23-0212_ko'
 ##################################
 
 openFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/창호.xlsx'
-saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/창호완성 -' + fileCreateDate + '.xlsx'
+saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/창호(동별창호리스트)완성 -' + fileCreateDate + '.xlsx'
 
 
 # openFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\창호.xlsx'

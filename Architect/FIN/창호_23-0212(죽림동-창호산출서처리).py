@@ -17,50 +17,23 @@ siteTicketNo = '23-0212_ko'
 ##################################
 
 openFilePath = '/Users/blue/hb/quantity/'+siteTicketNo+'/창호.xlsx'
-saveFilePath = '/Users/blue/hb/quantity/'+siteTicketNo+'/건축완성(창호)-' + fileCreateDate + '.xlsx'
+saveFilePath = '/Users/blue/hb/quantity/'+siteTicketNo+'/창호완성 -' + fileCreateDate + '.xlsx'
 
-#openFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\건축.xlsx'
-#saveFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\건축완성-' + fileCreateDate + '.xlsx'
+#openFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\창호.xlsx'
+#saveFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\창호완성-' + fileCreateDate + '.xlsx'
 
-#openFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\건축.xlsx'
-#saveFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\건축완성-' + fileCreateDate + '.xlsx'
+#openFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\창호.xlsx'
+#saveFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\창호완성-' + fileCreateDate + '.xlsx'
 
 
 
 
 def excel_normalize(name, column_dimensions=None):
-    excel = load_workbook(openFilePath,data_only=True)
 
+    excel = load_workbook(openFilePath,data_only=True)
 
     items = []
     windows_dict = {}
-    if '동별창호리스트' in excel.sheetnames:
-        worksheet = excel['동별창호리스트']
-        for row in worksheet.iter_rows(min_col=0, max_col=11, min_row=5):
-            if row[0].value == '':
-                break
-
-            if row[1].value is not None:
-                windows_name = row[1].value
-                windows_dict[row[1].value] = row[10].value
-                d1 = float_format(row[2])
-                d2 = float_format(row[3])
-                d3 = float_format(row[4])
-                windows_standard = d1 + '*' + d2 + '=' + d3
-
-            item = ItemStandard(
-                floor='',
-                location=row[1].value,
-                roomname=row[1].value,
-                name=windows_name,
-                standard=windows_standard,
-                unit='EA',
-                type='창호',
-                formula=row[10].value,
-                sum=row[10].value,
-            )
-            items.append(item)
-
 
     if '창호산출서' in excel.sheetnames:
         worksheet = excel['창호산출서']
@@ -114,9 +87,7 @@ def excel_normalize(name, column_dimensions=None):
     new_sheet.column_dimensions["L"].width = 30
     for item in items:
         new_sheet.append(item.to_excel())
-
-
-    new_workbook.save(saveFilePath)
+        new_workbook.save(saveFilePath)
 
 
 def float_format(column):
