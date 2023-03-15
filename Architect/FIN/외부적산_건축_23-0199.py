@@ -49,6 +49,7 @@ def excel_normalize(name, column_dimensions=None):
             부위값 = row[4].value
             산식값 = row[5].value
             수량값 = row[8].value
+            개소값 = row[7].value
 
 ####### 타입 / 층 / 실명 뽑아내기  위치에만 데이터가 있는 항목들 대상  S ##############################
 
@@ -126,6 +127,7 @@ def excel_normalize(name, column_dimensions=None):
                 부위확정 = 부위값
                 산식확정 = 산식값
                 수량확정 = 수량값
+                개소확정 = 개소값
 
                 내역 = ExcelStandard(
                     층=층확정,
@@ -141,7 +143,9 @@ def excel_normalize(name, column_dimensions=None):
                     타입=타입확정,
                     산식=산식확정,
                     수량=수량확정,
-                    Remark=''
+                    Remark='',
+                    개소=개소확정
+
                 )
                 내역목록.append(내역)
 
@@ -149,7 +153,7 @@ def excel_normalize(name, column_dimensions=None):
     new_workbook = Workbook()
     new_sheet = new_workbook.active
     new_sheet.title = '건축완성'
-    head_title = ['층', '호', '실', '대공종', '중공종', '코드', '품명', '규격', '단위', '부위', '타입', '산식', '수량', 'Remark']
+    head_title = ['층', '호', '실', '대공종', '중공종', '코드', '품명', '규격', '단위', '부위', '타입', '산식', '수량', 'Remark', '개소(확인용)']
     new_sheet.append(head_title)
     new_sheet.column_dimensions["G"].width = 15
     new_sheet.column_dimensions["H"].width = 15
