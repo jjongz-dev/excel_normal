@@ -160,7 +160,8 @@ def excel_normalize(name, column_dimensions=None):
 
     for 내역 in 내역목록:
        new_sheet.append(내역.to_excel())
-       new_workbook.save(saveFilePath)
+
+    new_workbook.save(saveFilePath)
 
 
 if __name__ == '__main__':
