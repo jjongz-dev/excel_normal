@@ -62,6 +62,8 @@ def excel_normalize(name, column_dimensions=None):
             ):
 
 
+
+
                 if '>' in 위치값:
                     타입확정 = 위치값.split('>')[-1].strip()
                     continue
@@ -82,10 +84,18 @@ def excel_normalize(name, column_dimensions=None):
 
                     continue
 
+
+
+                if '[문]' in 위치값 or '[창]' in 위치값:
+                    continue
+
+                if '[가로]X' in 위치값 or '[둘레]L' in 위치값:
+                    continue
+
+                # B301 근린생활, 전기실  등에서  층과 실 추출
+
                 위치값_분리_빈칸 = 위치값.split(' ')
                 위치값_분리_빈칸_길이 = len(위치값_분리_빈칸)
-
-                                # B301 근린생활, 전기실  등에서  층과 실 추출
 
                 if 위치값_분리_빈칸_길이 == 1:
                     층확정 = ''
@@ -98,11 +108,6 @@ def excel_normalize(name, column_dimensions=None):
                     실확정 = 위치값_분리_빈칸[1]
                     continue
 
-                if '[문]' in 위치값 or '[창]' in 위치값:
-                    continue
-
-                if '[가로]X' in 위치값 or '[둘레]L' in 위치값:
-                    continue
 
             if 위치값 == '위치' and 품명값 == '품명' and 규격값 == '규격':
                 continue
