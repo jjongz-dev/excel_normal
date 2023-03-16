@@ -12,7 +12,7 @@ fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
 
 
 # 이곳에 현장 폴더명만 변경하면 완료 #######
-siteTicketNo = '22-0068'
+siteTicketNo = '23-0225'
 ##################################
 
 openFilePath = '/Users/blue/hb/quantity/'+siteTicketNo+'/건축.xlsx'
@@ -443,6 +443,9 @@ def excel_normalize(name, column_dimensions=None):
 
         title_list = []
         for cell_obj in list(worksheet.rows)[dong_windowslist_row_index-1]:
+
+            print('cell_obj.value : ', cell_obj.value)
+
             if cell_obj.value is not None:
                 title_list.append(cell_obj.value)
                 # print(title_list)
@@ -453,13 +456,13 @@ def excel_normalize(name, column_dimensions=None):
                 floor_list.append(title)
                 # print(floor_list)
 
-        for row in worksheet.iter_rows(min_col=0, max_col=worksheet._current_row, min_row=dong_windowslist_row_index+1):
+        for row in worksheet.iter_rows(min_col=0, min_row=dong_windowslist_row_index+1):
             window_name = row[title_list.index('창호명')].value
-            # print(window_name)
+            print(window_name)
             if window_name is not None:
                 for floor_name in floor_list:
                     floor_count = row[title_list.index(floor_name)].value
-                    # print(floor_count)
+                    print('floor_name = ', floor_name, ' /  floor_count = ', floor_count)
                     if floor_count is not None and int(floor_count) > 0:
                         if 'B' in floor_name:
                             final_floor_name = f'{floor_name}F'
