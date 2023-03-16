@@ -45,10 +45,16 @@ def excel_normalize(name, column_dimensions=None):
             규격값 = row[2].value
             단위값 = row[3].value
             수량값 = row[4].value
-            비고값 = row[5].value
+            비고값 = row[10].value
 
+            if 비고값 is not None:
+
+                비고값 = 비고값.replace('\n', '').replace('\r', '')
+                공종값 = f'{공종값}/{비고값}'
+                # 공종값 = 공종값 + '/' + 비고값
 
             if 공종값 is not None and 단위값 is not None:
+
                 품명확정 = 공종값
                 규격확정 = 규격값
                 단위확정 = 단위값
@@ -85,7 +91,6 @@ def excel_normalize(name, column_dimensions=None):
         new_sheet.append(내역.to_excel())
 
     new_workbook.save(saveFilePath)
-
 
 if __name__ == '__main__':
     excel_normalize('PyCharm')
