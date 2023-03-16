@@ -20,4 +20,4 @@ class ExcelStandard:
     개소: int
 
     def to_excel(self):
-        return [self.층, self.호, self.실, self.대공종, self.중공종, self.코드, self.품명, self.규격, self.단위, self.부위, self.타입, self.산식, self.수량, self.Remark, self.개소]
+        return [self.층, self.호, self.실, self.대공종, self.중공종, self.코드, self.품명.replace('\n', '').replace('\r', ''), self.규격.replace('\n', '').replace('\r', ''), self.단위, self.부위, self.타입, self.산식.replace('\n', '').replace('\r', ''), self.수량, self.Remark, self.개소]
