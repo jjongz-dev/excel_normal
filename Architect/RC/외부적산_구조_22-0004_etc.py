@@ -1,6 +1,6 @@
 from openpyxl import load_workbook, Workbook
 
-from Architect.RC.ItemStandard import ItemStandard
+from Architect.RC.ExcelStandard import ExcelStandard
 
 from datetime import datetime
 
@@ -24,180 +24,109 @@ saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/구조완성-' + fi
 def excel_normalize(name, column_dimensions=None):
     excel = load_workbook(openFilePath)
 
-    items = []
+    내역목록 = []
 
-    # index init
-    floor_part_index = 0
+    sheetname = "본관동-물량산출서"
+    if sheetname in excel.sheetnames:
+        worksheet = excel[sheetname]
 
-    concrete_standard_index = 4
-    concrete_formular_index = 5
-    concrete_quantity_index = 10
+        층확정 = ''
+        호확정 = ''
+        실확정 = ''
+        품명확정 = ''
+        규격확정 = ''
+        부위확정 = ''
+        산식확정 = ''
+        수량확정 = ''
 
-    formwork_standard_index = 11
-    formwork_formular_index = 13
-    formwork_quantity_index = 18
+        파싱시작줄 = 2
+        for 줄번호, row in enumerate(worksheet.iter_rows(min_row=파싱시작줄)):
 
-    rebar_standard_index = 21
-    rebar_formular_index = 23
-    rebar_quantity_index = 30
+            층값 = row[0].value
+            개소값 = row[2].value
+            콘크리트종류값 = row[4].value
+            콘크리트산출식값 = row[5].value
+            콘크리트소계값 = row[10].value
 
-    # 각종 변수들 초기화
-    floor = location = room_name = part = ''
-    type = '구조'
-    sheet_name = '본관동-물량산출서'
-    if sheet_name in excel.sheetnames:
-        worksheet = excel[sheet_name]
+            거푸집종류값 = row[11].value
+            거푸집산출식값 = row[13].value
+            거푸집소계값 = row[18].value
 
-        min_row = 2
-        for index, row in enumerate(worksheet.iter_rows(min_col=0, max_col=worksheet._current_row, min_row=min_row)):
+            철근위치값 = row[19].value
+            철근규격값 = row[21].value
+            철근산출식값 = row[23].value
+            철근소계값 = row[30].value
 
-            if is_empty_row(row):
-                continue
-            if row[4].value == '종류' and row[5].value == '산출식':
-                continue
-            if row[4].value == '콘크리트(M3)':
-                continue
-            if row[0].value in ['계', '[비  고]']:
-                continue
-            if row[17].value in ['D', 'H D', 'H D/s', 'SHD/s', 'UHD', 'SSH']:
+            if 콘크리트종류값 in ['콘크리트(M3)', '종류', '계', '물 량 산 출 서']:
                 continue
 
-            # print(index)
+            if 층값 in ['계']:
+                continue
 
-            if (row[floor_part_index].value is not None
-                    and (row[concrete_formular_index].value is None or row[concrete_formular_index].value == '')
-                    and (row[formwork_formular_index].value is None or row[formwork_formular_index].value == '')
-                    and (row[rebar_formular_index].value is None or row[rebar_formular_index].value == '')
+            if row[17].value in ['D', 'H D', 'H D/s', 'SHD', 'SHD/s', 'UHD', 'SSH']:
+                continue
 
-            ):
-                # [ 본관동   기초 ]
-                floor_part_name = row[floor_part_index].value
-                if floor_part_name.startswith("[") and floor_part_name.endswith("]"):
-                    try:
-                        location = floor_part_name.replace('[', '').replace(']', '').strip().split('   ')[1]
-                    except:
-                        print(floor_part_name)
-                    continue
+            if 층값 is not None and '본관동' in 층값:
+                호확정 = 층값.split(' ')[-2]
+                continue
 
-            # CONC
-            if row[concrete_standard_index].value is not None and 'Kg' in row[concrete_standard_index].value and row[
-                concrete_formular_index].value is not None:
-                if row[floor_part_index].value is not None:
-                    next_row = worksheet[index + min_row + 1]
-                    prev_row = worksheet[index + min_row - 1]
-                    if next_row[floor_part_index].value is not None:
-                        floor = next_row[floor_part_index].value
-                        part = row[floor_part_index].value
-                        print(index, floor, part)
-                    if prev_row[floor_part_index].value is not None:
-                        floor = row[floor_part_index].value
-                        part = prev_row[floor_part_index].value
-                        print(index, floor, part)
+            # 콘크리트 산출 Start ##############################################################
 
-                formular = row[concrete_formular_index].value
-                quantity = row[concrete_quantity_index].value
+            if 콘크리트종류값 is not None and 콘크리트산출식값 is not None:
 
-                if row[concrete_quantity_index].value is None:
-                    next_row = worksheet[index + min_row + 1]
-                    formular += str(next_row[concrete_formular_index].value)
-                    if next_row[concrete_quantity_index].value is None:
-                        next_next_row = worksheet[index + min_row + 2]
-                        formular += str(next_next_row[concrete_formular_index].value)
-                        quantity = next_next_row[concrete_quantity_index].value
-                    else:
-                        quantity = next_row[concrete_quantity_index].value
+                다음줄층값 = worksheet[줄번호 + 파싱시작줄 + 1][0].value
 
-                item = ItemStandard(
-                    floor=floor,
-                    location=location,
-                    name='콘크리트',
-                    standard=row[concrete_standard_index].value,
-                    part=part,
-                    formula=formular,
-                    sum=quantity,
+                if 다음줄층값 is not None:
+                    층확정 = 다음줄층값
+                    부위확정 = 층값
+
+                if 콘크리트소계값 is None or 콘크리트소계값 == '':
+                    다음줄콘크리트산출식값 = str(worksheet[줄번호 + 파싱시작줄 + 1][5].value)
+                    다음줄콘크리트소계값 = worksheet[줄번호 + 파싱시작줄 + 1][10].value
+
+                    if 다음줄콘크리트소계값 is not None:
+                        콘크리트산출식값 = 콘크리트산출식값 + 다음줄콘크리트산출식값
+                        콘크리트소계값 = 다음줄콘크리트소계값
+
+                규격확정 = 콘크리트종류값
+                산식확정 = 콘크리트산출식값
+                수량확정 = 콘크리트소계값
+
+                print(층값, 층확정, 호확정, 규격확정, 부위확정, 산식확정, 수량확정)
+
+                내역 = ExcelStandard(
+                    층=층확정,
+                    호=호확정,
+                    실='',
+                    대공종='건축',
+                    중공종='철근콘크리트공사',
+                    코드='',
+                    품명='콘크리트',
+                    규격=규격확정,
+                    단위='',
+                    부위=부위확정,
+                    타입='구조',
+                    산식=산식확정,
+                    수량=수량확정,
+                    Remark=''
                 )
-                items.append(item)
+                내역목록.append(내역)
 
-            # 거푸집
-            if row[formwork_standard_index].value is not None and row[formwork_formular_index].value is not None:
-                formular = row[formwork_formular_index].value
-                quantity = row[formwork_quantity_index].value
-                if row[formwork_quantity_index].value is None:
-                    next_row = worksheet[index + min_row + 1]
-                    formular += str(next_row[formwork_formular_index].value)
-                    if next_row[formwork_quantity_index].value is None:
-                        next_next_row = worksheet[index + min_row + 2]
-                        formular += str(next_next_row[formwork_formular_index].value)
-                        quantity = next_next_row[formwork_quantity_index].value
-                    else:
-                        quantity = next_row[formwork_quantity_index].value
-
-                item = ItemStandard(
-                    floor=floor,
-                    location=location,
-                    name='거푸집',
-                    standard=row[formwork_standard_index].value,
-                    part=part,
-                    formula=formular,
-                    sum=quantity,
-                )
-                items.append(item)
-
-            print(f"맨앞={row[floor_part_index].value}", f"규격={row[rebar_standard_index].value}",
-                  f"산식={row[rebar_formular_index].value}")
-            # 철근
-            if row[rebar_standard_index].value is not None and 'HD' in row[rebar_standard_index].value and row[
-                rebar_formular_index].value is not None:
-                formular = row[rebar_formular_index].value
-                quantity = row[rebar_quantity_index].value
-
-                if row[rebar_quantity_index].value is None:
-                    next_row = worksheet[index + min_row + 1]
-                    formular += str(next_row[rebar_formular_index].value)
-                    if next_row[rebar_quantity_index].value is None:
-                        next_next_row = worksheet[index + min_row + 2]
-                        formular += str(next_next_row[rebar_formular_index].value)
-                        quantity = next_next_row[rebar_quantity_index].value
-                    else:
-                        quantity = next_row[rebar_quantity_index].value
-
-                item = ItemStandard(
-                    floor=floor,
-                    location=location,
-                    name='철근',
-                    standard=row[rebar_standard_index].value,
-                    part=part,
-                    formula=formular,
-                    sum=quantity,
-                )
-                items.append(item)
+            # 콘크리트 산출 End ##############################################################
 
     # 저장할 엑셀
     new_workbook = Workbook()
     new_sheet = new_workbook.active
-    new_sheet.title = '구조(데이터변경X)'
+    new_sheet.title = '구조완성'
     head_title = ['층', '호', '실', '대공종', '중공종', '코드', '품명', '규격', '단위', '부위', '타입', '산식', '수량', 'Remark']
     new_sheet.append(head_title)
-    new_sheet.column_dimensions["G"].width = 30
-    new_sheet.column_dimensions["H"].width = 30
-    new_sheet.column_dimensions["L"].width = 30
+    new_sheet.column_dimensions["G"].width = 15
+    new_sheet.column_dimensions["H"].width = 15
 
-    for item in items:
-        new_sheet.append(item.to_excel())
+    for 내역 in 내역목록:
+        new_sheet.append(내역.to_excel())
 
     new_workbook.save(saveFilePath)
-
-
-
-def is_empty_row(row):
-    for column in row:
-        if column.value is None:
-            continue
-        elif column.value is not None:
-            return False
-        elif column.value.strip() != '':
-            return False
-    return True
 
 
 if __name__ == '__main__':
