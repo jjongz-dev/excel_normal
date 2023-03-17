@@ -83,19 +83,11 @@ def excel_normalize(name, column_dimensions=None):
     new_sheet.column_dimensions["A"].width = 15
     new_sheet.column_dimensions["B"].width = 15
     new_sheet.column_dimensions["C"].width = 15
-    new_sheet.column_dimensions["D"].width = 15
-    new_sheet.column_dimensions["E"].width = 15
-    new_sheet.column_dimensions["F"].width = 15
-    new_sheet.column_dimensions["G"].width = 15
-    new_sheet.column_dimensions["H"].width = 15
-    new_sheet.column_dimensions["I"].width = 15
-    new_sheet.column_dimensions["J"].width = 15
-    new_sheet.column_dimensions["K"].width = 15
+
 
     for 창호 in 창호목록:
         new_sheet.append(창호.to_excel())
     new_workbook.save(saveFilePath)
-
 
     # 파싱한 엑셀을 자동으로 띄워서 확인
     systemOs = platform.system()

@@ -16,7 +16,6 @@ siteTicketNo = '23-0212_ko'
 openFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/구조.xlsx'
 saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/구조완성-' + fileCreateDate + '.xlsx'
 
-
 # openFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\구조.xlsx'
 # saveFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\구조완성-' + fileCreateDate + '.xlsx'
 

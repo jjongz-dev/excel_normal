@@ -45,7 +45,6 @@ def excel_normalize(name, column_dimensions=None):
             엑셀가로줄번호 = 가로줄번호 + 1
 
             층값 = row[0].value
-            개소값 = row[2].value
             콘크리트종류값 = row[4].value
             콘크리트산출식값 = row[5].value
             콘크리트소계값 = row[10].value
@@ -54,7 +53,6 @@ def excel_normalize(name, column_dimensions=None):
             거푸집산출식값 = row[13].value
             거푸집소계값 = row[18].value
 
-            철근위치값 = row[19].value
             철근규격값 = row[21].value
             철근산출식값 = row[23].value
             철근소계값 = row[30].value
@@ -93,14 +91,14 @@ def excel_normalize(name, column_dimensions=None):
                     다음줄콘크리트소계값 = worksheet[엑셀가로줄번호 + 1][10].value
 
                     if 다음줄콘크리트소계값 is not None:
-                        콘크리트산출식값 = 콘크리트산출식값 + 다음줄콘크리트산출식값
+                        콘크리트산출식값 = f'{콘크리트산출식값}{다음줄콘크리트산출식값}'
                         콘크리트소계값 = 다음줄콘크리트소계값
 
                 규격확정 = 콘크리트종류값
                 산식확정 = 콘크리트산출식값
                 수량확정 = 콘크리트소계값
 
-                # print(엑셀가로줄번호, 층값, 층확정, 호확정, 규격확정, 부위확정, 산식확정, 수량확정)
+                #print(엑셀가로줄번호, 층값, 층확정, 호확정, 규격확정, 부위확정, 산식확정, 수량확정, '/', 다음줄콘크리트산출식값)
 
                 내역 = ExcelStandard(
                     층=층확정,
@@ -131,14 +129,14 @@ def excel_normalize(name, column_dimensions=None):
                     다음줄거푸집소계값 = worksheet[엑셀가로줄번호 + 1][18].value
 
                     if 다음줄거푸집소계값 is not None:
-                        거푸집산출식값 = 거푸집산출식값 + 다음줄거푸집산출식값
+                        거푸집산출식값 = f'{거푸집산출식값}{다음줄거푸집산출식값}'
                         거푸집소계값 = 다음줄거푸집소계값
 
                 규격확정 = 거푸집종류값
                 산식확정 = 거푸집산출식값
                 수량확정 = 거푸집소계값
 
-                # print(엑셀가로줄번호, 층값, 층확정, 호확정, 규격확정, 부위확정, 산식확정, 수량확정)
+                #print(엑셀가로줄번호, 층값, 층확정, 호확정, 규격확정, 부위확정, 산식확정, 수량확정, '/', 다음줄거푸집산출식값)
 
                 내역 = ExcelStandard(
                     층=층확정,
@@ -169,14 +167,14 @@ def excel_normalize(name, column_dimensions=None):
                     다음줄철근소계값 = worksheet[엑셀가로줄번호 + 1][30].value
 
                     if 다음줄철근소계값 is not None:
-                        철근산출식값 = 철근산출식값 + 다음줄철근산출식값
+                        철근산출식값 = f'{철근산출식값}{다음줄철근산출식값}'
                         철근소계값 = 다음줄철근소계값
 
                 규격확정 = 철근규격값
                 산식확정 = 철근산출식값
                 수량확정 = 철근소계값
 
-                print(엑셀가로줄번호, 층값, 층확정, 호확정, 규격확정, 부위확정, 산식확정, 수량확정)
+                #print(엑셀가로줄번호, 층값, 층확정, 호확정, 규격확정, 부위확정, 산식확정, 수량확정)
 
                 내역 = ExcelStandard(
                     층=층확정,
@@ -198,8 +196,6 @@ def excel_normalize(name, column_dimensions=None):
 
             # 철근 산출 End ##############################################################
 
-
-
     # 저장할 엑셀
     new_workbook = Workbook()
     new_sheet = new_workbook.active
@@ -208,6 +204,7 @@ def excel_normalize(name, column_dimensions=None):
     new_sheet.append(head_title)
     # new_sheet.column_dimensions["G"].width = 15
     # new_sheet.column_dimensions["H"].width = 15
+    new_sheet.column_dimensions["L"].width = 80
 
     for 내역 in 내역목록:
         new_sheet.append(내역.to_excel())

@@ -65,9 +65,6 @@ def excel_normalize(name, column_dimensions=None):
                     and (수량값 is None or 수량값 == '')
             ):
 
-
-
-
                 if '>' in 위치값:
                     타입확정 = 위치값.split('>')[-1].strip()
                     continue
@@ -84,11 +81,9 @@ def excel_normalize(name, column_dimensions=None):
                     호확정 = 창호명
                     실확정 = 창호명
 
-#                    print(위치, '  ==> ', 위치값_분리_슬래쉬[0], '/', 위치값_분리_슬래쉬[1], ' ===>', 호확정 ,' ===>', 창호가로사이즈, "/", 창호세로사이즈)
+                    #print(위치, '  ==> ', 위치값_분리_슬래쉬[0], '/', 위치값_분리_슬래쉬[1], ' ===>', 호확정 ,' ===>', 창호가로사이즈, "/", 창호세로사이즈)
 
                     continue
-
-
 
                 if '[문]' in 위치값 or '[창]' in 위치값:
                     continue
@@ -96,7 +91,7 @@ def excel_normalize(name, column_dimensions=None):
                 if '[가로]X' in 위치값 or '[둘레]L' in 위치값:
                     continue
 
-                # B301 근린생활, 전기실  등에서  층과 실 추출
+                #B301 근린생활, 전기실  등에서  층과 실 추출
 
                 위치값_분리_빈칸 = 위치값.split(' ')
                 위치값_분리_빈칸_길이 = len(위치값_분리_빈칸)
@@ -111,7 +106,6 @@ def excel_normalize(name, column_dimensions=None):
                     호확정 = 위치값_분리_빈칸[1]
                     실확정 = 위치값_분리_빈칸[1]
                     continue
-
 
             if 위치값 == '위치' and 품명값 == '품명' and 규격값 == '규격':
                 continue
@@ -148,7 +142,6 @@ def excel_normalize(name, column_dimensions=None):
                     수량=수량확정,
                     Remark='',
                     개소=개소확정
-
                 )
                 내역목록.append(내역)
 

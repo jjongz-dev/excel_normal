@@ -16,7 +16,6 @@ siteTicketNo = '22-0004_etc'
 openFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/건축.xlsx'
 saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/건축완성-' + fileCreateDate + '.xlsx'
 
-
 # openFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\건축.xlsx'
 # saveFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\건축완성-' + fileCreateDate + '.xlsx'
 
@@ -71,8 +70,6 @@ def excel_normalize(name, column_dimensions=None):
             if (위치값 is None or 위치값 == '') and (품명값 is None or 품명값 == '') and (규격값 is None or 규격값 == ''):
                 continue
 
-            print(층확정,호확정,실확정,품명값,수량값)
-
             if 품명값 is not None and 수량값 is not None:
 
                 품명확정 = 품명값
@@ -99,7 +96,6 @@ def excel_normalize(name, column_dimensions=None):
                     수량=수량확정,
                     Remark='',
                     개소=개소확정
-
                 )
                 내역목록.append(내역)
 

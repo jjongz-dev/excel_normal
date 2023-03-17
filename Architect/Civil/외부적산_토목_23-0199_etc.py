@@ -16,7 +16,6 @@ siteTicketNo = '23-0199_etc'
 openFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/토목.xlsx'
 saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/토목-' + fileCreateDate + '.xlsx'
 
-
 # openFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\토목.xlsx'
 # saveFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\토목완성-' + fileCreateDate + '.xlsx'
 
@@ -94,7 +93,6 @@ def excel_normalize(name, column_dimensions=None):
         new_sheet.append(내역.to_excel())
 
     new_workbook.save(saveFilePath)
-
 
     # 파싱한 엑셀을 자동으로 띄워서 확인
     systemOs = platform.system()
