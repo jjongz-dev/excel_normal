@@ -17,11 +17,11 @@ openFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/건축.xlsx'
 saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/건축완성-' + fileCreateDate + '.xlsx'
 
 
-# openFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\창호.xlsx'
-# saveFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\창호완성-' + fileCreateDate + '.xlsx'
+# openFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\건축.xlsx'
+# saveFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\건축완성-' + fileCreateDate + '.xlsx'
 
-# openFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\창호.xlsx'
-# saveFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\창호완성-' + fileCreateDate + '.xlsx'
+# openFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\건축.xlsx'
+# saveFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\건축완성-' + fileCreateDate + '.xlsx'
 
 
 def excel_normalize(name, column_dimensions=None):
@@ -168,7 +168,7 @@ def excel_normalize(name, column_dimensions=None):
 
     # 파싱한 엑셀을 자동으로 띄워서 확인
     systemOs = platform.system()
-    if systemOs !='windows':
+    if systemOs =='Darwin':
         subprocess.call(['open', saveFilePath])
 
 

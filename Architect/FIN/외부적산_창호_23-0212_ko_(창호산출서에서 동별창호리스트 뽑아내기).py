@@ -99,7 +99,7 @@ def excel_normalize(name, column_dimensions=None):
 
     # 파싱한 엑셀을 자동으로 띄워서 확인
     systemOs = platform.system()
-    if systemOs !='windows':
+    if systemOs =='Darwin':
         subprocess.call(['open', saveFilePath])
 
 
