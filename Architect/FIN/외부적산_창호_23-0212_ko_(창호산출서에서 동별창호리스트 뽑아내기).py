@@ -2,7 +2,8 @@ from openpyxl import load_workbook, Workbook
 
 from Architect.FIN.WindowList import WindowList
 
-
+import platform
+import subprocess
 
 from datetime import datetime
 
@@ -93,7 +94,14 @@ def excel_normalize(name, column_dimensions=None):
 
     for 창호 in 창호목록:
         new_sheet.append(창호.to_excel())
-        new_workbook.save(saveFilePath)
+    new_workbook.save(saveFilePath)
+
+
+    # 파싱한 엑셀을 자동으로 띄워서 확인
+    systemOs = platform.system()
+    if systemOs !='windows':
+        subprocess.call(['open', saveFilePath])
+
 
 if __name__ == '__main__':
     excel_normalize('PyCharm')

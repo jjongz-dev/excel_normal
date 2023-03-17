@@ -4,6 +4,9 @@ from Architect.RC.ExcelStandard import ExcelStandard
 
 from datetime import datetime
 
+import platform
+import subprocess
+
 fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
 
 # 이곳에 현장 폴더명만 변경하면 완료 #######
@@ -39,8 +42,9 @@ def excel_normalize(name, column_dimensions=None):
         산식확정 = ''
         수량확정 = ''
 
-        파싱시작줄 = 2
-        for 줄번호, row in enumerate(worksheet.iter_rows(min_row=파싱시작줄)):
+        for 가로줄번호, row in enumerate(worksheet.rows):
+
+            엑셀가로줄번호 = 가로줄번호 + 1
 
             층값 = row[0].value
             개소값 = row[2].value
@@ -56,6 +60,12 @@ def excel_normalize(name, column_dimensions=None):
             철근규격값 = row[21].value
             철근산출식값 = row[23].value
             철근소계값 = row[30].value
+
+            if 층값 is not None:
+                층값 = 층값.replace('\n', '').replace('\r', '')
+
+            # for 세로줄번호, col in enumerate(list(row)):
+            #     print(층값, 세로줄번호, col)
 
             if 콘크리트종류값 in ['콘크리트(M3)', '종류', '계', '물 량 산 출 서']:
                 continue
@@ -74,15 +84,15 @@ def excel_normalize(name, column_dimensions=None):
 
             if 콘크리트종류값 is not None and 콘크리트산출식값 is not None:
 
-                다음줄층값 = worksheet[줄번호 + 파싱시작줄 + 1][0].value
+                다음줄층값 = worksheet[엑셀가로줄번호 + 1][0].value
 
                 if 다음줄층값 is not None:
                     층확정 = 다음줄층값
                     부위확정 = 층값
 
                 if 콘크리트소계값 is None or 콘크리트소계값 == '':
-                    다음줄콘크리트산출식값 = str(worksheet[줄번호 + 파싱시작줄 + 1][5].value)
-                    다음줄콘크리트소계값 = worksheet[줄번호 + 파싱시작줄 + 1][10].value
+                    다음줄콘크리트산출식값 = str(worksheet[엑셀가로줄번호 + 1][5].value)
+                    다음줄콘크리트소계값 = worksheet[엑셀가로줄번호 + 1][10].value
 
                     if 다음줄콘크리트소계값 is not None:
                         콘크리트산출식값 = 콘크리트산출식값 + 다음줄콘크리트산출식값
@@ -92,7 +102,7 @@ def excel_normalize(name, column_dimensions=None):
                 산식확정 = 콘크리트산출식값
                 수량확정 = 콘크리트소계값
 
-                print(층값, 층확정, 호확정, 규격확정, 부위확정, 산식확정, 수량확정)
+                # print(엑셀가로줄번호, 층값, 층확정, 호확정, 규격확정, 부위확정, 산식확정, 수량확정)
 
                 내역 = ExcelStandard(
                     층=층확정,
@@ -103,7 +113,7 @@ def excel_normalize(name, column_dimensions=None):
                     코드='',
                     품명='콘크리트',
                     규격=규격확정,
-                    단위='',
+                    단위='M3',
                     부위=부위확정,
                     타입='구조',
                     산식=산식확정,
@@ -114,19 +124,102 @@ def excel_normalize(name, column_dimensions=None):
 
             # 콘크리트 산출 End ##############################################################
 
+            # 거푸집 산출 Start ##############################################################
+
+            if 거푸집종류값 is not None and 거푸집산출식값 is not None:
+
+                if 거푸집소계값 is None or 거푸집소계값 == '':
+                    다음줄거푸집산출식값 = str(worksheet[엑셀가로줄번호 + 1][13].value)
+                    다음줄거푸집소계값 = worksheet[엑셀가로줄번호 + 1][18].value
+
+                    if 다음줄거푸집소계값 is not None:
+                        거푸집산출식값 = 거푸집산출식값 + 다음줄거푸집산출식값
+                        거푸집소계값 = 다음줄거푸집소계값
+
+                규격확정 = 거푸집종류값
+                산식확정 = 거푸집산출식값
+                수량확정 = 거푸집소계값
+
+                # print(엑셀가로줄번호, 층값, 층확정, 호확정, 규격확정, 부위확정, 산식확정, 수량확정)
+
+                내역 = ExcelStandard(
+                    층=층확정,
+                    호=호확정,
+                    실='',
+                    대공종='건축',
+                    중공종='철근콘크리트공사',
+                    코드='',
+                    품명='거푸집',
+                    규격=규격확정,
+                    단위='M2',
+                    부위=부위확정,
+                    타입='구조',
+                    산식=산식확정,
+                    수량=수량확정,
+                    Remark=''
+                )
+                내역목록.append(내역)
+
+            # 거푸집 산출 End ##############################################################
+
+            # 철근 산출 Start ##############################################################
+
+            if 철근규격값 is not None and 철근산출식값 is not None:
+
+                if 철근소계값 is None or 철근소계값 == '':
+                    다음줄철근산출식값 = str(worksheet[엑셀가로줄번호 + 1][23].value)
+                    다음줄철근소계값 = worksheet[엑셀가로줄번호 + 1][30].value
+
+                    if 다음줄철근소계값 is not None:
+                        철근산출식값 = 철근산출식값 + 다음줄철근산출식값
+                        철근소계값 = 다음줄철근소계값
+
+                규격확정 = 철근규격값
+                산식확정 = 철근산출식값
+                수량확정 = 철근소계값
+
+                print(엑셀가로줄번호, 층값, 층확정, 호확정, 규격확정, 부위확정, 산식확정, 수량확정)
+
+                내역 = ExcelStandard(
+                    층=층확정,
+                    호=호확정,
+                    실='',
+                    대공종='건축',
+                    중공종='철근콘크리트공사',
+                    코드='',
+                    품명='철근',
+                    규격=규격확정,
+                    단위='M',
+                    부위=부위확정,
+                    타입='구조',
+                    산식=산식확정,
+                    수량=수량확정,
+                    Remark=''
+                )
+                내역목록.append(내역)
+
+            # 철근 산출 End ##############################################################
+
+
+
     # 저장할 엑셀
     new_workbook = Workbook()
     new_sheet = new_workbook.active
     new_sheet.title = '구조완성'
     head_title = ['층', '호', '실', '대공종', '중공종', '코드', '품명', '규격', '단위', '부위', '타입', '산식', '수량', 'Remark']
     new_sheet.append(head_title)
-    new_sheet.column_dimensions["G"].width = 15
-    new_sheet.column_dimensions["H"].width = 15
+    # new_sheet.column_dimensions["G"].width = 15
+    # new_sheet.column_dimensions["H"].width = 15
 
     for 내역 in 내역목록:
         new_sheet.append(내역.to_excel())
 
     new_workbook.save(saveFilePath)
+
+    # 파싱한 엑셀을 자동으로 띄워서 확인
+    systemOs = platform.system()
+    if systemOs !='windows':
+        subprocess.call(['open', saveFilePath])
 
 
 if __name__ == '__main__':

@@ -4,6 +4,9 @@ from Architect.RC.ExcelStandard import ExcelStandard
 
 from datetime import datetime
 
+import platform
+import subprocess
+
 fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
 
 # 이곳에 현장 폴더명만 변경하면 완료 #######
@@ -98,6 +101,11 @@ def excel_normalize(name, column_dimensions=None):
         new_sheet.append(내역.to_excel())
 
     new_workbook.save(saveFilePath)
+
+    # 파싱한 엑셀을 자동으로 띄워서 확인
+    systemOs = platform.system()
+    if systemOs !='windows':
+        subprocess.call(['open', saveFilePath])
 
 
 if __name__ == '__main__':
