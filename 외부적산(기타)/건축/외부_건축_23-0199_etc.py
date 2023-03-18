@@ -13,7 +13,6 @@ siteTicketNo = '23-0199_etc'
 openFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/건축.xlsx'
 saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/건축완성-' + fileCreateDate + '.xlsx'
 
-
 # openFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\건축.xlsx'
 # saveFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\건축완성-' + fileCreateDate + '.xlsx'
 
