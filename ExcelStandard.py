@@ -36,6 +36,6 @@ class ExcelStandard:
             규격 = 규격.replace('\n', '').replace('\r', '')
 
         if type(단위) is str:
-            단위 = 단위.replace('\n', '').replace('\r', '')
+            단위 = 단위.replace('\n', '').replace('\r', '').replace('m', 'M').replace('m2', 'M2').replace('m3', 'M3').replace('ton', 'TON').replace('㎡', 'M2').replace('㎥', 'M3').replace('ea', 'EA')
 
         return [self.층, self.호, self.실, self.대공종, self.중공종, self.코드, 품명, 규격, 단위, self.부위, self.타입, 산식, self.수량, self.Remark, self.개소]
