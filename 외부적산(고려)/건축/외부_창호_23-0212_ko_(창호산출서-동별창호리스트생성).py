@@ -1,6 +1,6 @@
 from openpyxl import load_workbook, Workbook
 
-from Architect.FIN.WindowList import WindowList
+from WindowList import WindowList
 
 import platform
 import subprocess

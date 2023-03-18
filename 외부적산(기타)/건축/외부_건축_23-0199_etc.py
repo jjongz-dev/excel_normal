@@ -1,6 +1,6 @@
 from openpyxl import load_workbook, Workbook
 
-from Architect.FIN.ExcelStandard import ExcelStandard
+from ExcelStandard import ExcelStandard
 
 from datetime import datetime
 
