@@ -1,9 +1,6 @@
 from openpyxl import load_workbook, Workbook
-
 from ExcelStandard import ExcelStandard
-
 from datetime import datetime
-
 import platform
 import subprocess
 
