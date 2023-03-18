@@ -1,11 +1,8 @@
 from openpyxl import load_workbook, Workbook
-
 from WindowList import WindowList
-
+from datetime import datetime
 import platform
 import subprocess
-
-from datetime import datetime
 
 fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
 
