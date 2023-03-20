@@ -25,9 +25,9 @@ def excel_normalize(name, column_dimensions=None):
 
     내역목록 = []
 
-    sheet_names = ['부재별산출서', '기타산출서']
+    sheetnames = ['부재별산출서', '기타산출서', '아파트옹벽 Unit별산출서']
 
-    for sheetname in sheet_names:
+    for sheetname in sheetnames:
 
         if sheetname in excel.sheetnames:
             worksheet = excel[sheetname]
