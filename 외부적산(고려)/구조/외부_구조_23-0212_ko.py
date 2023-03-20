@@ -60,6 +60,11 @@ def excel_normalize(name, column_dimensions=None):
             if '[ 비 고 ]' in 명칭값:
                 continue
 
+            if 규격값 is not None:
+                규격_분리_하이픈 = 규격값.split('-')
+                if len(규격_분리_하이픈) == 3:
+                    규격값 = f'{규격_분리_하이픈[0]}-{규격_분리_하이픈[1]}-{규격_분리_하이픈[-1].zfill(2)}'
+
             if 명칭값 is not None and 결과값 is not None:
                 품명확정 = 명칭값
                 규격확정 = 규격값
