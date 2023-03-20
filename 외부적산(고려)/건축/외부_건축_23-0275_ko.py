@@ -6,7 +6,8 @@ from Architect.FIN.ItemStandard2 import ItemStandard2
 from Architect.FIN.PasingRule import earthwork, internal_construction, delete_duplicate
 from datetime import datetime
 import re
-
+import platform
+import subprocess
 
 fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
 
@@ -631,6 +632,10 @@ def excel_normalize(name, column_dimensions=None):
 
     new_workbook.save(saveFilePath)
 
+    # 파싱한 엑셀을 자동으로 띄워서 확인
+    systemOs = platform.system()
+    if systemOs =='Darwin':
+        subprocess.call(['open', saveFilePath])
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
