@@ -66,7 +66,11 @@ def excel_normalize(name, column_dimensions=None):
 
                 if 명칭값 is not None and 결과값 is not None:
 
-                    품명확정 = 명칭값
+                    명칭값_제거_어퍼스트로피 = 명칭값.replace("'", "")
+
+                    if len(명칭값_제거_어퍼스트로피) >= 2:
+                        품명확정 = 명칭값_제거_어퍼스트로피
+
                     규격확정 = 규격값
                     산식확정 = 산출식값
                     수량확정 = 결과값

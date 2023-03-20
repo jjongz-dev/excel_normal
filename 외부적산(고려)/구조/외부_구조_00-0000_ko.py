@@ -25,9 +25,9 @@ def excel_normalize(name, column_dimensions=None):
 
     내역목록 = []
 
-    sheet_names = ['부재별산출서', '기타산출서']
+    sheetnames = ['부재별산출서', '기타산출서','아파트옹벽 Unit별산출서']
 
-    for sheetname in sheet_names:
+    for sheetname in sheetnames:
 
         if sheetname in excel.sheetnames:
             worksheet = excel[sheetname]
@@ -65,8 +65,11 @@ def excel_normalize(name, column_dimensions=None):
                          규격값 = f'{규격_분리_하이픈[0]}-{규격_분리_하이픈[1]}-{규격_분리_하이픈[-1].zfill(2)}'
 
                 if 명칭값 is not None and 결과값 is not None:
+                    명칭값_제거_어퍼스트로피 = 명칭값.replace("'", "")
 
-                    품명확정 = 명칭값
+                    if len(명칭값_제거_어퍼스트로피) >= 2:
+                        품명확정 = 명칭값_제거_어퍼스트로피
+
                     규격확정 = 규격값
                     산식확정 = 산출식값
                     수량확정 = 결과값
