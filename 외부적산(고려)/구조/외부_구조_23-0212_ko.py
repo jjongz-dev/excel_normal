@@ -80,7 +80,8 @@ def excel_normalize(name, column_dimensions=None):
                     타입='구조',
                     산식=산식확정,
                     수량=수량확정,
-                    Remark=''
+                    Remark='',
+                    개소=''
                 )
                 내역목록.append(내역)
 
