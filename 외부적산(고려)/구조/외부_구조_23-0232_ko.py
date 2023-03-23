@@ -49,14 +49,13 @@ def excel_normalize(name, column_dimensions=None):
             규격값 = row[3].value
             결과값 = row[5].value
 
-            if 규격값 is not None and 결과값 is not None:
+            if 규격값 is not None and 결과값 is not None and 규격값 in 철근이음길이수량목록:
                 철근수량목록[규격값] = 철근수량목록[규격값] + 결과값
 
         for 규격 in 철근이음길이수량목록:
             철근이음길이합산기준수량[규격] = 철근이음길이수량목록[규격] / 철근수량목록[규격] * 1000000
 
-
-        pp(철근이음길이합산기준수량)
+        #pp(철근수량목록)
 
     sheetnames = ['부재별산출서']
 
