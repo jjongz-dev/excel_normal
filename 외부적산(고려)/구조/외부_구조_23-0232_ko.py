@@ -3,7 +3,7 @@ from ExcelStandard import ExcelStandard
 from datetime import datetime
 from collections import defaultdict
 
-from pprint import pprint as pp
+from pprint import pprint as pprint
 
 import platform
 import subprocess
@@ -55,7 +55,7 @@ def excel_normalize(name, column_dimensions=None):
         for 규격 in 철근이음길이수량목록:
             철근이음길이합산기준수량[규격] = 철근이음길이수량목록[규격] / 철근수량목록[규격] * 1000000
 
-        #pp(철근수량목록)
+        pprint(철근수량목록)
 
     sheetnames = ['부재별산출서']
 
