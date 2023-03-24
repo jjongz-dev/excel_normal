@@ -511,7 +511,7 @@ def excel_normalize(name, column_dimensions=None):
                         if 'B' in 창호층:
                             층값 = f'{창호층}F'
                         elif 'F' in 창호층:
-                            창호층수정 = 창호층.replace('F','')
+                            창호층수정 = 창호층.replace('F', '')
                             층값 = f'{창호층수정}F'
                         elif 'p1' in 창호층:
                             층값 = 'RF'
