@@ -16,7 +16,7 @@ import ReplaceFinDuplicateDelete
 fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
 
 # 이곳에 현장 폴더명만 변경하면 완료 #######
-siteTicketNo = '23-0225'
+siteTicketNo = '23-0046'
 ##################################
 
 openFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/건축.xlsx'
@@ -550,6 +550,8 @@ def excel_normalize(name, column_dimensions=None):
 
     # 창호산출서 ###################################################################################
     if '창호산출서' in excel.sheetnames:
+
+        #pprint(창호별층별수량)
 
         worksheet = excel['창호산출서']
         산출서시작줄 = 0
