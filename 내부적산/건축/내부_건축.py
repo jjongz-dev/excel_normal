@@ -209,7 +209,6 @@ def excel_normalize(name, column_dimensions=None):
             ReplaceFinEarthWork.launch(내역)
         # 품명 규격 자동 변경 E #######################
 
-
     sheet_names = ['내부산출서', '내부산출서-1', '내부산출서-2']
     for sheet in sheet_names:
         if sheet in excel.sheetnames:
@@ -229,6 +228,7 @@ def excel_normalize(name, column_dimensions=None):
             개소값 = ''
 
             for 가로줄번호, row in enumerate(worksheet.rows):
+
                 if row[0].value in 산출서시작점기준문자:
                     산출서시작줄 = 가로줄번호
                     break
@@ -247,6 +247,7 @@ def excel_normalize(name, column_dimensions=None):
                     continue
 
                 if 도형값 is not None and 품명값 is None and 단위값 is None and 물량값 is None:
+
                     층값 = 도형값.split(' ')[-2].strip()
                     if '층' in 층값:
                         층확정 = 층값
@@ -510,7 +511,7 @@ def excel_normalize(name, column_dimensions=None):
                         if 'B' in 창호층:
                             층값 = f'{창호층}F'
                         elif 'F' in 창호층:
-                            창호층수정 = 창호층.replace('F','')
+                            창호층수정 = 창호층.replace('F', '')
                             층값 = f'{창호층수정}F'
                         elif 'p1' in 창호층:
                             층값 = 'RF'
