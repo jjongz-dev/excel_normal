@@ -211,7 +211,7 @@ def excel_normalize(name, column_dimensions=None):
             ReplaceFinEarthWork.launch(내역)
         # 품명 규격 자동 변경 E #######################
 
-    sheet_names = ['내부산출서', '내부산출서-1', '내부산출서-2']
+    sheet_names = ['내부산출서', '내부산출서-1', '내부산출서-2', '내부산출서_1', '내부산출서_2']
     for sheet in sheet_names:
         if sheet in excel.sheetnames:
 

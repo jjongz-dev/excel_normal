@@ -12,7 +12,7 @@ fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
 
 
 # 이곳에 현장 폴더명만 변경하면 완료 #######
-siteTicketNo = '23-0225'
+siteTicketNo = '23-0240'
 ##################################
 
 openFilePath = '/Users/blue/hb/quantity/'+siteTicketNo+'/건축.xlsx'
@@ -185,7 +185,7 @@ def excel_normalize(name, column_dimensions=None):
 
     # 시트 추가가 필요한경우 오른쪽과 같이 추가 :   ,'시트명'
     # 추가해놓은 시트가 없는경우 자동으로 다음시트로 넘어감.
-    sheet_names = ['내부산출서','내부산출서-1','내부산출서-2']
+    sheet_names = ['내부산출서', '내부산출서-1', '내부산출서-2', '내부산출서_1', '내부산출서_2']
     for sheet in sheet_names:
         # internal_construction
         if sheet in excel.sheetnames:
@@ -307,6 +307,7 @@ def excel_normalize(name, column_dimensions=None):
                             levels = temp_roomname.split('_')[0]
                             roomname = temp_roomname.split('_')[-1]
                         else:
+                            levels = temp_roomname
                             roomname = temp_roomname
                             continue
                 except Exception as e:
