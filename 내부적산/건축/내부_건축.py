@@ -257,9 +257,14 @@ def excel_normalize(name, column_dimensions=None):
                     if '실명 :' in 도형값:
                         호실값= 도형값.split('개소')[0].split(':')[-1].strip()
                         호실값_분리_호 = 호실값.split('호')
+                        호실값_분리_하이픈 = 호실값.split('-')
+
                         if len(호실값_분리_호)>1:
                             호확정 = f'{호실값_분리_호[0].strip()}호'
                             실확정 = 호실값_분리_호[1].strip()
+                        elif len(호실값_분리_하이픈)>1:
+                            호확정 = f'{호실값_분리_하이픈[0].strip()}'
+                            실확정 = 호실값_분리_하이픈[1].strip()
                         else:
                             호확정 = 호실값
                             실확정 = 호실값
