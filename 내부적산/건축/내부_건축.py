@@ -252,7 +252,10 @@ def excel_normalize(name, column_dimensions=None):
 
                     층값 = 도형값.split(' ')[-2].strip()
                     if '층' in 층값:
-                        층확정 = 층값
+                        if '옥탑' in 층값:
+                            층확정 = 'RF'
+                        else:
+                            층확정 = 층값
                         continue
                     if '실명 :' in 도형값:
                         호실값= 도형값.split('개소')[0].split(':')[-1].strip()
