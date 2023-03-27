@@ -23,13 +23,11 @@ siteTicketNo = '23-0240'
 openFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/건축.xlsx'
 saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/건축완성-' + fileCreateDate + '.xlsx'
 
+#openFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\건축.xlsx'
+#saveFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\건축완성-' + fileCreateDate + '.xlsx'
 
-# openFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\건축.xlsx'
-# saveFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\건축완성-' + fileCreateDate + '.xlsx'
-
-# openFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\건축.xlsx'
-# saveFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\건축완성-' + fileCreateDate + '.xlsx'
-
+#openFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\건축.xlsx'
+#saveFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\건축완성-' + fileCreateDate + '.xlsx'
 
 def excel_normalize(name, column_dimensions=None):
     excel = load_workbook(openFilePath)
@@ -723,7 +721,8 @@ def excel_normalize(name, column_dimensions=None):
     systemOs = platform.system()
     if systemOs =='Darwin':
         subprocess.call(['open', saveFilePath])
-
+    elif systemOs == "Windows":
+        subprocess.Popen(saveFilePath, shell=True)
 
 if __name__ == '__main__':
     excel_normalize('PyCharm')
