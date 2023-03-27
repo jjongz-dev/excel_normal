@@ -672,10 +672,9 @@ def excel_normalize(name, column_dimensions=None):
             단위값 = row[3].value
             물량값 = row[4].value
 
-
             if 품명값 is not None and (단위값 is None or 단위값 == ''):
+
                 중공종확정 = 품명값.replace(' ', '')
-                print(중공종확정)
 
             if 품명값 is not None and (물량값 is not None and 물량값 != 0):
 
