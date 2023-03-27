@@ -206,6 +206,8 @@ def excel_normalize(name, column_dimensions=None):
             ReplaceFinEarthWork.launch(내역)
         # 품명 규격 자동 변경 E #######################
 
+    # 내부산출서 ###################################################################################
+
     sheet_names = ['내부산출서', '내부산출서-1', '내부산출서-2', '내부산출서_1', '내부산출서_2']
     for sheet in sheet_names:
         if sheet in excel.sheetnames:
@@ -396,6 +398,7 @@ def excel_normalize(name, column_dimensions=None):
                 내역목록.append(내역)
 
     # 철골산출서 ###################################################################################
+
     if '철골산출서' in excel.sheetnames:
 
         worksheet = excel['철골산출서']
@@ -469,6 +472,7 @@ def excel_normalize(name, column_dimensions=None):
                 내역목록.append(내역)
 
     # 동별창호리스트 ###################################################################################
+
     if '동별창호리스트' in excel.sheetnames:
         worksheet = excel['동별창호리스트']
 
@@ -560,6 +564,7 @@ def excel_normalize(name, column_dimensions=None):
                         내역목록.append(내역)
 
     # 창호산출서 ###################################################################################
+
     if '창호산출서' in excel.sheetnames:
 
         #pprint(창호별층별수량)
@@ -643,10 +648,7 @@ def excel_normalize(name, column_dimensions=None):
         ReplaceFinDuplicateDelete.launch(내역)
     # 품명 규격 자동 변경 E #######################
 
-
-
-
-    # 가설산출서 ###################################################################################
+    # 공종별집계표 ###################################################################################
 
     if '공종별집계표' in excel.sheetnames:
 
@@ -673,7 +675,6 @@ def excel_normalize(name, column_dimensions=None):
             if 품명값 is not None and 물량값 is None:
                 중공종확정 = 품명값
 
-
             if 품명값 is not None and (물량값 is not None and 물량값 != 0):
 
                 품명확정 = 품명값
@@ -690,9 +691,8 @@ def excel_normalize(name, column_dimensions=None):
                 )
                 집계표목록.append(집계표내역)
 
-    # 토공산출서 ###################################################################################
 
-
+    # 엑셀 처리 완료 ###################################################################################
 
 
     # 저장할 엑셀
@@ -708,15 +708,12 @@ def excel_normalize(name, column_dimensions=None):
     for 내역 in 내역목록:
        new_sheet.append(내역.to_excel())
 
-
-
     sheet = new_workbook.create_sheet(title='집계표')
     sheet.append(['중공종', '품명', '규격', '단위', '수량(할증전)'])
     sheet.column_dimensions["B"].width = 30
     sheet.column_dimensions["C"].width = 30
     for 집계표내역 in 집계표목록:
         sheet.append(집계표내역.to_excelGroup())
-
 
     new_workbook.save(saveFilePath)
 
