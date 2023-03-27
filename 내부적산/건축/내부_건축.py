@@ -26,19 +26,21 @@ saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/건축완성-' + fi
 #openFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\건축.xlsx'
 #saveFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\건축완성-' + fileCreateDate + '.xlsx'
 
-def excel_normalize(name, column_dimensions=None):
+def excel_normalize(name):
     excel = load_workbook(openFilePath)
 
     집계표목록 = []
     내역목록 = []
     산출서시작점기준문자 = ['부위', '도형', '구분', '코드']
-    필수시트체크목록 = ['가설산출서', '토공산출서', '내부산출서', '외부산출서', '철골산출서', '동별창호리스트', '창호산출서', '공종별집계표']
 
+    print('=================================')
+    필수시트체크목록 = ['가설산출서', '토공산출서', '내부산출서', '외부산출서', '철골산출서', '동별창호리스트', '창호산출서', '공종별집계표']
     for 시트명 in 필수시트체크목록:
         if 시트명 in excel.sheetnames:
             print("필수시트체크 : ", 시트명, '(O)')
         else:
             print("필수시트체크 : ", 시트명, '(X) - 확인필요')
+    print('=================================')
 
     # 가설산출서 ###################################################################################
 
