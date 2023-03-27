@@ -36,7 +36,7 @@ def excel_normalize(name, column_dimensions=None):
 
     집계표목록 = []
     내역목록 = []
-
+    산출서시작점기준문자 = ['부위', '도형', '구분', '코드']
     필수시트체크목록 = ['가설산출서', '토공산출서', '내부산출서', '외부산출서', '철골산출서', '동별창호리스트', '창호산출서', '공종별집계표']
 
     for 시트명 in 필수시트체크목록:
@@ -44,8 +44,6 @@ def excel_normalize(name, column_dimensions=None):
             print("필수시트체크 : ", 시트명, '(O)')
         else:
             print("필수시트체크 : ", 시트명, '(X) - 확인필요')
-
-    산출서시작점기준문자 = ['부위', '도형', '구분', '코드']
 
     # 가설산출서 ###################################################################################
 
@@ -157,7 +155,6 @@ def excel_normalize(name, column_dimensions=None):
 
             도형값 = row[0].value
             부위값 = ''
-            층범위값 = row[2].value
             품명값 = row[3].value
             규격값 = row[4].value
             단위값 = row[5].value
@@ -175,19 +172,9 @@ def excel_normalize(name, column_dimensions=None):
                 else:
                     continue
 
-            # 층범위값 표기 수정
-            if 층범위값 is not None and 층범위값 != '':
-                if 'PT' in 층범위값:
-                    층범위값 = 'PT'
-                elif 'P1' in 층범위값:
-                    층범위값 = 'RF'
-                else:
-                    층범위값 = f'{층범위값}F'
-
             if 품명값 is not None and (물량값 is not None and 물량값 != 0):
 
                 품명확정 = 품명값
-                층확정 = 층범위값
                 규격확정 = 규격값
                 단위확정 = 단위값
                 부위확정 = 부위값
