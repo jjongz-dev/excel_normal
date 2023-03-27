@@ -102,7 +102,7 @@ def excel_normalize(name, column_dimensions=None):
     # 저장할 엑셀
     new_workbook = Workbook()
     new_sheet = new_workbook.active
-    new_sheet.title = '구조완성'
+    new_sheet.title = '구조(데이터변경X)'
     head_title = ['층', '호', '실', '대공종', '중공종', '코드', '품명', '규격', '단위', '부위', '타입', '산식', '수량', 'Remark']
     new_sheet.append(head_title)
     new_sheet.column_dimensions["G"].width = 15

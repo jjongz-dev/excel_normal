@@ -1,5 +1,6 @@
 from openpyxl import load_workbook, Workbook
 from ExcelStandard import ExcelStandard
+from ExcelGroup import ExcelGroup
 from collections import defaultdict
 from pprint import pprint as pprint
 from datetime import datetime
@@ -33,9 +34,10 @@ saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/건축완성-' + fi
 def excel_normalize(name, column_dimensions=None):
     excel = load_workbook(openFilePath)
 
+    집계표목록 = []
     내역목록 = []
 
-    산출서시작점기준문자 = ['부위', '도형', '구분']
+    산출서시작점기준문자 = ['부위', '도형', '구분','코드']
 
     # 가설산출서 ###################################################################################
 
@@ -633,10 +635,61 @@ def excel_normalize(name, column_dimensions=None):
         ReplaceFinDuplicateDelete.launch(내역)
     # 품명 규격 자동 변경 E #######################
 
+
+
+
+    # 가설산출서 ###################################################################################
+
+    if '공종별집계표' in excel.sheetnames:
+
+        worksheet = excel['공종별집계표']
+        산출서시작줄 = 0
+        품명확정 = ''
+        규격확정 = ''
+        단위확정 = ''
+        수량확정 = ''
+
+        for 가로줄번호, row in enumerate(worksheet.rows):
+            if row[0].value in 산출서시작점기준문자:
+                산출서시작줄 = 가로줄번호 + 2
+                break
+
+        for row in worksheet.iter_rows(min_row=산출서시작줄):
+
+            품명값 = row[1].value
+            규격값 = row[2].value
+            단위값 = row[3].value
+            물량값 = row[4].value
+
+            if 품명값 is not None and 물량값 is None:
+                중공종확정 = 품명값
+
+
+            if 품명값 is not None and (물량값 is not None and 물량값 != 0):
+
+                품명확정 = 품명값
+                규격확정 = 규격값
+                단위확정 = 단위값
+                수량확정 = 물량값
+
+                집계표내역 = ExcelGroup(
+                    중공종=중공종확정,
+                    품명=품명확정,
+                    규격=규격확정,
+                    단위=단위확정,
+                    수량=수량확정
+                )
+                집계표목록.append(집계표내역)
+
+    # 토공산출서 ###################################################################################
+
+
+
+
     # 저장할 엑셀
     new_workbook = Workbook()
     new_sheet = new_workbook.active
-    new_sheet.title = '건축완성'
+    new_sheet.title = '건축(데이터변경X)'
     head_title = ['층', '호', '실', '대공종', '중공종', '코드', '품명', '규격', '단위', '부위', '타입', '산식', '수량', 'Remark', '개소(확인용)']
     new_sheet.append(head_title)
     new_sheet.column_dimensions["G"].width = 30
@@ -645,6 +698,16 @@ def excel_normalize(name, column_dimensions=None):
 
     for 내역 in 내역목록:
        new_sheet.append(내역.to_excel())
+
+
+
+    sheet = new_workbook.create_sheet(title='집계표')
+    sheet.append(['중공종', '품명', '규격', '단위', '수량(할증전)'])
+    sheet.column_dimensions["B"].width = 30
+    sheet.column_dimensions["C"].width = 30
+    for 집계표내역 in 집계표목록:
+        sheet.append(집계표내역.to_excelGroup())
+
 
     new_workbook.save(saveFilePath)
 
@@ -656,3 +719,4 @@ def excel_normalize(name, column_dimensions=None):
 
 if __name__ == '__main__':
     excel_normalize('PyCharm')
+
