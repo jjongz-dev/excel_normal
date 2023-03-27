@@ -261,8 +261,7 @@ def excel_normalize(name, column_dimensions=None):
                             호확정 = f'{호실값_분리_호[0].strip()}호'
                             실확정 = 호실값_분리_호[1].strip()
                         else:
-                            호확정 = 호실값
-                            실확정 = 호실값
+                            층확정 = 호실값
                         continue
                     else:
                         continue
@@ -336,13 +335,17 @@ def excel_normalize(name, column_dimensions=None):
                 if '구분명 :' in 도형값:
                     층호실 = 도형값.split('개소')[0].split(':')[-1].strip()
                     층호실_분리_언더바 = 층호실.split('_')
+                    층호실_분리_띄어쓰기 = 층호실.split(' ')
 
                     if len(층호실_분리_언더바)>1:
                         층확정 = 층호실_분리_언더바[0].strip()
                         호확정 = 실확정 = 층호실_분리_언더바[-1].strip()
+                    elif len(층호실_분리_띄어쓰기) > 1:
+                        층확정 = 층호실_분리_띄어쓰기[0].strip()
+                        호확정 = 실확정 = 층호실_분리_띄어쓰기[-1].strip()
                     else:
-                        호확정 = 층호실
-                        실확정 = 층호실
+                        층확정 = 층호실
+
                     개소값 = int(도형값.split(':')[-1].strip())
                     continue
                 else:
