@@ -261,7 +261,8 @@ def excel_normalize(name, column_dimensions=None):
                             호확정 = f'{호실값_분리_호[0].strip()}호'
                             실확정 = 호실값_분리_호[1].strip()
                         else:
-                            층확정 = 호실값
+                            호확정 = 호실값
+                            실확정 = 호실값
                         continue
                     else:
                         continue
