@@ -498,8 +498,9 @@ def excel_normalize(name, column_dimensions=None):
 
         for 세로줄번호, 층정보 in enumerate(list(worksheet.rows)[구분시작줄]):
             #print(층정보.value)
-            if re.match('[BFP]\\d{1,2}', 층정보.value):
-                창호층목록[층정보.value] = 세로줄번호
+            if 층정보.value is not None:
+                if re.match('[BFP]\\d{1,2}', 층정보.value):
+                    창호층목록[층정보.value] = 세로줄번호
 
         for row in worksheet.iter_rows(min_row=산출서시작줄):
 
