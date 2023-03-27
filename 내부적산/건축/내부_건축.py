@@ -8,11 +8,8 @@ from datetime import datetime
 import re
 import platform
 import subprocess
-
-
 import ReplaceFinEarthWork
 import ReplaceFinDuplicateDelete
-
 
 fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
 
@@ -355,7 +352,6 @@ def excel_normalize(name, column_dimensions=None):
                 else:
                     continue
 
-            # 층범위에 값이 있는경우 그값을 층정보로 사용
             if 층범위값 is not None:
                 if 'P1' in 층범위값:
                     층확정 = 'RF'
@@ -693,7 +689,6 @@ def excel_normalize(name, column_dimensions=None):
 
     # 엑셀 처리 완료 ###################################################################################
 
-
     # 저장할 엑셀
     new_workbook = Workbook()
     new_sheet = new_workbook.active
@@ -723,6 +718,7 @@ def excel_normalize(name, column_dimensions=None):
         subprocess.call(['open', saveFilePath])
     elif systemOs == "Windows":
         subprocess.Popen(saveFilePath, shell=True)
+
 
 if __name__ == '__main__':
     excel_normalize('PyCharm')
