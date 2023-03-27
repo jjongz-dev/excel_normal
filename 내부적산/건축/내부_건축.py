@@ -644,6 +644,7 @@ def excel_normalize(name, column_dimensions=None):
 
         worksheet = excel['공종별집계표']
         산출서시작줄 = 0
+        중공종확정 = ''
         품명확정 = ''
         규격확정 = ''
         단위확정 = ''
