@@ -23,11 +23,18 @@ saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/구조완성-' + fi
 def excel_normalize(name, column_dimensions=None):
     excel = load_workbook(openFilePath)
 
-    내역목록 = []
+    산출서목록 = []
 
-    sheetnames = ['부재별산출서', '기타산출서', '아파트옹벽 Unit별산출서']
+    파싱시트목록 = ['부재별산출서', '기타산출서', '아파트옹벽 Unit별산출서']
+    print('=================================')
+    for 시트명 in 파싱시트목록:
+        if 시트명 in excel.sheetnames:
+            print("파싱시트체크 : ", 시트명, '(O)')
+        else:
+            print("파싱시트체크 : ", 시트명, '(X) - 확인필요')
+    print('=================================')
 
-    for sheetname in sheetnames:
+    for sheetname in 파싱시트목록:
 
         if sheetname in excel.sheetnames:
             worksheet = excel[sheetname]
@@ -97,7 +104,7 @@ def excel_normalize(name, column_dimensions=None):
                         Remark='',
                         개소=''
                     )
-                    내역목록.append(내역)
+                    산출서목록.append(내역)
 
     # 저장할 엑셀
     new_workbook = Workbook()
@@ -108,7 +115,7 @@ def excel_normalize(name, column_dimensions=None):
     new_sheet.column_dimensions["G"].width = 15
     new_sheet.column_dimensions["H"].width = 15
 
-    for 내역 in 내역목록:
+    for 내역 in 산출서목록:
         new_sheet.append(내역.to_excel())
 
     new_workbook.save(saveFilePath)

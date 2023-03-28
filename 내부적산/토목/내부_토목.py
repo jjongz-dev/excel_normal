@@ -32,13 +32,18 @@ saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/토목완성-' + fi
 def excel_normalize(name, column_dimensions=None):
     excel = load_workbook(openFilePath, data_only=True)
 
-    내역목록 = []
+    산출서목록 = []
+
+    파싱시트목록 = ['토공집계표', '가시설공 집계표', 'C.I.P 집계표', 'STRUT공 집계표', 'RAKER공 집계표', 'S.G.R공 집계표', 'LW공 집계표', '복공 집계표']
+    print('=================================')
+    for 시트명 in 파싱시트목록:
+        if 시트명 in excel.sheetnames:
+            print("파싱시트체크 : ", 시트명, '(O)')
+        else:
+            print("파싱시트체크 : ", 시트명, '(X) - 확인필요')
+    print('=================================')
 
     품명확정 = ''
-    규격확정 = ''
-    부위확정 = ''
-    산식확정 = ''
-    수량확정 = ''
 
     if "토공집계표" in excel.sheetnames:
         worksheet = excel['토공집계표']
@@ -78,10 +83,10 @@ def excel_normalize(name, column_dimensions=None):
                 Remark='',
                 개소=''
             )
-            내역목록.append(내역)
+            산출서목록.append(내역)
 
         # 품명 규격 자동 변경 S #######################
-        for 내역 in 내역목록:
+        for 내역 in 산출서목록:
             ReplaceCivilEarthwork.launch(내역)
         # 품명 규격 자동 변경 E #######################
 
@@ -129,10 +134,10 @@ def excel_normalize(name, column_dimensions=None):
                 Remark='',
                 개소=''
             )
-            내역목록.append(내역)
+            산출서목록.append(내역)
 
         # 품명 규격 자동 변경 S #######################
-        for 내역 in 내역목록:
+        for 내역 in 산출서목록:
             ReplaceCivilSidePostPile.launch(내역)
         # 품명 규격 자동 변경 E #######################
 
@@ -183,10 +188,10 @@ def excel_normalize(name, column_dimensions=None):
                 Remark='',
                 개소=''
             )
-            내역목록.append(내역)
+            산출서목록.append(내역)
 
         # 품명 규격 자동 변경 S #######################
-        for 내역 in 내역목록:
+        for 내역 in 산출서목록:
             ReplaceCivilCIP.launch(내역)
         # 품명 규격 자동 변경 E #######################
 
@@ -234,10 +239,10 @@ def excel_normalize(name, column_dimensions=None):
                 Remark='',
                 개소=''
             )
-            내역목록.append(내역)
+            산출서목록.append(내역)
 
         # 품명 규격 자동 변경 S #######################
-        for 내역 in 내역목록:
+        for 내역 in 산출서목록:
             ReplaceCivilStrut.launch(내역)
         # 품명 규격 자동 변경 E #######################
 
@@ -281,7 +286,7 @@ def excel_normalize(name, column_dimensions=None):
                 Remark='',
                 개소=''
             )
-            내역목록.append(내역)
+            산출서목록.append(내역)
 
     if "S.G.R공 집계표" in excel.sheetnames:
         worksheet = excel['S.G.R공 집계표']
@@ -323,10 +328,10 @@ def excel_normalize(name, column_dimensions=None):
                 Remark='',
                 개소=''
             )
-            내역목록.append(내역)
+            산출서목록.append(내역)
 
         # 품명 규격 자동 변경 S #######################
-        for 내역 in 내역목록:
+        for 내역 in 산출서목록:
             ReplaceCivilSGR.launch(내역)
         # 품명 규격 자동 변경 E #######################
 
@@ -370,10 +375,10 @@ def excel_normalize(name, column_dimensions=None):
                 Remark='',
                 개소=''
             )
-            내역목록.append(내역)
+            산출서목록.append(내역)
 
         # 품명 규격 자동 변경 S #######################
-        for 내역 in 내역목록:
+        for 내역 in 산출서목록:
             ReplaceCivilLW.launch(내역)
         # 품명 규격 자동 변경 E #######################
 
@@ -418,10 +423,10 @@ def excel_normalize(name, column_dimensions=None):
                 Remark='',
                 개소=''
             )
-            내역목록.append(내역)
+            산출서목록.append(내역)
 
         # 품명 규격 자동 변경 S #######################
-        for 내역 in 내역목록:
+        for 내역 in 산출서목록:
             ReplaceCivilRoadDeckingPanel.launch(내역)
         # 품명 규격 자동 변경 E #######################
 
@@ -446,7 +451,7 @@ def excel_normalize(name, column_dimensions=None):
             Remark='',
             개소=''
         )
-        내역목록.append(내역)
+        산출서목록.append(내역)
 
 
     # 저장할 엑셀
@@ -458,7 +463,7 @@ def excel_normalize(name, column_dimensions=None):
     new_sheet.column_dimensions["G"].width = 30
     new_sheet.column_dimensions["H"].width = 40
 
-    for 내역 in 내역목록:
+    for 내역 in 산출서목록:
         new_sheet.append(내역.to_excel())
 
     new_workbook.save(saveFilePath)

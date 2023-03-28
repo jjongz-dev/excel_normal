@@ -31,15 +31,15 @@ def excel_normalize(name):
 
     내역서목록 = []
     산출서목록 = []
-    산출서시작점기준문자 = ['부위', '도형', '구분', '코드', '품목']
+    파싱시작점기준문자 = ['부위', '도형', '구분', '코드', '품목']
 
+    파싱시트목록 = ['가설산출서', '토공산출서', '내부산출서', '외부산출서', '철골산출서', '동별창호리스트', '창호산출서', '공종별집계표']
     print('=================================')
-    필수시트체크목록 = ['가설산출서', '토공산출서', '내부산출서', '외부산출서', '철골산출서', '동별창호리스트', '창호산출서', '공종별집계표']
-    for 시트명 in 필수시트체크목록:
+    for 시트명 in 파싱시트목록:
         if 시트명 in excel.sheetnames:
-            print("필수시트체크 : ", 시트명, '(O)')
+            print("파싱시트체크 : ", 시트명, '(O)')
         else:
-            print("필수시트체크 : ", 시트명, '(X) - 확인필요')
+            print("파싱시트체크 : ", 시트명, '(X) - 확인필요')
     print('=================================')
 
     # 가설산출서 ###################################################################################
@@ -61,7 +61,7 @@ def excel_normalize(name):
         개소값 = ''
 
         for 가로줄번호, row in enumerate(worksheet.rows):
-            if row[0].value in 산출서시작점기준문자:
+            if row[0].value in 파싱시작점기준문자:
                 산출서시작줄 = 가로줄번호 + 2
                 break
 
@@ -144,7 +144,7 @@ def excel_normalize(name):
         개소값 = ''
 
         for 가로줄번호, row in enumerate(worksheet.rows):
-            if row[0].value in 산출서시작점기준문자:
+            if row[0].value in 파싱시작점기준문자:
                 산출서시작줄 = 가로줄번호 + 2
                 break
 
@@ -225,7 +225,7 @@ def excel_normalize(name):
 
             for 가로줄번호, row in enumerate(worksheet.rows):
 
-                if row[0].value in 산출서시작점기준문자:
+                if row[0].value in 파싱시작점기준문자:
                     산출서시작줄 = 가로줄번호
                     break
 
@@ -317,7 +317,7 @@ def excel_normalize(name):
         개소값 = ''
 
         for 가로줄번호, row in enumerate(worksheet.rows):
-            if row[0].value in 산출서시작점기준문자:
+            if row[0].value in 파싱시작점기준문자:
                 산출서시작줄 = 가로줄번호 + 2
                 break
 
@@ -345,9 +345,10 @@ def excel_normalize(name):
                         호확정 = 실확정 = 층호실_분리_언더바[-1].strip()
                     elif len(층호실_분리_띄어쓰기) > 1:
                         층확정 = 층호실_분리_띄어쓰기[0].strip()
-                        호확정 = 실확정 = 층호실_분리_띄어쓰기[-1].strip()
+                        호확정 = 실확정 = 층호실
                     else:
-                        층확정 = 층호실
+                        층확정 = 호확정 = 실확정 = 층호실
+
 
                     개소값 = int(도형값.split(':')[-1].strip())
                     continue
@@ -412,7 +413,7 @@ def excel_normalize(name):
         개소값 = ''
 
         for 가로줄번호, row in enumerate(worksheet.rows):
-            if row[0].value in 산출서시작점기준문자:
+            if row[0].value in 파싱시작점기준문자:
                 산출서시작줄 = 가로줄번호 + 2
                 break
 
@@ -489,7 +490,7 @@ def excel_normalize(name):
         개소값 = ''
 
         for 가로줄번호, row in enumerate(worksheet.rows):
-            if row[0].value in 산출서시작점기준문자:
+            if row[0].value in 파싱시작점기준문자:
                 구분시작줄 = 가로줄번호
                 산출서시작줄 = 가로줄번호 + 2
                 break
@@ -580,7 +581,7 @@ def excel_normalize(name):
         개소값 = ''
 
         for 가로줄번호, row in enumerate(worksheet.rows):
-            if row[0].value in 산출서시작점기준문자:
+            if row[0].value in 파싱시작점기준문자:
                 산출서시작줄 = 가로줄번호+2
                 break
 
@@ -658,7 +659,7 @@ def excel_normalize(name):
 
         for 가로줄번호, row in enumerate(worksheet.rows):
 
-            if row[0].value.replace(' ', '') in 산출서시작점기준문자:
+            if row[0].value.replace(' ', '') in 파싱시작점기준문자:
                 내역서시작줄 = 가로줄번호 + 3
                 break
 
