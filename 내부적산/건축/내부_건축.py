@@ -662,15 +662,12 @@ def excel_normalize(name):
                 내역서시작줄 = 가로줄번호 + 3
                 break
 
-        print(내역서시작줄)
-
         for row in worksheet.iter_rows(min_row=내역서시작줄):
 
             품명값 = row[0].value
             규격값 = row[1].value
             단위값 = row[2].value
             수량값 = row[3].value
-
 
             if 품명값 is not None and (단위값 is None or 단위값 == ''):
                 if '[ 합           계 ]' in 품명값:
