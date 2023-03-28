@@ -349,7 +349,6 @@ def excel_normalize(name):
                     else:
                         층확정 = 호확정 = 실확정 = 층호실
 
-
                     개소값 = int(도형값.split(':')[-1].strip())
                     continue
                 else:

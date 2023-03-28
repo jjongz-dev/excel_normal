@@ -21,11 +21,19 @@ class ExcelStandard:
 
     def to_excel(self):
 
+        호 = self.호
+        실 = self.실
         산식 = self.산식
         품명 = self.품명
         규격 = self.규격
         단위 = self.단위
         수량 = float(self.수량)
+
+        if type(호) is str:
+            호 = 호.replace(' ', '').replace('  ', '')
+
+        if type(실) is str:
+            실 = 실.replace(' ', '').replace('  ', '')
 
         if type(산식) is str:
             산식 = 산식.replace('\n', '').replace('\r', '')
@@ -39,4 +47,4 @@ class ExcelStandard:
         if type(단위) is str:
             단위 = 단위.replace('\n', '').replace('\r', '').replace('m', 'M').replace('m2', 'M2').replace('m3', 'M3').replace('ton', 'TON').replace('㎡', 'M2').replace('㎥', 'M3').replace('ea', 'EA')
 
-        return [self.층, self.호, self.실, self.대공종, self.중공종, self.코드, 품명, 규격, 단위, self.부위, self.타입, 산식, 수량, self.Remark, self.개소]
+        return [self.층, 호, 실, self.대공종, self.중공종, self.코드, 품명, 규격, 단위, self.부위, self.타입, 산식, 수량, self.Remark, self.개소]
