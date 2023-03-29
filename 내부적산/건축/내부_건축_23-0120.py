@@ -24,8 +24,8 @@ if systemOs == 'Darwin':
     openFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/건축.xlsx'
     saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/건축완성-' + fileCreateDate + '.xlsx'
 else:
-    openFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\건축.xlsx'
-    saveFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\건축완성-' + fileCreateDate + '.xlsx'
+    openFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\건축.xlsx'
+    saveFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\건축완성-' + fileCreateDate + '.xlsx'
 
 
 def excel_normalize(name):
@@ -293,7 +293,7 @@ def excel_normalize(name):
                     개소값 = 개소값.replace('비고:*', '').replace('비고:건식벽체', '').replace('비고:벽지구분', '').strip()
 
                     if 개소값 =='2' or 개소값 ==2:
-                        품명값 = f'{호확정}_{품명값}'
+                        품명값X = f'{호확정}_{품명값}'
 
                     품명확정 = 품명값
                     규격확정 = 규격값
