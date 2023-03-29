@@ -267,6 +267,9 @@ def excel_normalize(name):
                         else:
                             호확정 = 호실값
                             실확정 = 호실값
+
+                        개소값 = 도형값.split("개소 :")[-1].replace(' ', '').strip()
+
                         continue
                     else:
                         continue
