@@ -78,6 +78,24 @@ def excel_normalize(name):
             층갯수값 = row[6].value
             물량값 = row[7].value
 
+
+
+            if 산식값 is not None:
+
+                if '주동-A' in 산식값:
+                    호확정 = '주동A'
+                    print(호확정)
+                    continue
+                elif '주동-B' in 산식값:
+                    호확정 = '주동B'
+                    print(호확정)
+                    continue
+                elif '주동-C' in 산식값:
+                    호확정 = '주동C'
+                    print(호확정)
+                    continue
+
+
             if (부위값 is not None
                     and (품명값 is None or 품명값 == '')
             ):
@@ -87,6 +105,7 @@ def excel_normalize(name):
                     continue
                 else:
                     continue
+
 
             # 층범위값 표기 수정
             if 층범위값 is not None and 층범위값 != '':
@@ -98,6 +117,15 @@ def excel_normalize(name):
                     층범위값 = f'{층범위값}F'
 
             if 품명값 is not None and (물량값 is not None and 물량값 != 0):
+
+                if "주동-A" in 호확정:
+                    품명값 = f'주동A_{품명값}'
+                elif "주동-B" in 호확정:
+                    품명값 = f'주동B_{품명값}'
+                elif "주동-C" in 호확정:
+                    품명값 = f'주동C_{품명값}'
+                elif "부동" in 호확정:
+                    품명값 = f'부동_{품명값}'
 
                 품명확정 = 품명값
                 층확정 = 층범위값
@@ -161,6 +189,27 @@ def excel_normalize(name):
             층갯수값 = row[7].value
             물량값 = row[8].value
 
+
+
+            if 산식값 is not None:
+
+                if '주동-A' in 산식값:
+                    호확정 = '주동A'
+                    print(호확정)
+                    continue
+                elif '주동-B' in 산식값:
+                    호확정 = '주동B'
+                    print(호확정)
+                    continue
+                elif '주동-C' in 산식값:
+                    호확정 = '주동C'
+                    print(호확정)
+                    continue
+                elif '부동' in 산식값:
+                    호확정 = '부동'
+                    print(호확정)
+                    continue
+
             if (도형값 is not None
                     and (품명값 is None or 품명값 == '')
             ):
@@ -172,6 +221,16 @@ def excel_normalize(name):
                     continue
 
             if 품명값 is not None and (물량값 is not None and 물량값 != 0):
+
+                if "주동-A" in 호확정:
+                   품명값 = f'주동A_{품명값}'
+                elif "주동-B" in 호확정:
+                   품명값 = f'주동B_{품명값}'
+                elif "주동-C" in 호확정:
+                   품명값 = f'주동C_{품명값}'
+                elif "부동" in 호확정:
+                   품명값 = f'부동_{품명값}'
+
 
                 품명확정 = 품명값
                 규격확정 = 규격값
@@ -364,12 +423,14 @@ def excel_normalize(name):
                     층호실_분리_언더바 = 층호실.split('_')
                     층호실_분리_띄어쓰기 = 층호실.split(' ')
 
-                    if len(층호실_분리_언더바)>1:
+                    if len(층호실_분리_언더바)==3:
                         층확정 = 층호실_분리_언더바[0].strip()
-                        호확정 = 실확정 = 층호실_분리_언더바[-1].strip()
-                    elif len(층호실_분리_띄어쓰기) > 1:
-                        층확정 = 층호실_분리_띄어쓰기[0].strip()
-                        호확정 = 실확정 = 층호실
+                        호확정 = 층호실_분리_언더바[1].strip()
+                        실확정 = 층호실_분리_언더바[2].strip()
+
+                    elif len(층호실_분리_언더바) ==2:
+                        층확정 = 호확정 = 층호실_분리_언더바[0].strip()
+                        실확정 = 층호실_분리_언더바[1].strip()
                     else:
                         층확정 = 호확정 = 실확정 = 층호실
 
