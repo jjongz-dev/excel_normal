@@ -108,11 +108,11 @@ def excel_normalize(name):
 
             if 품명값 is not None and (물량값 is not None and 물량값 != 0):
 
-                if "주동-A" in 호확정:
+                if "주동A" in 호확정:
                     품명값x = f'주동A_{품명값}'
-                elif "주동-B" in 호확정:
+                elif "주동B" in 호확정:
                     품명값x = f'주동B_{품명값}'
-                elif "주동-C" in 호확정:
+                elif "주동C" in 호확정:
                     품명값x = f'주동C_{품명값}'
                 elif "부동" in 호확정:
                     품명값x = f'부동_{품명값}'
@@ -202,11 +202,11 @@ def excel_normalize(name):
 
             if 품명값 is not None and (물량값 is not None and 물량값 != 0):
 
-                if "주동-A" in 호확정:
+                if "주동A" in 호확정:
                    품명값x = f'주동A_{품명값}'
-                elif "주동-B" in 호확정:
+                elif "주동B" in 호확정:
                    품명값x = f'주동B_{품명값}'
-                elif "주동-C" in 호확정:
+                elif "주동C" in 호확정:
                    품명값x = f'주동C_{품명값}'
                 elif "부동" in 호확정:
                    품명값x = f'부동_{품명값}'
@@ -318,19 +318,19 @@ def excel_normalize(name):
                     if "주동A" in 호실값:
                         실확정 = 호실값[re.search('주동A', 호실값).end():]
                         호확정 = '주동A'
+                        품명값x = f'주동A_{품명값}'
 
                     elif "주동B,C" in 호실값:
                         실확정 = 호실값[re.search('주동B,C', 호실값).end():]
                         호확정 = '주동B,C'
+                        품명값x = f'주동B,C_{품명값}'
 
                     elif "부동" in 호실값:
                         실확정 = 호실값[re.search('부동', 호실값).end():]
                         호확정 = '부동'
+                        품명값x = f'부동_{품명값}'
 
                     개소값 = 개소값.replace('비고:*', '').replace('비고:건식벽체', '').replace('비고:벽지구분', '').strip()
-
-                    if 개소값 =='2' or 개소값 ==2:
-                        품명값x = f'{호확정}_{품명값}'
 
                     품명확정 = 품명값
                     규격확정 = 규격값
