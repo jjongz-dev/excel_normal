@@ -17,8 +17,8 @@ if systemOs == 'Darwin':
     openFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/구조.xlsx'
     saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/구조완성-' + fileCreateDate + '.xlsx'
 else:
-    openFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\구조.xlsx'
-    saveFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\구조완성-' + fileCreateDate + '.xlsx'
+    openFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\구조.xlsx'
+    saveFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\구조완성-' + fileCreateDate + '.xlsx'
 
 
 def excel_normalize(name, column_dimensions=None):
