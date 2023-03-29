@@ -602,6 +602,8 @@ def excel_normalize(name):
 
                         창호별층별수량[창호명값].append((층확정, 수량확정, 개소확정))
 
+                        품명확정x = f'{코드확정}_{품명확정}'
+
                         내역 = ExcelStandard(
                             층='1F',
                             호=호확정,
@@ -682,6 +684,9 @@ def excel_normalize(name):
                     산식확정 = f'({산식값})*<수량>({창호수량})'
                     수량확정 = float(물량값) * float(창호수량)
                     개소확정 = 개소값
+
+                    품명확정x = f'{코드확정}_{품명확정}'
+
 
                     내역 = ExcelStandard(
                         층='1F',
