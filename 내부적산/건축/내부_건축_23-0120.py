@@ -902,7 +902,7 @@ def excel_normalize(name):
 
     for 내역 in 산출서목록:
        if (내역.호 == "주동A" and 내역.호 == "주동A") or (내역.호 != "주동B" and 내역.코드 != '주동B' and 내역.호 != '주동C' and 내역.코드 != '주동C' and 내역.호 != '부동' and 내역.코드 != '부동'):
-
+        내역.코드=''
         new_sheet.append(내역.to_excel())
     new_workbook.save(saveFile1)
 
@@ -923,6 +923,7 @@ def excel_normalize(name):
     saveFile2 = f'{saveFilePath}{saveFileName2}'
     for 내역 in 산출서목록:
         if 내역.호 == "주동B" or 내역.코드 == "주동B":
+            내역.코드=''
             new_sheet.append(내역.to_excel())
     new_workbook.save(saveFile2)
 
@@ -936,7 +937,8 @@ def excel_normalize(name):
     saveFile3 = f'{saveFilePath}{saveFileName3}'
     for 내역 in 산출서목록:
        if 내역.호=="주동C" or 내역.코드 == "주동C":
-        new_sheet.append(내역.to_excel())
+            내역.코드=''
+            new_sheet.append(내역.to_excel())
     new_workbook.save(saveFile3)
 
     # 저장 - 부동
@@ -949,6 +951,7 @@ def excel_normalize(name):
     saveFile4 = f'{saveFilePath}{saveFileName4}'
     for 내역 in 산출서목록:
         if 내역.호 == "부동" or 내역.코드 == "부동":
+            내역.코드=''
             new_sheet.append(내역.to_excel())
     new_workbook.save(saveFile4)
 
