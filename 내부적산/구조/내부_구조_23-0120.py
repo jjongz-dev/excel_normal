@@ -128,10 +128,74 @@ def excel_normalize(name, column_dimensions=None):
 
     new_workbook.save(saveFilePath)
 
+
+
+    # 저장 - 주동A
+    new_workbook = Workbook()
+    new_sheet = new_workbook.active
+    new_sheet.title = '건축(데이터변경X)'
+    head_title = ['층', '호', '실', '대공종', '중공종', '코드', '품명', '규격', '단위', '부위', '타입', '산식', '수량', 'Remark', '개소(확인용)']
+    new_sheet.append(head_title)
+
+    saveFileName1 = '구조완성-' + fileCreateDate + '-주동A.xlsx'
+    saveFile1 = f'{saveFilePath}{saveFileName1}'
+
+    for 내역 in 산출서목록:
+       if (내역.실 == "주동A") or (내역.실 != "주동B" and 내역.실 != '주동C' and 내역.실 != '부동' and 내역.실 != '부속동'):
+
+        new_sheet.append(내역.to_excel())
+    new_workbook.save(saveFile1)
+
+
+    # 저장 - 주동B
+    new_workbook = Workbook()
+    new_sheet = new_workbook.active
+    new_sheet.title = '구조(데이터변경X)'
+    head_title = ['층', '호', '실', '대공종', '중공종', '코드', '품명', '규격', '단위', '부위', '타입', '산식', '수량', 'Remark', '개소(확인용)']
+    new_sheet.append(head_title)
+
+    saveFileName2 = '구조완성-' + fileCreateDate + '-주동B.xlsx'
+    saveFile2 = f'{saveFilePath}{saveFileName2}'
+    for 내역 in 산출서목록:
+        if 내역.실 == "주동B":
+            new_sheet.append(내역.to_excel())
+    new_workbook.save(saveFile2)
+
+
+    # 저장 - 주동C
+    new_workbook = Workbook()
+    new_sheet = new_workbook.active
+    new_sheet.title = '구조(데이터변경X)'
+    head_title = ['층', '호', '실', '대공종', '중공종', '코드', '품명', '규격', '단위', '부위', '타입', '산식', '수량', 'Remark', '개소(확인용)']
+    new_sheet.append(head_title)
+
+    saveFileName3 = '구조완성-' + fileCreateDate + '-주동C.xlsx'
+    saveFile3 = f'{saveFilePath}{saveFileName3}'
+    for 내역 in 산출서목록:
+       if 내역.실=="주동C":
+        new_sheet.append(내역.to_excel())
+    new_workbook.save(saveFile3)
+
+    # 저장 - 부동
+    new_workbook = Workbook()
+    new_sheet = new_workbook.active
+    new_sheet.title = '구조(데이터변경X)'
+    head_title = ['층', '호', '실', '대공종', '중공종', '코드', '품명', '규격', '단위', '부위', '타입', '산식', '수량', 'Remark', '개소(확인용)']
+    new_sheet.append(head_title)
+
+    saveFileName4 = '구조완성-' + fileCreateDate + '-부동.xlsx'
+    saveFile4 = f'{saveFilePath}{saveFileName4}'
+    for 내역 in 산출서목록:
+        if 내역.실 == "부동" or 내역.실 == "부속동":
+            new_sheet.append(내역.to_excel())
+    new_workbook.save(saveFile4)
+
+    # 파싱한 엑셀 자동 오픈
+
     # 파싱한 엑셀을 자동으로 띄워서 확인
     systemOs = platform.system()
     if systemOs =='Darwin':
-        subprocess.call(['open', saveFilePath])
+        subprocess.call(['open', saveFile1])
 
 
 if __name__ == '__main__':
