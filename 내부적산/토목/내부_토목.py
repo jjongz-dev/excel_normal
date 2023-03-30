@@ -252,7 +252,7 @@ def excel_normalize(name, column_dimensions=None):
 
         품명확정 =''
 
-        for row in worksheet.iter_rows(min_row=9):
+        for row in worksheet.iter_rows(min_row=11):
 
             공종값 = row[1].value
             규격값 = row[9].value
