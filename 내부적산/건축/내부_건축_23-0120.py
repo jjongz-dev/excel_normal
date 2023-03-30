@@ -895,7 +895,6 @@ def excel_normalize(name):
     new_workbook = Workbook()
     new_sheet = new_workbook.active
     new_sheet.title = '건축(데이터변경X)'
-    head_title = ['층', '호', '실', '대공종', '중공종', '코드', '품명', '규격', '단위', '부위', '타입', '산식', '수량', 'Remark', '개소(확인용)']
     new_sheet.append(head_title)
 
     saveFileName1 = '건축완성-' + fileCreateDate + '-주동A.xlsx'
@@ -909,19 +908,15 @@ def excel_normalize(name):
 
     sheet = new_workbook.create_sheet(title='집계표')
     sheet.append(['중공종', '품명', '규격', '단위', '수량(할증전)'])
-    sheet.column_dimensions["B"].width = 30
-    sheet.column_dimensions["C"].width = 30
 
     for 내역 in 내역서목록:
         sheet.append(내역.to_excelGroup())
     new_workbook.save(saveFile1)
 
-
     # 저장 - 주동B
     new_workbook = Workbook()
     new_sheet = new_workbook.active
     new_sheet.title = '건축(데이터변경X)'
-    head_title = ['층', '호', '실', '대공종', '중공종', '코드', '품명', '규격', '단위', '부위', '타입', '산식', '수량', 'Remark', '개소(확인용)']
     new_sheet.append(head_title)
 
     saveFileName2 = '건축완성-' + fileCreateDate + '-주동B.xlsx'
@@ -931,12 +926,10 @@ def excel_normalize(name):
             new_sheet.append(내역.to_excel())
     new_workbook.save(saveFile2)
 
-
     # 저장 - 주동C
     new_workbook = Workbook()
     new_sheet = new_workbook.active
     new_sheet.title = '건축(데이터변경X)'
-    head_title = ['층', '호', '실', '대공종', '중공종', '코드', '품명', '규격', '단위', '부위', '타입', '산식', '수량', 'Remark', '개소(확인용)']
     new_sheet.append(head_title)
 
     saveFileName3 = '건축완성-' + fileCreateDate + '-주동C.xlsx'
@@ -950,7 +943,6 @@ def excel_normalize(name):
     new_workbook = Workbook()
     new_sheet = new_workbook.active
     new_sheet.title = '건축(데이터변경X)'
-    head_title = ['층', '호', '실', '대공종', '중공종', '코드', '품명', '규격', '단위', '부위', '타입', '산식', '수량', 'Remark', '개소(확인용)']
     new_sheet.append(head_title)
 
     saveFileName4 = '건축완성-' + fileCreateDate + '-부동.xlsx'
@@ -961,13 +953,12 @@ def excel_normalize(name):
     new_workbook.save(saveFile4)
 
     # 파싱한 엑셀 자동 오픈
-
-
-
     systemOs = platform.system()
     if systemOs =='Darwin':
         subprocess.call(['open', saveFile1])
-
+        subprocess.call(['open', saveFile2])
+        subprocess.call(['open', saveFile3])
+        subprocess.call(['open', saveFile4])
     elif systemOs == "Windows":
         subprocess.Popen(saveFile, shell=True)
 
