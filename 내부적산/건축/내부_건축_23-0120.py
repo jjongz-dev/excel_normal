@@ -958,6 +958,7 @@ def excel_normalize(name):
     # 파싱한 엑셀 자동 오픈
     systemOs = platform.system()
     if systemOs =='Darwin':
+        subprocess.call(['open', saveFilePath])
         subprocess.call(['open', saveFile1])
         subprocess.call(['open', saveFile2])
         subprocess.call(['open', saveFile3])
