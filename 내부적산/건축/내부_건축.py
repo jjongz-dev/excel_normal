@@ -11,7 +11,7 @@ import subprocess
 import ReplaceFinEarthWork
 import ReplaceFinDuplicateDelete
 
-fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
+fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M%S')
 systemOs = platform.system()
 
 

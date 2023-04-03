@@ -13,7 +13,7 @@ import ReplaceCivilLW
 import ReplaceCivilRoadDeckingPanel
 
 
-fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
+fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M%S')
 systemOs = platform.system()
 
 

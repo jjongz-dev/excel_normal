@@ -4,7 +4,7 @@ from datetime import datetime
 import platform
 import subprocess
 
-fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
+fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M%S')
 systemOs = platform.system()
 
 
