@@ -19,7 +19,7 @@ systemOs = platform.system()
 
 
 # 이곳에 현장 폴더명만 변경하면 완료 #######
-siteTicketNo = '23-0233'
+siteTicketNo = '23-0274'
 ##################################
 
 
@@ -57,11 +57,11 @@ def excel_normalize(name, column_dimensions=None):
             단위값 = row[15].value
             수량값 = row[19].value
 
-            if 단위값 is None or 수량값 == 0:
-                continue
-
             if 공종값 is not None and 단위값 is not None:
                 품명확정 = 공종값.replace('\n', '')
+
+            if 단위값 is None or 수량값 == 0:
+                continue
 
             규격확정 = 규격값
             단위확정 = 단위값
@@ -103,9 +103,6 @@ def excel_normalize(name, column_dimensions=None):
             수량값 = row[20].value
             비고값 = row[25].value
 
-            if 단위값 is None or 수량값 == 0:
-                continue
-
             if 공종값 is not None and 단위값 is not None:
                 품명값 = 공종값.replace('\n', '')
                 품명확정 = 품명값
@@ -113,6 +110,9 @@ def excel_normalize(name, column_dimensions=None):
             if 품명값 == "H-PILE 연결" and 비고값 is not None:
                 품명확정 = f'{품명값}{비고값}'
                 #print(품명값, '##', 비고값, '==', 품명확정)
+
+            if 단위값 is None or 수량값 == 0:
+                continue
 
             규격확정 = 규격값
             단위확정 = 단위값
@@ -154,9 +154,6 @@ def excel_normalize(name, column_dimensions=None):
             수량값 = row[20].value
             비고값 = row[25].value
 
-            if 단위값 is None or 수량값 == 0:
-                continue
-
             if 공종값 is not None and 단위값 is not None:
                 품명값 = 공종값.replace('\n', '')
                 품명확정 = 품명값
@@ -164,6 +161,9 @@ def excel_normalize(name, column_dimensions=None):
             if "CON'C" in 품명값 and 비고값 is not None:
                 품명확정 = f'{품명값}{비고값}'
                 #print(품명값, '##', 비고값, '==', 품명확정)
+
+            if 단위값 is None or 수량값 == 0:
+                continue
 
             if 규격값 =="풍화암":
                 continue
@@ -208,9 +208,6 @@ def excel_normalize(name, column_dimensions=None):
             수량값 = row[20].value
             비고값 = row[25].value
 
-            if 단위값 is None or 수량값 == 0:
-                continue
-
             if 공종값 is not None and 단위값 is not None:
                 품명값 = 공종값.replace('\n', '')
                 품명확정 = 품명값
@@ -218,6 +215,9 @@ def excel_normalize(name, column_dimensions=None):
             if "H-PILE 연결" in 품명값 and 비고값 is not None:
                 품명확정 = f'{품명값}{비고값}'
                 #print(품명값, '##', 비고값, '==', 품명확정)
+
+            if 단위값 is None or 수량값 == 0:
+                continue
 
             규격확정 = 규격값
             단위확정 = 단위값
@@ -260,11 +260,13 @@ def excel_normalize(name, column_dimensions=None):
             단위값 = row[16].value
             수량값 = row[20].value
 
-            if 단위값 is None or 수량값 == 0:
-                continue
 
             if 공종값 is not None and 단위값 is not None:
                 품명확정 = 공종값
+
+            if 단위값 is None or 수량값 == 0:
+                continue
+
 
             규격확정 = 규격값
             단위확정 = 단위값
@@ -302,11 +304,11 @@ def excel_normalize(name, column_dimensions=None):
             단위값 = row[16].value
             수량값 = row[20].value
 
-            if 단위값 is None or 수량값 == 0:
-                continue
-
             if 공종값 is not None and 단위값 is not None:
                 품명확정 = 공종값
+
+            if 단위값 is None or 수량값 == 0:
+                continue
 
             규격확정 = 규격값
             단위확정 = 단위값
@@ -349,11 +351,11 @@ def excel_normalize(name, column_dimensions=None):
             단위값 = row[16].value
             수량값 = row[20].value
 
-            if 단위값 is None or 수량값 == 0:
-                continue
-
             if 공종값 is not None and 단위값 is not None:
                 품명확정 = 공종값
+
+            if 단위값 is None or 수량값 == 0:
+                continue
 
             규격확정 = 규격값
             단위확정 = 단위값
@@ -397,11 +399,11 @@ def excel_normalize(name, column_dimensions=None):
             단위값 = row[16].value
             수량값 = row[20].value
 
-            if 단위값 is None or 수량값 == 0:
-                continue
-
             if 공종값 is not None and 단위값 is not None:
                 품명확정 = 공종값
+
+            if 단위값 is None or 수량값 == 0:
+                continue
 
             규격확정 = 규격값
             단위확정 = 단위값
