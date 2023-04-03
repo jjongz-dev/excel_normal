@@ -11,6 +11,7 @@ import ReplaceCivilStrut
 import ReplaceCivilSGR
 import ReplaceCivilLW
 import ReplaceCivilRoadDeckingPanel
+import os
 
 
 fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M%S')
@@ -473,6 +474,8 @@ def excel_normalize(name, column_dimensions=None):
     systemOs = platform.system()
     if systemOs =='Darwin':
         subprocess.call(['open', saveFilePath])
+    elif systemOs == "Windows":
+        subprocess.Popen(saveFilePath, shell=True)
 
 
 if __name__ == '__main__':
