@@ -31,6 +31,8 @@ class ExcelStandard:
 
         if self.수량 !='★산출서 확인 후 값 변경':
             수량 = float(self.수량)
+        else:
+            수량 = self.수량
 
         if type(호) is str:
             호 = 호.replace(' ', '').replace('  ', '')
