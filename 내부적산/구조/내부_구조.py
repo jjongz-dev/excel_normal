@@ -3,6 +3,7 @@ from ExcelStandard import ExcelStandard
 from datetime import datetime
 import platform
 import subprocess
+import ReplacePersonal
 
 fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M%S')
 systemOs = platform.system()
@@ -106,6 +107,13 @@ def excel_normalize(name, column_dimensions=None):
                         개소=''
                     )
                     산출서목록.append(내역)
+
+
+    # 품명 규격 개인별 지정 변경 S #######################
+    for 내역 in 산출서목록:
+        ReplacePersonal.launch(내역)
+    # 품명 규격 개인별 지정 변경 E #######################
+
 
     # 저장할 엑셀
     new_workbook = Workbook()

@@ -11,7 +11,7 @@ import ReplaceCivilStrut
 import ReplaceCivilSGR
 import ReplaceCivilLW
 import ReplaceCivilRoadDeckingPanel
-import os
+import ReplacePersonal
 
 
 fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M%S')
@@ -456,6 +456,13 @@ def excel_normalize(name, column_dimensions=None):
             개소=''
         )
         산출서목록.append(내역)
+
+
+    # 품명 규격 개인별 지정 변경 S #######################
+    for 내역 in 산출서목록:
+        ReplacePersonal.launch(내역)
+    # 품명 규격 개인별 지정 변경 E #######################
+
 
 
     # 저장할 엑셀

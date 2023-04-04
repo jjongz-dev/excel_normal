@@ -10,6 +10,7 @@ import platform
 import subprocess
 import ReplaceFinEarthWork
 import ReplaceFinDuplicateDelete
+import ReplacePersonal
 
 fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M%S')
 systemOs = platform.system()
@@ -648,6 +649,15 @@ def excel_normalize(name):
     for 내역 in 산출서목록:
         ReplaceFinDuplicateDelete.launch(내역)
     # 품명 규격 자동 변경 E #######################
+
+
+
+    # 품명 규격 개인별 지정 변경 S #######################
+    for 내역 in 산출서목록:
+        ReplacePersonal.launch(내역)
+    # 품명 규격 개인별 지정 변경 E #######################
+
+
 
     # 공종별내역서 ###################################################################################
 
