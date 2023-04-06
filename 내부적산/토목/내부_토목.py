@@ -14,7 +14,7 @@ import ReplaceCivilRoadDeckingPanel
 import ReplacePersonal
 
 
-fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M%S')
+fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
 systemOs = platform.system()
 
 
