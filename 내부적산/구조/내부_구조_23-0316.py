@@ -3,9 +3,8 @@ from ExcelStandard import ExcelStandard
 from datetime import datetime
 import platform
 import subprocess
-import ReplacePersonal
 
-fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M%S')
+fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
 systemOs = platform.system()
 
 
@@ -62,6 +61,11 @@ def excel_normalize(name, column_dimensions=None):
                 if 층값 is not None:
                     if '동 명' in 층값:
                         호확정 = 층값.split('-')[-1].strip()
+                        실확정 = 층값.split(']')[0].split('[')[-1].replace('-', '').strip()
+
+                        if 실확정 == "부속동":
+                            실확정 = "부속동"
+
                         continue
 
                 if 층값 is not None and 부호값 is not None:
@@ -85,6 +89,8 @@ def excel_normalize(name, column_dimensions=None):
                     if len(명칭값_제거_어퍼스트로피) >= 2:
                         품명확정 = 명칭값_제거_어퍼스트로피
 
+                    품명확정x = f'{실확정}_{품명확정}'
+
                     규격확정 = 규격값
                     산식확정 = 산출식값
                     수량확정 = 결과값
@@ -92,7 +98,7 @@ def excel_normalize(name, column_dimensions=None):
                     내역 = ExcelStandard(
                         층=층확정,
                         호=호확정,
-                        실='',
+                        실=실확정,
                         대공종='건축',
                         중공종='철근콘크리트공사',
                         코드='',
@@ -108,13 +114,6 @@ def excel_normalize(name, column_dimensions=None):
                     )
                     산출서목록.append(내역)
 
-
-    # 품명 규격 개인별 지정 변경 S #######################
-    for 내역 in 산출서목록:
-        ReplacePersonal.launch(내역)
-    # 품명 규격 개인별 지정 변경 E #######################
-
-
     # 저장할 엑셀
     new_workbook = Workbook()
     new_sheet = new_workbook.active
@@ -129,12 +128,40 @@ def excel_normalize(name, column_dimensions=None):
 
     new_workbook.save(saveFilePath)
 
+    # 저장 - 주동A + 기타분류
+    new_workbook = Workbook()
+    new_sheet = new_workbook.active
+    new_sheet.title = '건축(데이터변경X)'
+    new_sheet.append(head_title)
+
+    saveFileName1 = '구조완성-' + fileCreateDate + '-주동C.xlsx'
+    saveFile1 = f'{saveFilePath}{saveFileName1}'
+
+    for 내역 in 산출서목록:
+       if 내역.실 == "주동C" or (내역.실 != '부동' and 내역.실 != '부속동'):
+
+        new_sheet.append(내역.to_excel())
+    new_workbook.save(saveFile1)
+
+    # 저장 - 부동, 부속동
+    new_workbook = Workbook()
+    new_sheet = new_workbook.active
+    new_sheet.title = '구조(데이터변경X)'
+    new_sheet.append(head_title)
+
+    saveFileName2 = '구조완성-' + fileCreateDate + '-부동.xlsx'
+    saveFile2 = f'{saveFilePath}{saveFileName2}'
+    for 내역 in 산출서목록:
+        if 내역.실 == "부동" or 내역.실 == "부속동":
+            new_sheet.append(내역.to_excel())
+    new_workbook.save(saveFile2)
+
     # 파싱한 엑셀을 자동으로 띄워서 확인
     systemOs = platform.system()
     if systemOs =='Darwin':
-        subprocess.call(['open', saveFilePath])
-    elif systemOs == "Windows":
-        subprocess.Popen(saveFilePath, shell=True)
+        subprocess.call(['open', saveFile1])
+        subprocess.call(['open', saveFile2])
+
 
 
 if __name__ == '__main__':

@@ -10,9 +10,8 @@ import platform
 import subprocess
 import ReplaceFinEarthWork
 import ReplaceFinDuplicateDelete
-import ReplacePersonal
 
-fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M%S')
+fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
 systemOs = platform.system()
 
 
@@ -20,23 +19,29 @@ systemOs = platform.system()
 siteTicketNo = '23-0316'
 ##################################
 
+openFileName = '건축.xlsx'
+saveFileName = '건축완성-' + fileCreateDate + '.xlsx'
 
 if systemOs == 'Darwin':
-    openFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/건축.xlsx'
-    saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/건축완성-' + fileCreateDate + '.xlsx'
-else:
-    openFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\건축.xlsx'
-    saveFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\건축완성-' + fileCreateDate + '.xlsx'
+    openFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/'
+    saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/'
 
+else:
+    openFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\\'
+    saveFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\\'
+
+
+openFile = f'{openFilePath}{openFileName}'
+saveFile = f'{saveFilePath}{saveFileName}'
 
 def excel_normalize(name):
-    excel = load_workbook(openFilePath)
+    excel = load_workbook(openFile)
 
     내역서목록 = []
     산출서목록 = []
     파싱시작점기준문자 = ['부위', '도형', '구분', '코드', '품목', '품명']
 
-    파싱시트목록 = ['가설산출서', '토공산출서', '내부산출서', '내부산출서-1', '내부산출서-2', '내부산출서-3', '내부산출서-4', '내부산출서_1', '내부산출서_2', '내부산출서_3', '내부산출서_4', '외부산출서', '철골산출서', '동별창호리스트', '창호산출서', '공종별내역서']
+    파싱시트목록 = ['가설산출서', '토공산출서', '내부산출서', '외부산출서', '철골산출서', '동별창호리스트', '창호산출서', '공종별집계표']
     print('=================================')
     for 시트명 in 파싱시트목록:
         if 시트명 in excel.sheetnames:
@@ -79,6 +84,15 @@ def excel_normalize(name):
             층갯수값 = row[6].value
             물량값 = row[7].value
 
+            if 산식값 is not None:
+
+                if '주동-A' in 산식값:
+                    호확정 = '주동A'
+                elif '주동-B' in 산식값:
+                    호확정 = '주동B'
+                elif '주동-C' in 산식값:
+                    호확정 = '주동C'
+
             if (부위값 is not None
                     and (품명값 is None or 품명값 == '')
             ):
@@ -99,6 +113,15 @@ def excel_normalize(name):
                     층범위값 = f'{층범위값}F'
 
             if 품명값 is not None and (물량값 is not None and 물량값 != 0):
+
+                if "주동A" in 호확정:
+                    품명값x = f'주동A_{품명값}'
+                elif "주동B" in 호확정:
+                    품명값x = f'주동B_{품명값}'
+                elif "주동C" in 호확정:
+                    품명값x = f'주동C_{품명값}'
+                elif "부동" in 호확정:
+                    품명값x = f'부동_{품명값}'
 
                 품명확정 = 품명값
                 층확정 = 층범위값
@@ -162,6 +185,17 @@ def excel_normalize(name):
             층갯수값 = row[7].value
             물량값 = row[8].value
 
+            if 산식값 is not None:
+
+                if '주동-A' in 산식값:
+                    호확정 = '주동A'
+                elif '주동-B' in 산식값:
+                    호확정 = '주동B'
+                elif '주동-C' in 산식값:
+                    호확정 = '주동C'
+                elif '부동' in 산식값:
+                    호확정 = '부동'
+
             if (도형값 is not None
                     and (품명값 is None or 품명값 == '')
             ):
@@ -173,6 +207,16 @@ def excel_normalize(name):
                     continue
 
             if 품명값 is not None and (물량값 is not None and 물량값 != 0):
+
+                if "주동A" in 호확정:
+                   품명값x = f'주동A_{품명값}'
+                elif "주동B" in 호확정:
+                   품명값x = f'주동B_{품명값}'
+                elif "주동C" in 호확정:
+                   품명값x = f'주동C_{품명값}'
+                elif "부동" in 호확정:
+                   품명값x = f'부동_{품명값}'
+
 
                 품명확정 = 품명값
                 규격확정 = 규격값
@@ -208,7 +252,7 @@ def excel_normalize(name):
 
     # 내부산출서 ###################################################################################
 
-    sheet_names = ['내부산출서', '내부산출서-1', '내부산출서-2', '내부산출서-3', '내부산출서-4', '내부산출서_1', '내부산출서_2', '내부산출서_3', '내부산출서_4']
+    sheet_names = ['내부산출서', '내부산출서-1', '내부산출서-2', '내부산출서_1', '내부산출서_2']
     for sheet in sheet_names:
         if sheet in excel.sheetnames:
 
@@ -255,16 +299,18 @@ def excel_normalize(name):
                             층확정 = 층값
                         continue
                     if '실명 :' in 도형값:
+
                         호실값= 도형값.split('개소')[0].split(':')[-1].strip()
                         호실값_분리_호 = 호실값.split('호')
                         호실값_분리_하이픈 = 호실값.split('-')
-
                         if len(호실값_분리_호)>1:
                             호확정 = f'{호실값_분리_호[0].strip()}호'
                             실확정 = 호실값_분리_호[1].strip()
                         elif len(호실값_분리_하이픈)>1:
                             호확정 = f'{호실값_분리_하이픈[0].strip()}'
                             실확정 = 호실값_분리_하이픈[1].strip()
+                        elif '주동C' in 호실값:
+                            호확정 = '주동C'
                         else:
                             호확정 = 호실값
                             실확정 = 호실값
@@ -277,6 +323,23 @@ def excel_normalize(name):
 
                 if 품명값 is not None and (물량값 is not None and 물량값 != 0):
 
+                    if "주동A" in 호실값:
+                        실확정 = 호실값[re.search('주동A', 호실값).end():]
+                        호확정 = '주동A'
+                        품명값x = f'주동A_{품명값}'
+
+                    elif "주동B,C" in 호실값:
+                        실확정 = 호실값[re.search('주동B,C', 호실값).end():]
+                        호확정 = '주동B,C'
+                        품명값x = f'주동B,C_{품명값}'
+
+                    elif "부동" in 호실값:
+                        실확정 = 호실값[re.search('부동', 호실값).end():]
+                        호확정 = '부동'
+                        품명값x = f'부동_{품명값}'
+
+                    개소값 = 개소값.replace('비고:*', '').replace('비고:건식벽체', '').replace('비고:벽지구분', '').strip()
+
                     품명확정 = 품명값
                     규격확정 = 규격값
                     단위확정 = 단위값
@@ -285,24 +348,120 @@ def excel_normalize(name):
                     수량확정 = 물량값
                     개소확정 = 개소값
 
-                    내역 = ExcelStandard(
-                        층=층확정,
-                        호=호확정,
-                        실=실확정,
-                        대공종='건축',
-                        중공종='',
-                        코드='',
-                        품명=품명확정,
-                        규격=규격확정,
-                        단위=단위확정,
-                        부위='',
-                        타입='내부',
-                        산식=산식확정,
-                        수량=수량확정,
-                        Remark='',
-                        개소=개소확정
-                    )
-                    산출서목록.append(내역)
+                    실확정 = 실확정.replace('(좌측세대)', '_좌측세대').replace('(우측세대)', '_우측세대').replace('(우측)', '_우측세대').replace('(좌측)', '_좌측세대')
+
+                    실확정원본 = 실확정
+
+                    if 호확정 =="주동A" and (개소확정==2 or 개소확정=='2'):
+
+                        실확정 = f'{실확정원본}_좌측세대'
+
+                        내역 = ExcelStandard(
+                            층=층확정,
+                            호=호확정,
+                            실=실확정,
+                            대공종='건축',
+                            중공종='',
+                            코드='',
+                            품명=품명확정,
+                            규격=규격확정,
+                            단위=단위확정,
+                            부위='',
+                            타입='내부',
+                            산식=산식확정,
+                            수량=수량확정,
+                            Remark='',
+                            개소=개소확정
+                        )
+                        산출서목록.append(내역)
+
+                        실확정 = f'{실확정원본}_우측세대'
+
+                        내역 = ExcelStandard(
+                            층=층확정,
+                            호=호확정,
+                            실=실확정,
+                            대공종='건축',
+                            중공종='',
+                            코드='',
+                            품명=품명확정,
+                            규격=규격확정,
+                            단위=단위확정,
+                            부위='',
+                            타입='내부',
+                            산식=산식확정,
+                            수량=수량확정,
+                            Remark='',
+                            개소=개소확정
+                        )
+                        산출서목록.append(내역)
+
+
+                    elif 호확정 =="주동B,C" and (개소확정==2 or 개소확정=='2'):
+
+                        호확정 = '주동B'
+
+                        내역 = ExcelStandard(
+                            층=층확정,
+                            호=호확정,
+                            실=실확정,
+                            대공종='건축',
+                            중공종='',
+                            코드='',
+                            품명=품명확정,
+                            규격=규격확정,
+                            단위=단위확정,
+                            부위='',
+                            타입='내부',
+                            산식=산식확정,
+                            수량=수량확정,
+                            Remark='',
+                            개소=개소확정
+                        )
+                        산출서목록.append(내역)
+
+                        호확정 = '주동C'
+
+                        내역 = ExcelStandard(
+                            층=층확정,
+                            호=호확정,
+                            실=실확정,
+                            대공종='건축',
+                            중공종='',
+                            코드='',
+                            품명=품명확정,
+                            규격=규격확정,
+                            단위=단위확정,
+                            부위='',
+                            타입='내부',
+                            산식=산식확정,
+                            수량=수량확정,
+                            Remark='',
+                            개소=개소확정
+                        )
+                        산출서목록.append(내역)
+
+
+                    else:
+
+                        내역 = ExcelStandard(
+                            층=층확정,
+                            호=호확정,
+                            실=실확정,
+                            대공종='건축',
+                            중공종='',
+                            코드='',
+                            품명=품명확정,
+                            규격=규격확정,
+                            단위=단위확정,
+                            부위='',
+                            타입='내부',
+                            산식=산식확정,
+                            수량=수량확정,
+                            Remark='',
+                            개소=개소확정
+                        )
+                        산출서목록.append(내역)
 
     # 외부산출서 ###################################################################################
 
@@ -344,14 +503,15 @@ def excel_normalize(name):
                 if '구분명 :' in 도형값:
                     층호실 = 도형값.split('개소')[0].split(':')[-1].strip()
                     층호실_분리_언더바 = 층호실.split('_')
-                    층호실_분리_띄어쓰기 = 층호실.split(' ')
 
-                    if len(층호실_분리_언더바)>1:
+                    if len(층호실_분리_언더바)==3:
                         층확정 = 층호실_분리_언더바[0].strip()
-                        호확정 = 실확정 = 층호실_분리_언더바[-1].strip()
-                    elif len(층호실_분리_띄어쓰기) > 1:
-                        층확정 = 층호실_분리_띄어쓰기[0].strip()
-                        호확정 = 실확정 = 층호실
+                        호확정 = 층호실_분리_언더바[1].strip()
+                        실확정 = 층호실_분리_언더바[2].strip()
+
+                    elif len(층호실_분리_언더바) ==2:
+                        층확정 = 호확정 = 층호실_분리_언더바[0].strip()
+                        실확정 = 층호실_분리_언더바[1].strip()
                     else:
                         층확정 = 호확정 = 실확정 = 층호실
 
@@ -372,6 +532,15 @@ def excel_normalize(name):
 
             if 품명값 is not None and (물량값 is not None and 물량값 != 0):
 
+                if "주동A" in 호확정:
+                    품명값x = f'주동A_{품명값}'
+                elif "주동B" in 호확정:
+                    품명값x = f'주동B_{품명값}'
+                elif "주동C" in 호확정:
+                    품명값x = f'주동C_{품명값}'
+                elif "부동" in 호확정:
+                    품명값x = f'부동_{품명값}'
+
                 품명확정 = 품명값
                 규격확정 = 규격값
                 단위확정 = 단위값
@@ -379,6 +548,8 @@ def excel_normalize(name):
                 산식확정 = 산식값
                 수량확정 = 물량값
                 개소확정 = 개소값
+
+                실확정 = 실확정.replace('(좌측세대)', '_좌측세대').replace('(우측세대)', '_우측세대').replace('(우측)', '_우측세대').replace('(좌측)', '_좌측세대')
 
                 내역 = ExcelStandard(
                     층=층확정,
@@ -524,19 +695,10 @@ def excel_normalize(name):
                     창호수량 = row[창호층목록[창호층]].value
 
                     if 창호수량 is not None:
-                        if 'B' in 창호층:
-                            층값 = f'{창호층}F'
-                        elif 'F' in 창호층:
-                            창호층수정 = 창호층.replace('F', '')
-                            층값 = f'{창호층수정}F'
-                        elif 'p1' in 창호층:
-                            층값 = 'RF'
-                        elif 'p2' in 창호층:
-                            층값 = 'PHRF'
-                        else:
-                            층값 = 창호층
 
-                        층확정 = 층값
+                        코드확정 = 창호층.split('_')[-1]
+
+                        층확정 = 창호층
                         호확정 = 창호명값
                         품명확정 = 창호명값
                         규격확정 = f'{가로값:0.3f}*{세로값:0.3f}={면적값:0.3f}'
@@ -546,13 +708,15 @@ def excel_normalize(name):
 
                         창호별층별수량[창호명값].append((층확정, 수량확정, 개소확정))
 
+                        품명확정x = f'{코드확정}_{품명확정}'
+
                         내역 = ExcelStandard(
-                            층=층확정,
+                            층='1F',
                             호=호확정,
                             실=실확정,
                             대공종='건축',
                             중공종='',
-                            코드='',
+                            코드=코드확정,
                             품명=품명확정,
                             규격=규격확정,
                             단위='EA',
@@ -569,7 +733,7 @@ def excel_normalize(name):
 
     if '창호산출서' in excel.sheetnames:
 
-        #pprint(창호별층별수량)
+        pprint(창호별층별수량)
 
         worksheet = excel['창호산출서']
         산출서시작줄 = 0
@@ -617,6 +781,7 @@ def excel_normalize(name):
                 # 창호층수 만큼 반복하며 창호 수량이 있으면 창호를 생성
                 for 창호층, 창호수량, 개소값 in 창호별층별수량[창호명]:
 
+                    코드확정 = 창호층.split('_')[-1]
                     층확정 = 창호층
                     호확정 = 창호명
                     품명확정 = 품명값
@@ -626,13 +791,16 @@ def excel_normalize(name):
                     수량확정 = float(물량값) * float(창호수량)
                     개소확정 = 개소값
 
+                    품명확정x = f'{코드확정}_{품명확정}'
+
+
                     내역 = ExcelStandard(
-                        층=층확정,
+                        층='1F',
                         호=호확정,
                         실=실확정,
                         대공종='건축',
                         중공종='',
-                        코드='',
+                        코드=코드확정,
                         품명=품명확정,
                         규격=규격확정,
                         단위=단위확정,
@@ -649,15 +817,6 @@ def excel_normalize(name):
     for 내역 in 산출서목록:
         ReplaceFinDuplicateDelete.launch(내역)
     # 품명 규격 자동 변경 E #######################
-
-
-
-    # 품명 규격 개인별 지정 변경 S #######################
-    for 내역 in 산출서목록:
-        ReplacePersonal.launch(내역)
-    # 품명 규격 개인별 지정 변경 E #######################
-
-
 
     # 공종별내역서 ###################################################################################
 
@@ -711,18 +870,18 @@ def excel_normalize(name):
 
     # 엑셀 처리 완료 ###################################################################################
 
-    # 저장할 엑셀
+
+
+    # 저장 - 통합본
     new_workbook = Workbook()
     new_sheet = new_workbook.active
     new_sheet.title = '건축(데이터변경X)'
     head_title = ['층', '호', '실', '대공종', '중공종', '코드', '품명', '규격', '단위', '부위', '타입', '산식', '수량', 'Remark', '개소(확인용)']
     new_sheet.append(head_title)
-    new_sheet.column_dimensions["G"].width = 30
-    new_sheet.column_dimensions["H"].width = 30
-    new_sheet.column_dimensions["L"].width = 30
 
     for 내역 in 산출서목록:
-       new_sheet.append(내역.to_excel())
+        new_sheet.append(내역.to_excel())
+    new_workbook.save(saveFile)
 
     sheet = new_workbook.create_sheet(title='집계표')
     sheet.append(['중공종', '품명', '규격', '단위', '수량(할증전)'])
@@ -731,15 +890,55 @@ def excel_normalize(name):
 
     for 내역 in 내역서목록:
         sheet.append(내역.to_excelGroup())
+    new_workbook.save(saveFile)
 
-    new_workbook.save(saveFilePath)
 
-    # 파싱한 엑셀을 자동으로 띄워서 확인
+    # 저장 - 주동A
+    new_workbook = Workbook()
+    new_sheet = new_workbook.active
+    new_sheet.title = '건축(데이터변경X)'
+    new_sheet.append(head_title)
+
+    saveFileName1 = '건축완성-' + fileCreateDate + '-주동C.xlsx'
+    saveFile1 = f'{saveFilePath}{saveFileName1}'
+
+    for 내역 in 산출서목록:
+        if 내역.호=="주동C" or 내역.코드 == "주동C" or 내역.호 !="부동":
+            new_sheet.append(내역.to_excel())
+    new_workbook.save(saveFile1)
+
+    sheet = new_workbook.create_sheet(title='집계표')
+    sheet.append(['중공종', '품명', '규격', '단위', '수량(할증전)'])
+
+    for 내역 in 내역서목록:
+        sheet.append(내역.to_excelGroup())
+    new_workbook.save(saveFile1)
+
+
+    # 저장 - 부동
+    new_workbook = Workbook()
+    new_sheet = new_workbook.active
+    new_sheet.title = '건축(데이터변경X)'
+    new_sheet.append(head_title)
+
+    saveFileName2 = '건축완성-' + fileCreateDate + '-부동.xlsx'
+    saveFile2 = f'{saveFilePath}{saveFileName2}'
+    for 내역 in 산출서목록:
+        if 내역.호 == "부동" or 내역.코드 == "부동":
+            내역.코드=''
+            new_sheet.append(내역.to_excel())
+    new_workbook.save(saveFile2)
+
+    # 파싱한 엑셀 자동 오픈
     systemOs = platform.system()
     if systemOs =='Darwin':
-        subprocess.call(['open', saveFilePath])
+        subprocess.call(['open', saveFile])
+        subprocess.call(['open', saveFile1])
+        subprocess.call(['open', saveFile2])
     elif systemOs == "Windows":
-        subprocess.Popen(saveFilePath, shell=True)
+        subprocess.Popen(saveFile, shell=True)
+        subprocess.Popen(saveFile1, shell=True)
+        subprocess.Popen(saveFile2, shell=True)
 
 
 if __name__ == '__main__':
