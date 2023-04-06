@@ -803,7 +803,7 @@ def excel_normalize(name):
     saveFile1 = f'{saveFilePath}{saveFileName1}'
 
     for 내역 in 산출서목록:
-        if 내역.호=="주동C" or 내역.코드 == "주동C" or 내역.호 !="부동":
+        if 내역.호=="주동C" or 내역.코드 == "주동C" or (내역.코드 =='' and 내역.호 !="부동") or (내역.코드 is None and 내역.호 !="부동"):
             new_sheet.append(내역.to_excel())
     new_workbook.save(saveFile1)
 
