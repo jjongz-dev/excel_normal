@@ -326,10 +326,10 @@ def excel_normalize(name):
                         호확정 = '주동A'
                         품명값x = f'주동A_{품명값}'
 
-                    elif "주동B,C" in 호실값:
-                        실확정 = 호실값[re.search('주동B,C', 호실값).end():]
-                        호확정 = '주동B,C'
-                        품명값x = f'주동B,C_{품명값}'
+                    elif "주동B" in 호실값:
+                        실확정 = 호실값[re.search('주동B', 호실값).end():]
+                        호확정 = '주동B'
+
 
                     elif "부동" in 호실값:
                         실확정 = 호실값[re.search('부동', 호실값).end():]
@@ -927,19 +927,7 @@ def excel_normalize(name):
             new_sheet.append(내역.to_excel())
     new_workbook.save(saveFile2)
 
-    # 저장 - 주동C
-    new_workbook = Workbook()
-    new_sheet = new_workbook.active
-    new_sheet.title = '건축(데이터변경X)'
-    new_sheet.append(head_title)
 
-    saveFileName3 = '건축완성-' + fileCreateDate + '-주동C.xlsx'
-    saveFile3 = f'{saveFilePath}{saveFileName3}'
-    for 내역 in 산출서목록:
-       if 내역.호=="주동C" or 내역.코드 == "주동C":
-            내역.코드=''
-            new_sheet.append(내역.to_excel())
-    new_workbook.save(saveFile3)
 
     # 저장 - 부동
     new_workbook = Workbook()
@@ -961,7 +949,7 @@ def excel_normalize(name):
         subprocess.call(['open', saveFilePath])
         subprocess.call(['open', saveFile1])
         subprocess.call(['open', saveFile2])
-        subprocess.call(['open', saveFile3])
+
         subprocess.call(['open', saveFile4])
     elif systemOs == "Windows":
         subprocess.Popen(saveFile, shell=True)
