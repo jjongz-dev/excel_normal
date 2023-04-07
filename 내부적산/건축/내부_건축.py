@@ -12,18 +12,18 @@ import ReplaceFinEarthWork
 import ReplaceFinDuplicateDelete
 import ReplacePersonal
 
-fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
+fileCreateDate = datetime.strftime(datetime.today(), '%y%m%d_%H%M')
 systemOs = platform.system()
 
 
 # 이곳에 현장 폴더명만 변경하면 완료 #######
-siteTicketNo = '23-0316'
+siteTicketNo = '23-0183'
 ##################################
 
 
 if systemOs == 'Darwin':
     openFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/건축.xlsx'
-    saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/건축완성-' + fileCreateDate + '.xlsx'
+    saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/end-kun-' + fileCreateDate + '.xlsx'
 else:
     openFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\건축.xlsx'
     saveFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\건축완성-' + fileCreateDate + '.xlsx'

@@ -5,18 +5,18 @@ import platform
 import subprocess
 import ReplacePersonal
 
-fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
+fileCreateDate = datetime.strftime(datetime.today(), '%y%m%d_%H%M')
 systemOs = platform.system()
 
 
 # 이곳에 현장 폴더명만 변경하면 완료 #######
-siteTicketNo = '23-0316'
+siteTicketNo = '23-0183'
 ##################################
 
 
 if systemOs == 'Darwin':
     openFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/구조.xlsx'
-    saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/구조완성-' + fileCreateDate + '.xlsx'
+    saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/end-gujo-' + fileCreateDate + '.xlsx'
 else:
     openFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\구조.xlsx'
     saveFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\구조완성-' + fileCreateDate + '.xlsx'
@@ -26,6 +26,7 @@ def excel_normalize(name, column_dimensions=None):
     excel = load_workbook(openFilePath)
 
     산출서목록 = []
+    파싱시작점기준문자 = ['부호']
 
     파싱시트목록 = ['부재별산출서', '기타산출서', '아파트옹벽 Unit별산출서']
     print('=================================')
@@ -50,7 +51,12 @@ def excel_normalize(name, column_dimensions=None):
             산식확정 = ''
             수량확정 = ''
 
-            for row in worksheet.iter_rows(min_row=4):
+            for 가로줄번호, row in enumerate(worksheet.rows):
+                if row[1].value in 파싱시작점기준문자:
+                    산출서시작줄 = 가로줄번호 + 2
+                    break
+
+            for row in worksheet.iter_rows(min_row=산출서시작줄):
 
                 층값 = str(row[0].value)
                 부호값 = row[1].value

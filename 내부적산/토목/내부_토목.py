@@ -3,7 +3,6 @@ from ExcelStandard import ExcelStandard
 from datetime import datetime
 import platform
 import subprocess
-
 import ReplaceCivilEarthwork
 import ReplaceCivilSidePostPile
 import ReplaceCivilCIP
@@ -13,8 +12,7 @@ import ReplaceCivilLW
 import ReplaceCivilRoadDeckingPanel
 import ReplacePersonal
 
-
-fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
+fileCreateDate = datetime.strftime(datetime.today(), '%y%m%d_%H%M')
 systemOs = platform.system()
 
 
@@ -25,7 +23,7 @@ siteTicketNo = '23-0246'
 
 if systemOs == 'Darwin':
     openFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/토목.xlsx'
-    saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/토목완성-' + fileCreateDate + '.xlsx'
+    saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/end-land-' + fileCreateDate + '.xlsx'
 else:
     openFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\토목.xlsx'
     saveFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\토목완성-' + fileCreateDate + '.xlsx'
