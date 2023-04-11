@@ -16,7 +16,7 @@ siteTicketNo = '22-1178'
 
 if systemOs == 'Darwin':
     openFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/구조.xlsx'
-    saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/end-gujo-' + fileCreateDate + '.xlsx'
+    saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/end-2-gujo-' + fileCreateDate + '.xlsx'
 else:
     openFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\구조.xlsx'
     saveFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\구조완성-' + fileCreateDate + '.xlsx'
