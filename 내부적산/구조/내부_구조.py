@@ -1,6 +1,9 @@
 from openpyxl import load_workbook, Workbook
 from ExcelStandard import ExcelStandard
+from ExcelGroup import ExcelGroup
 from datetime import datetime
+
+import re
 import platform
 import subprocess
 import ReplacePersonal
@@ -10,7 +13,7 @@ systemOs = platform.system()
 
 
 # 이곳에 현장 폴더명만 변경하면 완료 #######
-siteTicketNo = '22-1178'
+siteTicketNo = '22-0544'
 ##################################
 
 
@@ -26,7 +29,8 @@ def excel_normalize(name, column_dimensions=None):
     excel = load_workbook(openFilePath)
 
     산출서목록 = []
-    파싱시작점기준문자 = ['부호']
+    내역서목록 = []
+    파싱시작점기준문자 = ['부호', '품명']
 
     파싱시트목록 = ['부재별산출서', '기타산출서', '아파트옹벽 Unit별산출서']
     print('=================================')
@@ -121,6 +125,60 @@ def excel_normalize(name, column_dimensions=None):
     # 품명 규격 개인별 지정 변경 E #######################
 
 
+
+    # 공종별내역서 ###################################################################################
+
+    if '공종별내역서' in excel.sheetnames:
+
+        worksheet = excel['공종별내역서']
+        내역서시작줄 = 0
+        중공종확정 = ''
+        품명확정 = ''
+        규격확정 = ''
+        단위확정 = ''
+        수량확정 = ''
+
+        for 가로줄번호, row in enumerate(worksheet.rows):
+
+            if row[0].value.replace(' ', '') in 파싱시작점기준문자:
+                내역서시작줄 = 가로줄번호 + 3
+                break
+
+        for row in worksheet.iter_rows(min_row=내역서시작줄):
+
+            품명값 = row[0].value
+            규격값 = row[1].value
+            단위값 = row[2].value
+            수량값 = row[3].value
+
+            if 품명값 is not None and (단위값 is None or 단위값 == ''):
+                if '[ 합           계 ]' in 품명값:
+                    continue
+                else:
+                    중공종 = 품명값.replace(' ', '')
+                    중공종확정 = 중공종[re.search('\\d{0,9}', 중공종).end():]
+                    continue
+
+            if 품명값 is not None and (단위값 is not None or 단위값 != '') and (수량값 is not None and 수량값 != 0):
+
+                품명확정 = 품명값
+                규격확정 = 규격값
+                단위확정 = 단위값
+                수량확정 = 수량값
+
+                내역 = ExcelGroup(
+                    중공종=중공종확정,
+                    품명=품명확정,
+                    규격=규격확정,
+                    단위=단위확정,
+                    수량=수량확정
+                )
+                내역서목록.append(내역)
+
+
+    # 엑셀 처리 완료 ###################################################################################
+
+
     # 저장할 엑셀
     new_workbook = Workbook()
     new_sheet = new_workbook.active
@@ -132,6 +190,20 @@ def excel_normalize(name, column_dimensions=None):
 
     for 내역 in 산출서목록:
         new_sheet.append(내역.to_excel())
+
+
+
+    sheet = new_workbook.create_sheet(title='집계표')
+    sheet.append(['중공종', '품명', '규격', '단위', '수량(할증전)'])
+    sheet.column_dimensions["B"].width = 30
+    sheet.column_dimensions["C"].width = 30
+
+    for 내역 in 내역서목록:
+        sheet.append(내역.to_excelGroup())
+
+
+
+
 
     new_workbook.save(saveFilePath)
 
