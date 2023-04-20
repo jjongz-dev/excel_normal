@@ -28,8 +28,9 @@ class ExcelStandard:
         규격 = self.규격
         단위 = self.단위
 
-        if self.수량 =='★산출서 확인 후 값 변경':
+        if self.수량 =='★산출서 확인 후 값 변경' or self.수량 =='★내역서 확인 후 값 변경':
             수량 = self.수량
+
         else:
             수량 = float(self.수량)
 

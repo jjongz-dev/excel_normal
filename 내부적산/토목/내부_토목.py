@@ -13,6 +13,7 @@ import ReplaceCivilStrut
 import ReplaceCivilSGR
 import ReplaceCivilLW
 import ReplaceCivilRoadDeckingPanel
+import ReplaceCivilGlobal
 import ReplacePersonal
 
 
@@ -455,8 +456,8 @@ def excel_normalize(name, column_dimensions=None):
             단위='EA',
             부위='',
             타입='외부',
-            산식=1,
-            수량=1,
+            산식='★내역서 확인 후 값 변경',
+            수량='★내역서 확인 후 값 변경',
             Remark='',
             개소=''
         )
@@ -518,6 +519,11 @@ def excel_normalize(name, column_dimensions=None):
                     수량=수량확정
                 )
                 내역서목록.append(내역)
+
+        # 품명 규격 자동 변경 S #######################
+        for 내역 in 내역서목록:
+            ReplaceCivilGlobal.launch(내역)
+        # 품명 규격 자동 변경 E #######################
 
 
     # 엑셀 처리 완료 ##################################################################################

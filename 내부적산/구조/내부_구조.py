@@ -130,6 +130,8 @@ def excel_normalize(name, column_dimensions=None):
 
     if '공종별내역서' in excel.sheetnames:
 
+        내역서집계표중공종 = ['철근콘크리트공사']
+
         worksheet = excel['공종별내역서']
         내역서시작줄 = 0
         중공종확정 = ''
@@ -159,7 +161,7 @@ def excel_normalize(name, column_dimensions=None):
                     중공종확정 = 중공종[re.search('\\d{0,9}', 중공종).end():]
                     continue
 
-            if 품명값 is not None and (단위값 is not None or 단위값 != '') and (수량값 is not None and 수량값 != 0):
+            if 중공종확정 in 내역서집계표중공종 and 품명값 is not None and (단위값 is not None or 단위값 != '') and (수량값 is not None and 수량값 != 0):
 
                 품명확정 = 품명값
                 규격확정 = 규격값
