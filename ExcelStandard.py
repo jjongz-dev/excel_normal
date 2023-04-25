@@ -34,7 +34,7 @@ class ExcelStandard:
             try:
                 수량 = float(self.수량)
             except Exception as e:
-                print(self.품명, self.규격, self.단위, self.수량, e)
+                print('에러발생 : ', self.층, self.호, self.실, self.품명, self.규격, self.단위, self.수량, e)
 
         if type(호) is str:
             호 = 호.replace(' ', '').replace('  ', '')
