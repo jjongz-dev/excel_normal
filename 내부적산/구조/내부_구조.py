@@ -13,7 +13,7 @@ systemOs = platform.system()
 
 
 # 이곳에 현장 폴더명만 변경하면 완료 #######
-siteTicketNo = '22-0544'
+siteTicketNo = '22-0422'
 ##################################
 
 
@@ -30,7 +30,7 @@ def excel_normalize(name, column_dimensions=None):
 
     산출서목록 = []
     내역서목록 = []
-    파싱시작점기준문자 = ['부호', '품명']
+    파싱시작점기준문자 = ['부호', '품명', '품목']
 
     파싱시트목록 = ['부재별산출서', '기타산출서', '아파트옹벽 Unit별산출서']
     print('=================================')
@@ -141,6 +141,8 @@ def excel_normalize(name, column_dimensions=None):
         수량확정 = ''
 
         for 가로줄번호, row in enumerate(worksheet.rows):
+
+            print(row[0].value)
 
             if row[0].value.replace(' ', '') in 파싱시작점기준문자:
                 내역서시작줄 = 가로줄번호 + 3
