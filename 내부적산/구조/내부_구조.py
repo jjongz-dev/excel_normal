@@ -13,7 +13,7 @@ systemOs = platform.system()
 
 
 # 이곳에 현장 폴더명만 변경하면 완료 #######
-siteTicketNo = '22-0422'
+siteTicketNo = '21-0155'
 ##################################
 
 
@@ -39,6 +39,12 @@ def excel_normalize(name, column_dimensions=None):
             print("파싱시트체크 : ", 시트명, '(O)')
         else:
             print("파싱시트체크 : ", 시트명, '(X) - 확인필요')
+
+    if "공종별내역서" in excel.sheetnames:
+        print("파싱시트체크 : ", "공종별내역서", '(O)')
+    else:
+        print("파싱시트체크 : ", "공종별내역서", '(X) - 확인필요')
+
     print('=================================')
 
     for sheetname in 파싱시트목록:
@@ -142,7 +148,7 @@ def excel_normalize(name, column_dimensions=None):
 
         for 가로줄번호, row in enumerate(worksheet.rows):
 
-            print(row[0].value)
+            #print(row[0].value)
 
             if row[0].value.replace(' ', '') in 파싱시작점기준문자:
                 내역서시작줄 = 가로줄번호 + 3
