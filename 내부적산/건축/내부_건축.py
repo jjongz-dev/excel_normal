@@ -17,7 +17,7 @@ systemOs = platform.system()
 
 
 # 이곳에 현장 폴더명만 변경하면 완료 #######
-siteTicketNo = '23-0311_etc'
+siteTicketNo = '23-0312'
 ##################################
 
 
