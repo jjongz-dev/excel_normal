@@ -158,10 +158,8 @@ def excel_normalize(name, column_dimensions=None):
 
                     if 혼합층검색결과 is not None:
 
-
-                        print(층확정, 혼합층검색결과, 혼합층검색결과.group(1), 혼합층검색결과.group(2))
-
                         층별데이터복사 = True
+
                         지하층층수 = int(혼합층검색결과.group(1)) + 1
 
                         for 층 in range(1, 지하층층수):
@@ -184,8 +182,6 @@ def excel_normalize(name, column_dimensions=None):
                             층값 = f'NO{str(층).zfill(2)}'
                             층목록.append(층값)
 
-
-                    실확정 = f'{층확정}'
 
                 # 콘크리트 산출 Start ##############################################################
 
