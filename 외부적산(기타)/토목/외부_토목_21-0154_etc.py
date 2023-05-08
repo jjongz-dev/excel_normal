@@ -30,58 +30,70 @@ def excel_normalize(name, column_dimensions=None):
 
     산출서목록 = []
 
-    sheetname = "내역서BOQ"
-    if sheetname in excel.sheetnames:
-        worksheet = excel[sheetname]
+    파싱시트목록 = ['내역서BOQ']
 
-        층확정 = ''
-        호확정 = ''
-        실확정 = ''
-        품명확정 = ''
-        규격확정 = ''
-        부위확정 = ''
-        산식확정 = ''
-        수량확정 = ''
+    print('=================================')
+    for 시트명 in 파싱시트목록:
+        if 시트명 in excel.sheetnames:
+            print("파싱시트체크 : ", 시트명, '(O)')
+        else:
+            print("파싱시트체크 : ", 시트명, '(X) - 확인필요')
+    print('=================================')
 
-        for row in worksheet.iter_rows(min_row=4):
+    for sheetname in 파싱시트목록:
 
-            공종값 = row[1].value
-            규격값 = row[2].value
-            단위값 = row[3].value
-            수량값 = row[4].value
-            비고값 = row[10].value
+        if sheetname in excel.sheetnames:
+            worksheet = excel[sheetname]
 
-            if 비고값 is not None:
 
-                비고값 = 비고값.replace('\n', '').replace('\r', '')
-                공종값 = f'{공종값}/{비고값}'
-                # 공종값 = 공종값 + '/' + 비고값
+            층확정 = ''
+            호확정 = ''
+            실확정 = ''
+            품명확정 = ''
+            규격확정 = ''
+            부위확정 = ''
+            산식확정 = ''
+            수량확정 = ''
 
-            if 공종값 is not None and 단위값 is not None and 수량값 is not None:
+            for row in worksheet.iter_rows(min_row=4):
 
-                품명확정 = 공종값
-                규격확정 = 규격값
-                단위확정 = 단위값
-                수량확정 = 수량값
+                공종값 = row[1].value
+                규격값 = row[2].value
+                단위값 = row[3].value
+                수량값 = row[4].value
+                비고값 = row[10].value
 
-                내역 = ExcelStandard(
-                    층='',
-                    호='',
-                    실='',
-                    대공종='토목',
-                    중공종='',
-                    코드='',
-                    품명=품명확정,
-                    규격=규격확정,
-                    단위=단위확정,
-                    부위='',
-                    타입='외부',
-                    산식=수량확정,
-                    수량=수량확정,
-                    Remark='',
-                    개소=''
-                )
-                산출서목록.append(내역)
+                if 비고값 is not None:
+
+                    비고값 = 비고값.replace('\n', '').replace('\r', '')
+                    공종값 = f'{공종값}/{비고값}'
+                    # 공종값 = 공종값 + '/' + 비고값
+
+                if 공종값 is not None and 단위값 is not None and 수량값 is not None:
+
+                    품명확정 = 공종값
+                    규격확정 = 규격값
+                    단위확정 = 단위값
+                    수량확정 = 수량값
+
+                    내역 = ExcelStandard(
+                        층='',
+                        호='',
+                        실='',
+                        대공종='토목',
+                        중공종='',
+                        코드='',
+                        품명=품명확정,
+                        규격=규격확정,
+                        단위=단위확정,
+                        부위='',
+                        타입='외부',
+                        산식=수량확정,
+                        수량=수량확정,
+                        Remark='',
+                        개소=''
+                    )
+                    산출서목록.append(내역)
 
 
 
