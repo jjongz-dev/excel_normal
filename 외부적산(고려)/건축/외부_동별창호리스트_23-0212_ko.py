@@ -73,7 +73,7 @@ def excel_normalize(name, column_dimensions=None):
     # 저장할 엑셀
     new_workbook = Workbook()
     new_sheet = new_workbook.active
-    new_sheet.title = '동별창호목록'
+    new_sheet.title = '동별창호리스트'
     head_title = ['구분', '창호명', '가로', '세로', '면적', '공제면적', 'BASE길이', '면적공식', '도어윈도우', '비고', '합계']
     new_sheet.append(head_title)
     new_sheet.column_dimensions["A"].width = 15
