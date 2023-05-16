@@ -222,7 +222,7 @@ def excel_normalize(name, column_dimensions=None):
                 품명확정 = f'{품명값}{비고값}'
                 #print(품명값, '##', 비고값, '==', 품명확정)
 
-            if 단위값 is None or 수량값 == 0 or 수량값 == '#REF!':
+            if 단위값 is None or 수량값 == '#REF!':
                 continue
 
             규격확정 = 규격값
