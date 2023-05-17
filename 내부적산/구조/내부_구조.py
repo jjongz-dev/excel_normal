@@ -201,8 +201,6 @@ def excel_normalize(name, column_dimensions=None):
     for 내역 in 산출서목록:
         new_sheet.append(내역.to_excel())
 
-
-
     sheet = new_workbook.create_sheet(title='집계표')
     sheet.append(['중공종', '품명', '규격', '단위', '수량(할증전)'])
     sheet.column_dimensions["B"].width = 30
@@ -211,11 +209,8 @@ def excel_normalize(name, column_dimensions=None):
     for 내역 in 내역서목록:
         sheet.append(내역.to_excelGroup())
 
-
-
-
-
     new_workbook.save(saveFilePath)
+
 
     # 파싱한 엑셀을 자동으로 띄워서 확인
     systemOs = platform.system()
