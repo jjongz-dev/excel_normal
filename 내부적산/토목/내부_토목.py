@@ -12,6 +12,7 @@ import ReplaceCivilCIP
 import ReplaceCivilStrut
 import ReplaceCivilSGR
 import ReplaceCivilLW
+import ReplaceRaker
 import ReplaceCivilRoadDeckingPanel
 import ReplaceCivilGlobal
 import ReplacePersonal
@@ -22,7 +23,7 @@ systemOs = platform.system()
 
 
 # 이곳에 현장 폴더명만 변경하면 완료 #######
-siteTicketNo = '22-0542'
+siteTicketNo = '2021-0043'
 ##################################
 
 
@@ -297,6 +298,12 @@ def excel_normalize(name, column_dimensions=None):
                 개소=''
             )
             산출서목록.append(내역)
+
+    # 품명 규격 자동 변경 S #######################
+        for 내역 in 산출서목록:
+            ReplaceRaker.launch(내역)
+        # 품명 규격 자동 변경 E #######################
+
 
     if "S.G.R공 집계표" in excel.sheetnames:
         worksheet = excel['S.G.R공 집계표']
