@@ -7,9 +7,9 @@ import re
 
 from Architect.FIN.UMID.ItemStandard import ItemStandard
 
+fileCreateDate = datetime.strftime(datetime.today(), '%y%m%d_%H%M')
+systemOs = platform.system()
 
-
-fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
 
 # 이곳에 현장 폴더명만 변경하면 완료 #######
 siteTicketNo = '22-0669_umid'
