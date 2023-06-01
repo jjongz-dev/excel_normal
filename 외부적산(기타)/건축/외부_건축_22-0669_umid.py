@@ -15,14 +15,12 @@ fileCreateDate = datetime.strftime(datetime.today(), '%Y%m%d_%H%M')
 siteTicketNo = '22-0669_umid'
 ##################################
 
-openFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/건축.xlsx'
-saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/건축완성-' + fileCreateDate + '.xlsx'
-
-# openFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\건축.xlsx'
-# saveFilePath = 'C:\\howbuild\\quantity\\'+siteTicketNo+'\건축완성-' + fileCreateDate + '.xlsx'
-
-# openFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\건축.xlsx'
-# saveFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\건축완성-' + fileCreateDate + '.xlsx'
+if systemOs == 'Darwin':
+    openFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/건축.xlsx'
+    saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/건축완성-' + fileCreateDate + '.xlsx'
+else:
+    openFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\건축.xlsx'
+    saveFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\건축완성-' + fileCreateDate + '.xlsx'
 
 
 def excel_normalize(name, column_dimensions=None):
