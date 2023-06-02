@@ -31,6 +31,7 @@ else:
 def excel_normalize(name, column_dimensions=None):
     excel = load_workbook(openFilePath)
 
+    건축타입 = ['내부', '외부', '창호']
 
     내역서목록 = []
     산출서목록 = []

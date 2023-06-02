@@ -87,12 +87,10 @@ def excel_normalize(name):
                 else:
                     continue
 
-            층범위값 = '1F'
 
             if 품명값 is not None and (물량값 is not None and 물량값 != 0):
 
                 품명확정 = 품명값
-                층확정 = 층범위값
                 규격확정 = 규격값
                 단위확정 = 단위값
                 부위확정 = 부위값
@@ -101,7 +99,7 @@ def excel_normalize(name):
                 개소확정 = 개소값
 
                 내역 = ExcelStandard(
-                    층=층확정,
+                    층='1F',
                     호=호확정,
                     실=실확정,
                     대공종='건축',
@@ -363,7 +361,6 @@ def excel_normalize(name):
 
             도형값 = row[0].value
             부위값 = ''
-            층범위값 = '1'
             품명값 = row[2].value
             규격값 = row[3].value
             단위값 = row[4].value
@@ -391,13 +388,6 @@ def excel_normalize(name):
                 else:
                     continue
 
-            if 층범위값 is not None:
-                if 'P1' in 층범위값:
-                    층확정 = 'RF'
-                else:
-                    if re.match('\\d{1,2}', 층범위값):
-                        층확정 = f'{층범위값}F'
-
             if 물량값 =="'" or 물량값 =='0' or 물량값 ==0 or 물량값 =='물량':
                 continue
 
@@ -412,7 +402,7 @@ def excel_normalize(name):
                 개소확정 = 개소값
 
                 내역 = ExcelStandard(
-                    층=층확정,
+                    층='1F',
                     호=호확정,
                     실=실확정,
                     대공종='건축',
