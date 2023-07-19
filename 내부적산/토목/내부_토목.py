@@ -23,13 +23,13 @@ systemOs = platform.system()
 
 
 # 이곳에 현장 폴더명만 변경하면 완료 #######
-siteTicketNo = '2021-0043'
+siteTicketNo = '23-0409'
 ##################################
 
 
 if systemOs == 'Darwin':
     openFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/토목.xlsx'
-    saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/end-3-land-' + fileCreateDate + '.xlsx'
+    saveFilePath = '/Users/blue/hb/quantity/' + siteTicketNo + '/토목완성-' + fileCreateDate + '.xlsx'
 else:
     openFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\토목.xlsx'
     saveFilePath = 'D:\\howbuild\\quantity\\'+siteTicketNo+'\토목완성-' + fileCreateDate + '.xlsx'
@@ -102,7 +102,7 @@ def excel_normalize(name, column_dimensions=None):
     if "가시설공 집계표" in excel.sheetnames:
         worksheet = excel['가시설공 집계표']
 
-        for row in worksheet.iter_rows(min_row=9):
+        for row in worksheet.iter_rows(min_row=8):
 
             공종값 = row[1].value
             규격값 = row[9].value
@@ -115,6 +115,7 @@ def excel_normalize(name, column_dimensions=None):
                 품명확정 = 품명값
 
             if 품명값 == "H-PILE 연결" and 비고값 is not None:
+
                 품명확정 = f'{품명값}{비고값}'
                 #print(품명값, '##', 비고값, '==', 품명확정)
 
