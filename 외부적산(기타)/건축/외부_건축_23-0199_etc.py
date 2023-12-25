@@ -25,8 +25,8 @@ def excel_normalize(name, column_dimensions=None):
 
     내역목록 = []
 
-    if '1. 본동-물량산출서' in excel.sheetnames:
-        worksheet = excel['1. 본동-물량산출서']
+    if '1. 본관동-물량산출서' in excel.sheetnames:
+        worksheet = excel['1. 본관동-물량산출서']
 
         층확정 = ''
         호확정 = ''
