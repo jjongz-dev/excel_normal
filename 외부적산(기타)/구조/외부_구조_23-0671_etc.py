@@ -210,6 +210,8 @@ def excel_normalize(name, column_dimensions=None):
                     다음줄거푸집소계값 = worksheet[엑셀가로줄번호 + 1][18].value
                     다다음줄거푸집산출식값 = str(worksheet[엑셀가로줄번호 + 2][13].value)
                     다다음줄거푸집소계값 = worksheet[엑셀가로줄번호 + 2][18].value
+                    다3줄거푸집산출식값 = str(worksheet[엑셀가로줄번호 + 3][13].value)
+                    다3줄거푸집소계값 = worksheet[엑셀가로줄번호 + 3][18].value
 
                     if 다음줄거푸집소계값 is not None:
                         거푸집산출식값 = f'{거푸집산출식값}{다음줄거푸집산출식값}'
@@ -217,6 +219,11 @@ def excel_normalize(name, column_dimensions=None):
                     elif 다다음줄거푸집소계값 is not None:
                         거푸집산출식값 = f'{거푸집산출식값}{다음줄거푸집산출식값}{다다음줄거푸집산출식값}'
                         거푸집소계값 = 다다음줄거푸집소계값
+                    elif 다3줄거푸집소계값 is not None:
+                        거푸집산출식값 = f'{거푸집산출식값}{다3줄거푸집산출식값}{다3줄거푸집산출식값}'
+                        거푸집소계값 = 다3줄거푸집소계값
+
+
 
                 규격확정 = 거푸집종류값
                 산식확정 = 거푸집산출식값
@@ -236,6 +243,11 @@ def excel_normalize(name, column_dimensions=None):
                         층변환확정 = f'{층문자추출}{층변환}'
 
                         산식변환확정 = 산식확정[:산식확정.rfind('*')]
+
+
+                        print(수량확정, '/', 총층수, '/', 엑셀가로줄번호, 층값, 층확정, 호확정, 규격확정, 부위확정, 산식확정)
+
+
                         분할수량 = round(수량확정/총층수, 3)
 
                         if 층 == 종료층-1:
